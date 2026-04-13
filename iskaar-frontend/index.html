@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Iskaar</title>
+  </head>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #1e1e1e;
+    }
+
+    #app {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+    }
+  </style>
+
+  <body>
+    <div id="app"></div>
+
+    <!-- 🔥 WICHTIG: MUSS VOR main.ts -->
+    <script>
+      window.global = window;
+    </script>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

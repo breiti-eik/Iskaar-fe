@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profiles version="12">
+  <profile kind="CodeFormatterProfile" name="MyStyle" version="12">
+
+    <!-- Line width -->
+    <setting id="org.eclipse.jdt.core.formatter.lineSplit" value="200" />
+
+    <!-- Annotation arguments: möglichst eine Zeile -->
+    <setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_annotation" value="16" />
+
+    <!-- Arrays (z.B. @JsonSubTypes) kompakt halten -->
+    <setting id="org.eclipse.jdt.core.formatter.alignment_for_expressions_in_array_initializer"
+      value="16" />
+
+  </profile>
+</profiles>

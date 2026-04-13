@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Attach to Port",
+            "type": "java",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": "8080"
+        },
+        {
+            "type": "java",
+            "name": "IskaarApplication",
+            "request": "launch",
+            "mainClass": "de.breiticreativs.iskaar.IskaarApplication",
+            "projectName": "iskaar-bootstrap"
+        }
+    ]
+}

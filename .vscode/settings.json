@@ -1,0 +1,28 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.autobuild.enabled": true,
+  "java.compile.nullAnalysis.mode": "automatic",
+  "cSpell.words": [
+    "breiticreativs",
+    "iskaar",
+    "projectlombok",
+    "springframework"
+  ],
+  "java.test.config": [
+    {
+      "name": "All Tests (Maven)",
+      "workingDirectory": "${workspaceFolder}",
+      "vmArgs": "",
+      "args": ""
+    }
+  ],
+  "java.debug.settings.onBuildFailureProceed": true,
+  "[java]": {
+    "editor.defaultFormatter": "Oracle.oracle-java"
+  },
+
+  "java.format.settings.url": ".vscode/eclipse-formatter.xml",
+  "java.format.settings.profile": "MyStyle",
+
+  "editor.formatOnSave": true
+}
