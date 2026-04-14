@@ -1,5 +1,6 @@
 import { WebSocketConnection } from "./WebSocketConnection";
-import type { PlayCardCommand } from "../command/PlayCardCommand";
+import { PlayCardCommand } from "../command/PlayCardCommand";
+import { JoinGameCommand } from "../command/JoinGameCommand";
 
 export class GameClient {
   private connection = new WebSocketConnection();
@@ -18,20 +19,10 @@ export class GameClient {
   }
 
   playCard(gameId: string, cardId: string) {
-    const command: PlayCardCommand = {
-      type: "PLAY_CARD",
-      gameId,
-      cardId,
-    };
-
-    this.send(command);
+    this.send(new PlayCardCommand(gameId, cardId));
   }
 
   joinGame(gameId: string, playerName: string) {
-    this.connection.send({
-      type: "JOIN_GAME",
-      gameId,
-      playerName,
-    });
+    this.send(new JoinGameCommand(gameId, playerName));
   }
 }

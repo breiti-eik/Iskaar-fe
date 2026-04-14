@@ -1,10 +1,10 @@
 import mitt from "mitt";
-import type { Card } from "../objects/Card";
+import { Card } from "../objects/Card";
+import type { GameView } from "../view/GameView";
 
 type Events = {
-  GAME_STATE: any; // 👈 wichtig
   cardPlayed: { card: Card };
-  buyCardRequest: { cardId: string };
+  gameViewReceived: { view: GameView };
 };
 
 export const GameEventBus = mitt<Events>();

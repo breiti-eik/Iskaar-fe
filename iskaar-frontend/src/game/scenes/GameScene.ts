@@ -13,13 +13,13 @@ export class GameScene extends Phaser.Scene {
   constructor() {
     super("GameScene");
   }
-
   create() {
-    // 🔥 GameClient initialisieren
+    const playerName = this.resolvePlayerName();
+
+    // 🔥 GameClient
     this.gameClient = new GameClient();
     this.gameClient.connect(this.gameId, () => {
-      // 🔥 JETZT erst joinen
-      this.gameClient.joinGame(this.gameId, "Player1");
+      this.gameClient.joinGame(this.gameId, playerName);
     });
 
     // 🔥 Background
@@ -33,14 +33,13 @@ export class GameScene extends Phaser.Scene {
     // 🔥 HandView
     this.handView = new HandView(this);
 
-    // 🔥 Server → View
-    GameEventBus.on("GAME_STATE", this.onGameState);
-
+    // 🔥 Events
+    GameEventBus.on("gameViewReceived", this.onGameViewReceived);
     GameEventBus.on("cardPlayed", event => this.onCardPlayed(event));
   }
 
   shutdown() {
-    GameEventBus.off("GAME_STATE", this.onGameState);
+    GameEventBus.off("gameViewReceived", this.onGameViewReceived);
   }
 
   private onCardPlayed(event: { card: Card }) {
@@ -69,8 +68,9 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  private onGameState = (view: any) => {
-    console.log("GameView update", {
+  private onGameViewReceived = (view: any) => {
+    console.log("GAME VIEW:", view);
+    /*  console.log("GameView update", {
       hand: view?.me?.hand?.length,
       opponents: view?.opponents?.length,
     });
@@ -78,6 +78,23 @@ export class GameScene extends Phaser.Scene {
     // 👉 später sauber typisieren!
     if (view?.me?.hand) {
       this.handView.setCards(view.me.hand);
-    }
+    } */
   };
+
+  private resolvePlayerName(): string {
+    let playerName = sessionStorage.getItem("playerName");
+
+    if (!playerName) {
+      const input = prompt("Enter your player name:");
+
+      playerName =
+        input && input.trim().length > 0
+          ? input.trim()
+          : "Player-" + crypto.randomUUID().slice(0, 8);
+
+      sessionStorage.setItem("playerName", playerName);
+    }
+
+    return playerName;
+  }
 }

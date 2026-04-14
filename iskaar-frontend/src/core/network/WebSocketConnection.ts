@@ -1,6 +1,10 @@
 import SockJS from "sockjs-client";
 import { Client, type IMessage } from "@stomp/stompjs";
 import { GameEventBus } from "../../game/events/GameEventBus";
+import { MessageFactory } from "../message/MessageFactory";
+import type { ServerMessage } from "../message/ServerMessage";
+import { GameViewMessage } from "../message/GameViewMessage";
+import type { CardPlayedMessage } from "../message/CardPlayedMessage";
 
 export class WebSocketConnection {
   private client?: Client;
@@ -15,16 +19,8 @@ export class WebSocketConnection {
 
         onConnected?.();
 
-        this.client!.subscribe("/user/queue/game", (msg: IMessage) => {
-          const data = this.parseMessage(msg);
-          if (data) {
-            GameEventBus.emit("GAME_STATE", data);
-          }
-        });
-
-        this.client!.subscribe(`/app/game/${gameId}`, (msg: IMessage) => {
-          const data = this.parseMessage(msg);
-          GameEventBus.emit("GAME_STATE", data);
+        this.client!.subscribe("/topic/game", (msg: IMessage) => {
+          this.onMessage(msg);
         });
       },
     });
@@ -47,12 +43,25 @@ export class WebSocketConnection {
     });
   }
 
-  private parseMessage(msg: IMessage): any | null {
-    try {
-      return JSON.parse(msg.body);
-    } catch (e) {
-      console.error("Invalid message", msg.body);
-      return null;
+  private onMessage(raw: any) {
+    const json = JSON.parse(raw.body);
+    const message = MessageFactory.fromJson(json);
+
+    this.dispatch(message);
+  }
+
+  private dispatch(message: ServerMessage) {
+    switch (message.type) {
+      case "CARD_PLAYED":
+        GameEventBus.emit("cardPlayed", {
+          card: (message as CardPlayedMessage).card,
+        });
+        break;
+      case "GAME_VIEW":
+        GameEventBus.emit("gameViewReceived", {
+          view: (message as GameViewMessage).view,
+        });
+        break;
     }
   }
 }
