@@ -19,13 +19,14 @@ export function createGame(
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [BootScene, GameScene],
+    scene: [BootScene],
   });
-
   const client = new GameClient();
   client.connect(gameId, playerId);
 
   (game as any).client = client;
+
+  game.scene.add("GameScene", GameScene, false, { gameClient: client });
 
   return game;
 }

@@ -1,16 +1,23 @@
 import Phaser from "phaser";
 import { HandView } from "../ui/HandView";
 import { GameEventBus } from "../events/GameEventBus";
-import type { Card } from "../objects/Card";
+import { GameClient } from "../../core/network/GameClient";
 
 export class GameScene extends Phaser.Scene {
   private handView!: HandView;
+  private gameClient!: GameClient;
 
   constructor() {
     super("GameScene");
   }
+
+  init(data: { gameClient: GameClient }) {
+    this.gameClient = data.gameClient;
+  }
+
   create() {
     // 🔥 Background
+    console.log("GameScene created", this);
     const bg = this.add.image(
       this.scale.width / 2,
       this.scale.height / 2,
@@ -23,15 +30,22 @@ export class GameScene extends Phaser.Scene {
 
     // 🔥 Events
     GameEventBus.on("gameView", this.onGameView);
+    GameEventBus.on("cardPlayed", this.onCardPlayed);
   }
 
   shutdown() {
     GameEventBus.off("gameView", this.onGameView);
+    GameEventBus.off("cardPlayed", this.onCardPlayed);
   }
 
-  private onCardPlayed(event: { card: Card }) {
-    const card = event.card;
+  private onCardPlayed = (event: { cardId: string }) => {
+    console.log("Play card:", event.cardId);
 
+    this.gameClient.playCard(
+      "11111111-1111-1111-1111-111111111111",
+      event.cardId,
+    );
+    /* 
     //Karte aus Hand entfernen
     this.handView.removeCard(card);
 
@@ -52,8 +66,8 @@ export class GameScene extends Phaser.Scene {
           card.destroy();
         });
       },
-    });
-  }
+    }); */
+  };
 
   private onGameView = (event: { view: any }) => {
     const view = event.view;
