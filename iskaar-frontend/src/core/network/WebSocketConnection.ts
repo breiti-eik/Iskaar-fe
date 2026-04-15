@@ -61,7 +61,7 @@ export class WebSocketConnection {
     switch (message.type) {
       case "CARD_PLAYED":
         GameEventBus.emit("cardPlayed", {
-          card: (message as CardPlayedMessage).card,
+          cardId: (message as CardPlayedMessage).card.id,
         });
         break;
 
