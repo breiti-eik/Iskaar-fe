@@ -66,7 +66,7 @@ export class HandView {
 
     card.on("pointerdown", () => {
       GameEventBus.emit("cardPlayed", {
-        card: card,
+        cardId: card.id,
       });
     });
   }
