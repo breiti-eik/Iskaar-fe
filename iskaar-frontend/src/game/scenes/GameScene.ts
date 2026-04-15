@@ -1,11 +1,14 @@
 import Phaser from "phaser";
 import { HandView } from "../ui/HandView";
+import { InPlayView } from "../view/InPlayView";
 import { GameEventBus } from "../events/GameEventBus";
 import { GameClient } from "../../core/network/GameClient";
+import type { GameView } from "../view/GameView";
 
 export class GameScene extends Phaser.Scene {
-  private handView!: HandView;
   private gameClient!: GameClient;
+  private handView!: HandView;
+  private inPlayView!: InPlayView;
 
   constructor() {
     super("GameScene");
@@ -25,8 +28,9 @@ export class GameScene extends Phaser.Scene {
     );
     bg.setDisplaySize(this.scale.width, this.scale.height);
 
-    // 🔥 HandView
+    // Views
     this.handView = new HandView(this);
+    this.inPlayView = new InPlayView(this);
 
     // 🔥 Events
     GameEventBus.on("gameView", this.onGameView);
@@ -76,6 +80,23 @@ export class GameScene extends Phaser.Scene {
 
     if (view?.me?.hand) {
       this.handView.setCards(view.me.hand);
+      if (view.activePlayerId === view.me.playerId) {
+        this.inPlayView.setCards(view.me.inPlay);
+      } else {
+        this.inPlayView.setCards(view.opponents[0].inPlay);
+      }
     }
   };
+
+  private getActiveInPlay(view: GameView) {
+    if (view.activePlayerId === view.me.playerId) {
+      return view.me.inPlay;
+    }
+
+    const opponent = view.opponents.find(
+      o => o.playerId === view.activePlayerId,
+    );
+
+    return opponent?.inPlay ?? [];
+  }
 }
