@@ -2,26 +2,14 @@ import Phaser from "phaser";
 import { HandView } from "../ui/HandView";
 import { GameEventBus } from "../events/GameEventBus";
 import type { Card } from "../objects/Card";
-import { GameClient } from "../../core/network/GameClient";
 
 export class GameScene extends Phaser.Scene {
   private handView!: HandView;
-  private gameClient!: GameClient;
-
-  private gameId: string = "11111111-1111-1111-1111-111111111111"; // MOCK später dynamisch!
 
   constructor() {
     super("GameScene");
   }
   create() {
-    const playerName = this.resolvePlayerName();
-
-    // 🔥 GameClient
-    this.gameClient = new GameClient();
-    this.gameClient.connect(this.gameId, () => {
-      this.gameClient.joinGame(this.gameId, playerName);
-    });
-
     // 🔥 Background
     const bg = this.add.image(
       this.scale.width / 2,
@@ -34,12 +22,11 @@ export class GameScene extends Phaser.Scene {
     this.handView = new HandView(this);
 
     // 🔥 Events
-    GameEventBus.on("gameViewReceived", this.onGameViewReceived);
-    GameEventBus.on("cardPlayed", event => this.onCardPlayed(event));
+    GameEventBus.on("gameView", this.onGameView);
   }
 
   shutdown() {
-    GameEventBus.off("gameViewReceived", this.onGameViewReceived);
+    GameEventBus.off("gameView", this.onGameView);
   }
 
   private onCardPlayed(event: { card: Card }) {
@@ -68,33 +55,13 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  private onGameViewReceived = (view: any) => {
-    console.log("GAME VIEW:", view);
-    /*  console.log("GameView update", {
-      hand: view?.me?.hand?.length,
-      opponents: view?.opponents?.length,
-    });
+  private onGameView = (event: { view: any }) => {
+    const view = event.view;
 
-    // 👉 später sauber typisieren!
+    console.log("GAME VIEW:", view);
+
     if (view?.me?.hand) {
       this.handView.setCards(view.me.hand);
-    } */
-  };
-
-  private resolvePlayerName(): string {
-    let playerName = sessionStorage.getItem("playerName");
-
-    if (!playerName) {
-      const input = prompt("Enter your player name:");
-
-      playerName =
-        input && input.trim().length > 0
-          ? input.trim()
-          : "Player-" + crypto.randomUUID().slice(0, 8);
-
-      sessionStorage.setItem("playerName", playerName);
     }
-
-    return playerName;
-  }
+  };
 }

@@ -18,11 +18,14 @@ export class HandView {
     this.scene = scene;
   }
 
-  setCards(cardIds: string[]) {
+  setCards(cards: { id: string; name: string }[]) {
     this.clear();
 
-    cardIds.forEach((id, index) => {
-      const card = new Card(this.scene, 0, 0, id);
+    cards.forEach(cardData => {
+      const textureKey = cardData.name;
+      const id = cardData.id;
+
+      const card = new Card(this.scene, 0, 0, id, textureKey);
 
       this.setupInteractions(card);
       this.cards.push(card);

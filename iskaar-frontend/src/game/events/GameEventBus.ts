@@ -4,7 +4,7 @@ import type { GameView } from "../view/GameView";
 
 type Events = {
   cardPlayed: { card: Card };
-  gameViewReceived: { view: GameView };
+  gameView: { view: GameView };
 };
 
 export const GameEventBus = mitt<Events>();
