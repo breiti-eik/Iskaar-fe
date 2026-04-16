@@ -7,7 +7,7 @@ export class MeViewData {
   persistentCards: Card[];
   hand: Card[];
   inPlay: Card[];
-  discardPile: Card[];
+  discard: Card[];
 
   constructor(
     playerId: string,
@@ -24,6 +24,6 @@ export class MeViewData {
     this.persistentCards = persistentCards;
     this.hand = hand;
     this.inPlay = inPlay;
-    this.discardPile = discardPile;
+    this.discard = discardPile;
   }
 }

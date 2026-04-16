@@ -5,13 +5,20 @@ import { GameEventBus } from "../events/GameEventBus";
 import { GameClient } from "../../core/network/GameClient";
 import type { GameViewData } from "../view/GameViewData";
 import { OpponentView } from "../ui/OpponentView";
-import { OpponentViewData } from "../view/OpponentViewData";
+import { StackView } from "../ui/StatckView";
 
 export class GameScene extends Phaser.Scene {
   private gameClient!: GameClient;
   private handView!: HandView;
   private inPlayView!: InPlayViewData;
   private opponentViews: OpponentView[] = [];
+  private drawPileView!: StackView;
+  private discardPileView!: StackView;
+  private readonly DEV_MOCK_DISCARD = true;
+
+  getCenterX() {
+    return this.scale.width / 2;
+  }
 
   constructor() {
     super("GameScene");
@@ -31,7 +38,9 @@ export class GameScene extends Phaser.Scene {
     bg.setDisplaySize(this.scale.width, this.scale.height);
 
     // Views
+    this.drawPileView = new StackView(this, 0.6);
     this.handView = new HandView(this);
+    this.discardPileView = new StackView(this, 0.6, false);
     this.inPlayView = new InPlayViewData(this);
 
     // 🔥 Events
@@ -53,13 +62,22 @@ export class GameScene extends Phaser.Scene {
     );
   };
 
-  private onGameView = (event: { view: any }) => {
+  private onGameView = (event: { view: GameViewData }) => {
     const view = event.view;
 
     console.log("GAME VIEW:", view);
 
+    if (view?.me?.drawPileSize !== undefined) {
+      this.updateDrawPile(view.me.drawPileSize);
+    }
+
     if (view?.me?.hand) {
       this.handView.setCards(view.me.hand);
+    }
+    if (view?.me?.discard) {
+      this.updateDiscardPile(
+        view?.me?.discard as unknown as { texture: string }[],
+      );
     }
     const inPlayCards = this.getActiveInPlay(view);
     this.inPlayView.setCards(inPlayCards);
@@ -79,40 +97,61 @@ export class GameScene extends Phaser.Scene {
     return opponent?.inPlay ?? [];
   }
 
+  private updateDrawPile(size: number) {
+    const offsetX = -350;
+
+    const x = this.handView.getCenterX() + offsetX;
+    const y = this.scale.height - 110;
+
+    this.drawPileView.setPosition(x, y);
+    this.drawPileView.setCount(size);
+  }
+
+  private updateDiscardPile(cards: { texture: string }[]) {
+    const offsetX = 350; // 👉 rechts vom Fächer
+
+    const x = this.getCenterX() + offsetX;
+    const y = this.scale.height - 120;
+    this.discardPileView.setPosition(x, y);
+    // ✅ echte Daten
+    if (cards && cards.length > 0) {
+      console.log("REAL DISCARD", cards);
+      this.discardPileView.setCards(cards);
+      return;
+    }
+
+    // ✅ DEV Mock
+    if (this.DEV_MOCK_DISCARD) {
+      console.log("MOCK DISCARD");
+      this.discardPileView.setCards([{ texture: "Knut" }]);
+      return;
+    }
+    console.log("NIX");
+
+    // ✅ leer
+    this.discardPileView.setCards([]);
+  }
+
   private updateOpponents(view: GameViewData) {
     const baseX = this.scale.width;
     const baseY = 100;
     const spacing = 120;
     const width = 300;
 
-    view.opponents.filter(Boolean).forEach((opponent, index) => {
-      const data = this.mapToOpponentViewData(opponent);
-
-      // 👉 CREATE
+    view.opponents.filter(Boolean).forEach((opponentData, index) => {
       if (!this.opponentViews[index]) {
         this.opponentViews[index] = new OpponentView(
           this,
           baseX,
           baseY + index * spacing,
           width,
-          data,
+          opponentData,
         );
       }
-
       // 👉 UPDATE
       else {
-        this.opponentViews[index].update(data);
+        this.opponentViews[index].update(opponentData);
       }
     });
-  }
-  private mapToOpponentViewData(opp: any): OpponentViewData {
-    return new OpponentViewData(
-      opp.playerId,
-      opp.playerName,
-      opp.drawPileSize,
-      opp.handSize,
-      opp.inPlay ?? [],
-      opp.discardTopCard ?? null,
-    );
   }
 }

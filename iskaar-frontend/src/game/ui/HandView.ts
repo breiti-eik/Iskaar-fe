@@ -4,13 +4,16 @@ import { GameEventBus } from "../events/GameEventBus";
 import type { CardViewData } from "../view/CardViewData";
 
 export class HandView {
+  getCenterX() {
+    return this.scene.scale.width / 2;
+  }
   private scene: Phaser.Scene;
   private cards: Card[] = [];
 
   private get baseY(): number {
     return this.scene.scale.height - 150;
   }
-  private readonly centerX = 1000;
+
   private readonly spacing = 120;
   private readonly curveStrength = 10;
   private hoveredCard?: Card;
@@ -42,7 +45,7 @@ export class HandView {
 
   private getCardX(index: number, total: number): number {
     const totalWidth = (total - 1) * this.spacing;
-    return this.centerX - totalWidth / 2 + index * this.spacing;
+    return this.scene.scale.width / 2 - totalWidth / 2 + index * this.spacing;
   }
 
   private clear() {
@@ -108,5 +111,18 @@ export class HandView {
         duration: 150,
       });
     });
+  }
+
+  getVisualBottomY(): number {
+    if (this.cards.length === 0) return this.baseY;
+
+    let maxY = this.baseY;
+
+    this.cards.forEach((_, index) => {
+      const y = this.getCardY(index, this.cards.length);
+      if (y > maxY) maxY = y;
+    });
+
+    return maxY;
   }
 }
