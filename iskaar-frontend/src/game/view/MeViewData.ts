@@ -1,7 +1,8 @@
 import { Card } from "../objects/Card";
 
-export class MeView {
+export class MeViewData {
   playerId: string;
+  playerName: string;
   drawPileSize: number;
   persistentCards: Card[];
   hand: Card[];
@@ -10,6 +11,7 @@ export class MeView {
 
   constructor(
     playerId: string,
+    playerName: string,
     drawPileSize: number,
     persistentCards: Card[],
     hand: Card[],
@@ -17,6 +19,7 @@ export class MeView {
     discardPile: Card[],
   ) {
     this.playerId = playerId;
+    this.playerName = playerName;
     this.drawPileSize = drawPileSize;
     this.persistentCards = persistentCards;
     this.hand = hand;

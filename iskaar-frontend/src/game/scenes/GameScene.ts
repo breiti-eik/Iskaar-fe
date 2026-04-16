@@ -1,14 +1,17 @@
 import Phaser from "phaser";
 import { HandView } from "../ui/HandView";
-import { InPlayView } from "../view/InPlayView";
+import { InPlayViewData } from "../view/InPlayViewData";
 import { GameEventBus } from "../events/GameEventBus";
 import { GameClient } from "../../core/network/GameClient";
-import type { GameView } from "../view/GameView";
+import type { GameViewData } from "../view/GameViewData";
+import { OpponentView } from "../ui/OpponentView";
+import { OpponentViewData } from "../view/OpponentViewData";
 
 export class GameScene extends Phaser.Scene {
   private gameClient!: GameClient;
   private handView!: HandView;
-  private inPlayView!: InPlayView;
+  private inPlayView!: InPlayViewData;
+  private opponentViews: OpponentView[] = [];
 
   constructor() {
     super("GameScene");
@@ -20,17 +23,16 @@ export class GameScene extends Phaser.Scene {
 
   create() {
     // 🔥 Background
-    console.log("GameScene created", this);
     const bg = this.add.image(
       this.scale.width / 2,
       this.scale.height / 2,
-      "background",
+      "Background",
     );
     bg.setDisplaySize(this.scale.width, this.scale.height);
 
     // Views
     this.handView = new HandView(this);
-    this.inPlayView = new InPlayView(this);
+    this.inPlayView = new InPlayViewData(this);
 
     // 🔥 Events
     GameEventBus.on("gameView", this.onGameView);
@@ -49,28 +51,6 @@ export class GameScene extends Phaser.Scene {
       "11111111-1111-1111-1111-111111111111",
       event.cardId,
     );
-    /* 
-    //Karte aus Hand entfernen
-    this.handView.removeCard(card);
-
-    //visuell nach vorne holen
-    this.children.bringToTop(card);
-
-    //Animation
-    this.tweens.add({
-      targets: card,
-      x: 640,
-      y: 400,
-      scale: 1.3,
-      rotation: 0,
-      duration: 700,
-      ease: "Power2",
-      onComplete: () => {
-        this.time.delayedCall(300, () => {
-          card.destroy();
-        });
-      },
-    }); */
   };
 
   private onGameView = (event: { view: any }) => {
@@ -80,15 +60,14 @@ export class GameScene extends Phaser.Scene {
 
     if (view?.me?.hand) {
       this.handView.setCards(view.me.hand);
-      if (view.activePlayerId === view.me.playerId) {
-        this.inPlayView.setCards(view.me.inPlay);
-      } else {
-        this.inPlayView.setCards(view.opponents[0].inPlay);
-      }
     }
+    const inPlayCards = this.getActiveInPlay(view);
+    this.inPlayView.setCards(inPlayCards);
+
+    this.updateOpponents(view);
   };
 
-  private getActiveInPlay(view: GameView) {
+  private getActiveInPlay(view: GameViewData) {
     if (view.activePlayerId === view.me.playerId) {
       return view.me.inPlay;
     }
@@ -98,5 +77,42 @@ export class GameScene extends Phaser.Scene {
     );
 
     return opponent?.inPlay ?? [];
+  }
+
+  private updateOpponents(view: GameViewData) {
+    const baseX = this.scale.width;
+    const baseY = 100;
+    const spacing = 120;
+    const width = 300;
+
+    view.opponents.filter(Boolean).forEach((opponent, index) => {
+      const data = this.mapToOpponentViewData(opponent);
+
+      // 👉 CREATE
+      if (!this.opponentViews[index]) {
+        this.opponentViews[index] = new OpponentView(
+          this,
+          baseX,
+          baseY + index * spacing,
+          width,
+          data,
+        );
+      }
+
+      // 👉 UPDATE
+      else {
+        this.opponentViews[index].update(data);
+      }
+    });
+  }
+  private mapToOpponentViewData(opp: any): OpponentViewData {
+    return new OpponentViewData(
+      opp.playerId,
+      opp.playerName,
+      opp.drawPileSize,
+      opp.handSize,
+      opp.inPlay ?? [],
+      opp.discardTopCard ?? null,
+    );
   }
 }

@@ -1,9 +1,9 @@
 import mitt from "mitt";
-import type { GameView } from "../view/GameView";
+import type { GameViewData } from "../view/GameViewData";
 
 type Events = {
   cardPlayed: { cardId: string };
-  gameView: { view: GameView };
+  gameView: { view: GameViewData };
 };
 
 export const GameEventBus = mitt<Events>();
