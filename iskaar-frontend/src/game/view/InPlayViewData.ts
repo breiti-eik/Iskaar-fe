@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 import { Card } from "../objects/Card";
-import type { CardView } from "./CardView";
+import type { CardViewData } from "./CardViewData";
 
-export class InPlayView {
+export class InPlayViewData {
   private scene: Phaser.Scene;
   private cards: Card[] = [];
 
@@ -13,7 +13,7 @@ export class InPlayView {
     this.scene = scene;
   }
 
-  setCards(cards: CardView[]) {
+  setCards(cards: CardViewData[]) {
     this.clear();
 
     cards.forEach(cardData => {

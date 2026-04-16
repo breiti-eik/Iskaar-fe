@@ -1,11 +1,11 @@
 import { ServerMessage } from "./ServerMessage";
-import { GameView } from "../../game/view/GameView";
+import { GameViewData } from "../../game/view/GameViewData";
 
 export class GameViewMessage extends ServerMessage {
   readonly type = "GAME_VIEW";
-  view: GameView;
+  view: GameViewData;
 
-  constructor(view: GameView) {
+  constructor(view: GameViewData) {
     super();
     this.view = view;
   }
