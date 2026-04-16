@@ -149,9 +149,6 @@ export class OpponentView {
     // DRAW
     this.drawPileIcon.setVisible(data.drawPileSize > 0);
 
-    // 🔥 DISCARD mit Flag
-    let discardCard: Card | null = data.discardTopCard;
-
     const textureKey =
       data.discardTopCard?.textureKey ??
       (this.DEV_MOCK_DISCARD ? "Knut" : null);
