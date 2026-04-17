@@ -14,7 +14,7 @@ export class GameScene extends Phaser.Scene {
   private opponentViews: OpponentView[] = [];
   private drawPileView!: StackView;
   private discardPileView!: StackView;
-  private readonly DEV_MOCK_DISCARD = true;
+  private readonly DEV_MOCK_DISCARD = false;
 
   getCenterX() {
     return this.scale.width / 2;
@@ -40,7 +40,7 @@ export class GameScene extends Phaser.Scene {
     // Views
     this.drawPileView = new StackView(this, 0.6);
     this.handView = new HandView(this);
-    this.discardPileView = new StackView(this, 0.6, false);
+    this.discardPileView = new StackView(this, 0.6, false, true);
     this.inPlayView = new InPlayViewData(this);
 
     // 🔥 Events
@@ -123,7 +123,16 @@ export class GameScene extends Phaser.Scene {
     // ✅ DEV Mock
     if (this.DEV_MOCK_DISCARD) {
       console.log("MOCK DISCARD");
-      this.discardPileView.setCards([{ texture: "Knut" }]);
+      this.discardPileView.setCards([
+        { texture: "Knut" },
+        { texture: "Knut" },
+        { texture: "Knut" },
+        { texture: "Knut" },
+        { texture: "Knut" },
+        { texture: "Knut" },
+        { texture: "Knut" },
+        { texture: "Knut" },
+      ]);
       return;
     }
     console.log("NIX");

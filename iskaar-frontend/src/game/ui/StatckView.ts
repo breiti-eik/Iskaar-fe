@@ -10,15 +10,26 @@ export class StackView {
   private y = 0;
   private scale: number;
   private hasCounter: boolean;
+  private MAX_STACK_VISIBLE = 3;
+  private hoverEnabled: boolean = false;
+  private isExpanded: boolean = false;
+  private fullCards: { texture: string }[] = [];
+
+  setHoverEnabled(enabled: boolean) {
+    this.hoverEnabled = enabled;
+  }
 
   constructor(
     scene: Phaser.Scene,
     scale: number = 0.6,
     hasCounter: boolean = true,
+    hoverEnabled: boolean = false,
   ) {
     this.scene = scene;
     this.scale = scale;
     this.hasCounter = hasCounter;
+    this.hoverEnabled = hoverEnabled;
+    this.scene.input.on("pointermove", this.handlePointerMove, this);
   }
 
   setPosition(x: number, y: number) {
@@ -31,15 +42,40 @@ export class StackView {
     this.clear();
 
     if (!cards || cards.length === 0) return;
+    this.fullCards = [...cards];
 
-    const top = cards[cards.length - 1];
+    const stackSize = Math.min(cards.length, this.MAX_STACK_VISIBLE);
+    const stackLift = Math.round(16 * this.scale);
+    const offset = Math.max(2, stackLift);
 
-    const sprite = this.scene.add.image(this.x, this.y, top.texture);
-    sprite.setScale(this.scale);
+    let topSprite!: Phaser.GameObjects.Image;
 
-    this.cards.push(sprite);
+    for (let i = 0; i < stackSize; i++) {
+      const cardData = cards[cards.length - 1 - i]; // 👈 von oben nach unten
 
-    this.renderCounter(cards.length, sprite, cards.length);
+      const card = this.scene.add.image(
+        this.x - i * offset,
+        this.y - i * offset,
+        cardData.texture,
+      );
+
+      card.setScale(this.scale);
+      card.setDepth(i);
+
+      this.cards.push(card);
+
+      if (i === 0) topSprite = card;
+    }
+
+    this.renderCounter(cards.length, topSprite, stackLift);
+
+    if (this.hoverEnabled && this.cards.length > 0) {
+      const hitArea = this.cards[0];
+
+      hitArea.setInteractive();
+
+      hitArea.on("pointerover", () => this.expandStack());
+    }
   }
 
   // 👉 Fall 2: nur Anzahl (DrawPile etc.)
@@ -48,7 +84,7 @@ export class StackView {
 
     if (count <= 0) return;
 
-    const stackSize = Math.min(count, 5);
+    const stackSize = Math.min(count, this.MAX_STACK_VISIBLE);
 
     let topSprite!: Phaser.GameObjects.Image;
 
@@ -70,6 +106,18 @@ export class StackView {
       if (i === 0) topSprite = card;
     }
     this.renderCounter(count, topSprite, stackLift);
+  }
+
+  private handlePointerMove(pointer: Phaser.Input.Pointer) {
+    if (!this.isExpanded) return;
+
+    const inside = this.cards.some(card =>
+      card.getBounds().contains(pointer.x, pointer.y),
+    );
+
+    if (!inside) {
+      this.collapseStack();
+    }
   }
 
   private renderCounter(
@@ -102,8 +150,47 @@ export class StackView {
     this.counter.setDepth(1000);
   }
 
+  private expandStack() {
+    if (!this.hoverEnabled || this.fullCards.length <= this.MAX_STACK_VISIBLE)
+      return;
+
+    this.isExpanded = true;
+
+    // 👉 neu rendern mit ALLEN Karten
+    this.clear();
+
+    const spacing = 60 * this.scale;
+    const totalWidth = (this.fullCards.length - 1) * spacing;
+
+    this.cards = [];
+
+    this.fullCards.forEach((cardData, index) => {
+      const card = this.scene.add.image(
+        this.x - totalWidth / 2 + index * spacing,
+        this.y - 15,
+        cardData.texture,
+      );
+
+      card.setScale(this.scale);
+      card.setDepth(100 + index);
+
+      this.cards.push(card);
+    });
+  }
+
+  private collapseStack() {
+    this.isExpanded = false;
+    this.setCards(this.fullCards);
+  }
+
   private clear() {
-    this.cards.forEach(c => c.destroy());
+    this.scene.tweens.killTweensOf(this.cards);
+
+    this.cards.forEach(c => {
+      c.removeAllListeners();
+      c.destroy();
+    });
+
     this.cards = [];
 
     if (this.counter) {
