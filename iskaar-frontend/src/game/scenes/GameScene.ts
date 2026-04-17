@@ -14,7 +14,6 @@ export class GameScene extends Phaser.Scene {
   private opponentViews: OpponentView[] = [];
   private drawPileView!: StackView;
   private discardPileView!: StackView;
-  private readonly DEV_MOCK_DISCARD = false;
 
   getCenterX() {
     return this.scale.width / 2;
@@ -71,13 +70,13 @@ export class GameScene extends Phaser.Scene {
       this.updateDrawPile(view.me.drawPileSize);
     }
 
-    if (view?.me?.hand) {
-      this.handView.setCards(view.me.hand);
-    }
     if (view?.me?.discard) {
       this.updateDiscardPile(
-        view?.me?.discard as unknown as { texture: string }[],
+        view?.me?.discard as unknown as { name: string }[],
       );
+    }
+    if (view?.me?.hand) {
+      this.handView.setCards(view.me.hand);
     }
     const inPlayCards = this.getActiveInPlay(view);
     this.inPlayView.setCards(inPlayCards);
@@ -98,7 +97,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateDrawPile(size: number) {
-    const offsetX = -350;
+    const offsetX = -this.handView.getHandViewWidth();
 
     const x = this.handView.getCenterX() + offsetX;
     const y = this.scale.height - 110;
@@ -107,8 +106,8 @@ export class GameScene extends Phaser.Scene {
     this.drawPileView.setCount(size);
   }
 
-  private updateDiscardPile(cards: { texture: string }[]) {
-    const offsetX = 350; // 👉 rechts vom Fächer
+  private updateDiscardPile(cards: { name: string }[]) {
+    const offsetX = this.handView.getHandViewWidth(); // 👉 rechts vom Fächer
 
     const x = this.getCenterX() + offsetX;
     const y = this.scale.height - 120;
@@ -117,22 +116,6 @@ export class GameScene extends Phaser.Scene {
     if (cards && cards.length > 0) {
       console.log("REAL DISCARD", cards);
       this.discardPileView.setCards(cards);
-      return;
-    }
-
-    // ✅ DEV Mock
-    if (this.DEV_MOCK_DISCARD) {
-      console.log("MOCK DISCARD");
-      this.discardPileView.setCards([
-        { texture: "Knut" },
-        { texture: "Knut" },
-        { texture: "Knut" },
-        { texture: "Knut" },
-        { texture: "Knut" },
-        { texture: "Knut" },
-        { texture: "Knut" },
-        { texture: "Knut" },
-      ]);
       return;
     }
     console.log("NIX");
@@ -145,7 +128,7 @@ export class GameScene extends Phaser.Scene {
     const baseX = this.scale.width;
     const baseY = 100;
     const spacing = 120;
-    const width = 300;
+    const width = 320;
 
     view.opponents.filter(Boolean).forEach((opponentData, index) => {
       if (!this.opponentViews[index]) {

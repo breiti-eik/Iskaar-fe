@@ -7,6 +7,11 @@ export class HandView {
   getCenterX() {
     return this.scene.scale.width / 2;
   }
+
+  getHandViewWidth() {
+    return this.handViewWidth;
+  }
+
   private scene: Phaser.Scene;
   private cards: Card[] = [];
 
@@ -14,9 +19,8 @@ export class HandView {
     return this.scene.scale.height - 150;
   }
 
-  private readonly spacing = 120;
-  private readonly curveStrength = 10;
   private hoveredCard?: Card;
+  private handViewWidth = 400;
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
@@ -41,11 +45,6 @@ export class HandView {
   removeCard(card: Card) {
     this.cards = this.cards.filter(c => c !== card);
     this.updateLayout();
-  }
-
-  private getCardX(index: number, total: number): number {
-    const totalWidth = (total - 1) * this.spacing;
-    return this.scene.scale.width / 2 - totalWidth / 2 + index * this.spacing;
   }
 
   private clear() {
@@ -75,30 +74,11 @@ export class HandView {
     });
   }
 
-  private getRotation(index: number, total: number): number {
-    if (total <= 1) return 0;
-    const mid = (total - 1) / 2;
-    const distanceFromCenter = index - mid;
-
-    const maxAngle = 0.25; // ca. 14°
-    return (distanceFromCenter / mid) * maxAngle;
-  }
-
-  private getCardY(index: number, total: number): number {
-    if (total <= 1) return this.baseY;
-    const mid = (total - 1) / 2;
-    const distanceFromCenter = index - mid;
-
-    return this.baseY + Math.pow(distanceFromCenter, 2) * this.curveStrength;
-  }
-
   private updateLayout() {
     const total = this.cards.length;
 
     this.cards.forEach((card, index) => {
-      const x = this.getCardX(index, total);
-      const y = this.getCardY(index, total);
-      const rotation = this.getRotation(index, total);
+      const { x, y, rotation } = this.getCardTransform(index, total);
 
       const isHovered = card === this.hoveredCard;
 
@@ -113,16 +93,47 @@ export class HandView {
     });
   }
 
-  getVisualBottomY(): number {
-    if (this.cards.length === 0) return this.baseY;
+  private getCardTransform(index: number, total: number) {
+    const centerX = this.getCenterX();
+    const baseY = this.baseY;
 
-    let maxY = this.baseY;
+    if (total === 1) {
+      return { x: centerX, y: baseY, rotation: 0 };
+    }
 
-    this.cards.forEach((_, index) => {
-      const y = this.getCardY(index, this.cards.length);
-      if (y > maxY) maxY = y;
-    });
+    const minWidth = 180; // kleine Hände (2–3 Karten)
+    const maxWidth = 400; // 🔥 harte Grenze wegen Kollision
 
-    return maxY;
+    // normalisieren (wie viele Karten im Verhältnis zu "viel")
+    const t = Phaser.Math.Clamp((total - 1) / 12, 0, 1);
+
+    // 🔥 easing → wichtig für gutes Gefühl bei kleinen Händen
+    const eased = Math.pow(t, 0.75);
+
+    // finale Breite
+    const maxTotalWidth = Phaser.Math.Linear(minWidth, maxWidth, eased);
+
+    // Radius bleibt gleich
+    const radius = 500;
+
+    // 🔥 Winkel berechnen basierend auf gewünschter Breite
+    const maxSpread = Math.min(
+      2 * Math.asin(maxTotalWidth / (2 * radius)),
+      1.2, // optionales hartes Limit
+    );
+
+    const startAngle = -maxSpread / 2;
+    const step = maxSpread / (total - 1);
+
+    const angle = startAngle + index * step;
+
+    const x = centerX + Math.sin(angle) * radius;
+    const y = baseY - Math.cos(angle) * radius + radius;
+
+    return {
+      x,
+      y,
+      rotation: angle * 0.8, // Karten folgen dem Bogen
+    };
   }
 }

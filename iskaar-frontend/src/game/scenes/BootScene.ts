@@ -7,6 +7,8 @@ export class BootScene extends Phaser.Scene {
 
   preload() {
     this.load.image("Knut", "assets/cards/knut.png");
+    this.load.image("Gro", "assets/cards/gro.png");
+    this.load.image("Rand", "assets/cards/rand.png");
     this.load.image("Troll", "assets/cards/troll.png");
     this.load.image("CardBack", "assets/cards/back.png");
 

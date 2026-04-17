@@ -13,7 +13,7 @@ export class StackView {
   private MAX_STACK_VISIBLE = 3;
   private hoverEnabled: boolean = false;
   private isExpanded: boolean = false;
-  private fullCards: { texture: string }[] = [];
+  private fullCards: { name: string }[] = [];
 
   setHoverEnabled(enabled: boolean) {
     this.hoverEnabled = enabled;
@@ -37,12 +37,15 @@ export class StackView {
     this.y = y;
   }
 
-  // 👉 Fall 1: echte Karten (Discard etc.)
-  setCards(cards: { texture: string }[]) {
+  // 👉 Fall 1: Karten verdeckt (DrawPile etc.)
+  setCards(cards: { name: string }[]) {
+    this.isExpanded = false;
     this.clear();
 
     if (!cards || cards.length === 0) return;
     this.fullCards = [...cards];
+
+    console.log("SetCards:", this.fullCards);
 
     const stackSize = Math.min(cards.length, this.MAX_STACK_VISIBLE);
     const stackLift = Math.round(16 * this.scale);
@@ -56,8 +59,10 @@ export class StackView {
       const card = this.scene.add.image(
         this.x - i * offset,
         this.y - i * offset,
-        cardData.texture,
+        cardData.name,
       );
+
+      console.log("Card: ", card);
 
       card.setScale(this.scale);
       card.setDepth(i);
@@ -78,7 +83,7 @@ export class StackView {
     }
   }
 
-  // 👉 Fall 2: nur Anzahl (DrawPile etc.)
+  // 👉 Fall 2: Karten aufgedeckt (Discard etc.)
   setCount(count: number) {
     this.clear();
 
@@ -109,7 +114,7 @@ export class StackView {
   }
 
   private handlePointerMove(pointer: Phaser.Input.Pointer) {
-    if (!this.isExpanded) return;
+    if (!this.isExpanded || this.cards.length === 0) return;
 
     const inside = this.cards.some(card =>
       card.getBounds().contains(pointer.x, pointer.y),
@@ -168,7 +173,7 @@ export class StackView {
       const card = this.scene.add.image(
         this.x - totalWidth / 2 + index * spacing,
         this.y - 15,
-        cardData.texture,
+        cardData.name,
       );
 
       card.setScale(this.scale);

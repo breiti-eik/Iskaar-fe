@@ -5,14 +5,17 @@ import { MessageFactory } from "../message/MessageFactory";
 import type { ServerMessage } from "../message/ServerMessage";
 import { GameViewMessage } from "../message/GameViewMessage";
 import type { CardPlayedMessage } from "../message/CardPlayedMessage";
+import { MOCK_GAME_VIEW, MOCK_GAME_VIEW_FULL } from "../mock/MockGameView";
 
 export class WebSocketConnection {
   private client?: Client;
 
+  private isDisplayMockEnabled = import.meta.env.DEV;
+
   connect(gameId: string, playerId: string, onConnected?: () => void) {
     this.client = new Client({
       webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
-      reconnectDelay: 5000,
+      reconnectDelay: 0,
 
       connectHeaders: { playerId },
 
@@ -51,8 +54,12 @@ export class WebSocketConnection {
 
   private onMessage(raw: IMessage) {
     const json = JSON.parse(raw.body);
-    const message = MessageFactory.fromJson(json);
-    console.log("Received message:", message);
+    let message = undefined;
+    if (this.isDisplayMockEnabled) {
+      message = MessageFactory.fromJson(MOCK_GAME_VIEW);
+    } else {
+      message = MessageFactory.fromJson(json);
+    }
 
     this.dispatch(message);
   }

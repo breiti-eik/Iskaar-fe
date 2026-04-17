@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import type { OpponentViewData } from "../view/OpponentViewData";
-import { Card } from "../objects/Card";
 
 export class OpponentView {
   private scene: Phaser.Scene;
@@ -8,6 +7,8 @@ export class OpponentView {
 
   private hiddenX: number;
   private visibleX: number;
+
+  private visibleBarWidth;
 
   private expanded = false;
 
@@ -19,13 +20,14 @@ export class OpponentView {
 
   private cardAreaContainer!: Phaser.GameObjects.Container;
 
-  private readonly WIDTH = 455;
+  private readonly BAR_WIDTH = 455;
   private readonly HEIGHT = 110;
 
   private readonly CARD_WIDTH = 40;
   private readonly CARD_HEIGHT = 60;
 
-  private readonly DEV_MOCK_DISCARD = true;
+  private readonly LEFT_PADDING = 10;
+  private readonly RIGHT_PADDING = 5;
 
   constructor(
     scene: Phaser.Scene,
@@ -37,7 +39,9 @@ export class OpponentView {
     this.scene = scene;
 
     this.visibleX = x;
-    this.hiddenX = x + width + 20;
+    this.hiddenX = x + width;
+
+    this.visibleBarWidth = this.BAR_WIDTH - width;
 
     this.container = scene.add.container(this.hiddenX, y);
 
@@ -51,11 +55,11 @@ export class OpponentView {
     const bg = this.scene.add
       .image(0, 0, "OpponentBarBg")
       .setOrigin(1, 0.5)
-      .setDisplaySize(this.WIDTH, this.HEIGHT);
+      .setDisplaySize(this.BAR_WIDTH, this.HEIGHT);
 
     // NAME (links sichtbar im collapsed state)
     this.nameText = this.scene.add
-      .text(-this.WIDTH + 20, 5, "", {
+      .text(-this.BAR_WIDTH + this.LEFT_PADDING, 5, "", {
         fontSize: "20px",
         color: "#ffffff",
         stroke: "#000000",
@@ -100,7 +104,7 @@ export class OpponentView {
 
   private buildInteraction(): void {
     const hit = this.scene.add
-      .rectangle(0, 0, this.WIDTH, this.HEIGHT)
+      .rectangle(0, 0, this.BAR_WIDTH, this.HEIGHT)
       .setOrigin(1, 0.5)
       .setInteractive({ useHandCursor: true });
 
@@ -142,6 +146,28 @@ export class OpponentView {
     // NAME
     this.nameText.setText(data.playerName);
 
+    const maxWidth =
+      this.visibleBarWidth - (this.LEFT_PADDING + this.RIGHT_PADDING);
+
+    this.nameText.setScale(1);
+
+    const textWidth = this.nameText.width;
+
+    let finalScale = 1;
+
+    if (textWidth > maxWidth) {
+      finalScale = maxWidth / textWidth;
+      this.nameText.setScale(finalScale);
+    }
+
+    // 🔥 NEU: zentrieren innerhalb des sichtbaren Bereichs
+    const scaledWidth = textWidth * finalScale;
+
+    const leftEdge = -this.BAR_WIDTH + this.LEFT_PADDING;
+    const centerOffset = (maxWidth - scaledWidth) / 2;
+
+    this.nameText.x = leftEdge + centerOffset;
+
     // HAND
     this.handIcons.forEach((icon, i) => {
       icon.setVisible(i < data.handSize);
@@ -149,9 +175,7 @@ export class OpponentView {
     // DRAW
     this.drawPileIcon.setVisible(data.drawPileSize > 0);
 
-    const textureKey =
-      data.discardTopCard?.textureKey ??
-      (this.DEV_MOCK_DISCARD ? "Knut" : null);
+    const textureKey = data.discardTopCard?.textureKey;
 
     if (textureKey) {
       this.discardImage.setTexture(textureKey);
