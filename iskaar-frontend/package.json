@@ -1,27 +1,28 @@
 {
-  "name": "iskaar-frontend",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@types/sockjs-client": "^1.5.4",
-    "typescript": "~6.0.2",
-    "vite": "^8.0.4"
-  },
-  "dependencies": {
-    "@stomp/stompjs": "^7.3.0",
-    "mitt": "^3.0.1",
-    "phaser": "^3.90.0",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
-    "react-router-dom": "^7.14.1",
-    "sockjs-client": "^1.6.1"
-  }
+    "name": "iskaar-frontend",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite --mode dev",
+        "dev:stage": "vite --mode stage",
+        "build": "tsc && vite build",
+        "preview": "vite preview"
+    },
+    "devDependencies": {
+        "@types/react": "^19.2.14",
+        "@types/react-dom": "^19.2.3",
+        "@types/sockjs-client": "^1.5.4",
+        "typescript": "~6.0.2",
+        "vite": "^8.0.4"
+    },
+    "dependencies": {
+        "@stomp/stompjs": "^7.3.0",
+        "mitt": "^3.0.1",
+        "phaser": "^3.90.0",
+        "react": "^19.2.5",
+        "react-dom": "^19.2.5",
+        "react-router-dom": "^7.14.1",
+        "sockjs-client": "^1.6.1"
+    }
 }

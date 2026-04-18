@@ -5,12 +5,12 @@ import { MessageFactory } from "../message/MessageFactory";
 import type { ServerMessage } from "../message/ServerMessage";
 import { GameViewMessage } from "../message/GameViewMessage";
 import type { CardPlayedMessage } from "../message/CardPlayedMessage";
-import { MOCK_GAME_VIEW, MOCK_GAME_VIEW_FULL } from "../mock/MockGameView";
+import { MOCK_GAME_VIEW } from "../mock/MockGameView";
 
 export class WebSocketConnection {
   private client?: Client;
 
-  private isDisplayMockEnabled = import.meta.env.DEV;
+  private isDisplayMockEnabled = import.meta.env.VITE_USE_MOCK === "true";
 
   connect(gameId: string, playerId: string, onConnected?: () => void) {
     this.client = new Client({
@@ -55,6 +55,7 @@ export class WebSocketConnection {
   private onMessage(raw: IMessage) {
     const json = JSON.parse(raw.body);
     let message = undefined;
+    console.debug(json);
     if (this.isDisplayMockEnabled) {
       message = MessageFactory.fromJson(MOCK_GAME_VIEW);
     } else {

@@ -118,8 +118,6 @@ export class GameScene extends Phaser.Scene {
       this.discardPileView.setCards(cards);
       return;
     }
-    console.log("NIX");
-
     // ✅ leer
     this.discardPileView.setCards([]);
   }
