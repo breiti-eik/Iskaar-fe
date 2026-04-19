@@ -4,10 +4,25 @@ import { useNavigate } from "react-router-dom";
 const FIXED_GAME_ID = "11111111-1111-1111-1111-111111111111";
 
 export default function LobbyPage() {
+  console.debug(import.meta.env);
+  const isMock = import.meta.env.VITE_USE_MOCK === "true";
   const [playerName, setPlayerName] = useState("");
   const navigate = useNavigate();
 
   const handleJoin = async () => {
+    if (isMock) {
+      console.log("Mock aktiv – kein Servercall");
+
+      navigate("/game", {
+        state: {
+          gameId: FIXED_GAME_ID,
+          playerId: "mock-player-id",
+        },
+      });
+
+      return;
+    }
+
     const response = await fetch(
       `http://localhost:8080/games/${FIXED_GAME_ID}/join`,
       {

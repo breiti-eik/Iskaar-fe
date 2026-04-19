@@ -4,13 +4,10 @@ import { GameEventBus } from "../../game/events/GameEventBus";
 import { MessageFactory } from "../message/MessageFactory";
 import type { ServerMessage } from "../message/ServerMessage";
 import { GameViewMessage } from "../message/GameViewMessage";
-import type { CardPlayedMessage } from "../message/CardPlayedMessage";
-import { MOCK_GAME_VIEW } from "../mock/MockGameView";
+import { MOCK_GAME_VIEW } from "../mock/MockGameData";
 
 export class WebSocketConnection {
   private client?: Client;
-
-  private isDisplayMockEnabled = import.meta.env.VITE_USE_MOCK === "true";
 
   connect(gameId: string, playerId: string, onConnected?: () => void) {
     this.client = new Client({
@@ -56,27 +53,15 @@ export class WebSocketConnection {
     const json = JSON.parse(raw.body);
     let message = undefined;
     console.debug(json);
-    if (this.isDisplayMockEnabled) {
-      message = MessageFactory.fromJson(MOCK_GAME_VIEW);
-    } else {
-      message = MessageFactory.fromJson(json);
-    }
+    message = MessageFactory.fromJson(json);
 
     this.dispatch(message);
   }
 
   private dispatch(message: ServerMessage) {
     switch (message.type) {
-      case "CARD_PLAYED":
-        GameEventBus.emit("cardPlayed", {
-          cardId: (message as CardPlayedMessage).card.id,
-        });
-        break;
-
       case "GAME_VIEW":
-        GameEventBus.emit("gameView", {
-          view: (message as GameViewMessage).view,
-        });
+        GameEventBus.emit("gameView", (message as GameViewMessage).view);
         break;
     }
   }

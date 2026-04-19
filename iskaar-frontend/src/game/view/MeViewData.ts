@@ -1,22 +1,22 @@
-import { Card } from "../objects/Card";
+import type { CardViewData } from "./CardViewData";
 
 export class MeViewData {
   playerId: string;
   playerName: string;
   drawPileSize: number;
-  persistentCards: Card[];
-  hand: Card[];
-  inPlay: Card[];
-  discard: Card[];
+  persistentCards: CardViewData[];
+  hand: CardViewData[];
+  inPlay: CardViewData[];
+  discard: CardViewData[];
 
   constructor(
     playerId: string,
     playerName: string,
     drawPileSize: number,
-    persistentCards: Card[],
-    hand: Card[],
-    inPlay: Card[],
-    discardPile: Card[],
+    persistentCards: CardViewData[],
+    hand: CardViewData[],
+    inPlay: CardViewData[],
+    discardPile: CardViewData[],
   ) {
     this.playerId = playerId;
     this.playerName = playerName;

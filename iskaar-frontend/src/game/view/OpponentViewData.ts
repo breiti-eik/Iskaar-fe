@@ -1,20 +1,20 @@
-import type { Card } from "../objects/Card";
+import type { CardViewData } from "./CardViewData";
 
 export class OpponentViewData {
   playerId: string;
   playerName: string;
   drawPileSize: number;
   handSize: number;
-  inPlay: Card[];
-  discardTopCard: Card | null;
+  inPlay: CardViewData[];
+  discardTopCard: CardViewData | null;
 
   constructor(
     playerId: string,
     playerName: string,
     drawPileSize: number,
     handSize: number,
-    inPlay: Card[],
-    discardTopCard: Card | null,
+    inPlay: CardViewData[],
+    discardTopCard: CardViewData | null,
   ) {
     this.playerId = playerId;
     this.playerName = playerName;

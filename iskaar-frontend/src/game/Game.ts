@@ -8,6 +8,7 @@ export function createGame(
   gameId: string,
   playerId: string,
 ): Phaser.Game {
+  const isMock = import.meta.env.VITE_USE_MOCK === "true";
   console.log("CreateGame:", { gameId, playerId });
   const game = new Phaser.Game({
     type: Phaser.AUTO,
@@ -21,12 +22,16 @@ export function createGame(
     },
     scene: [BootScene],
   });
-  const client = new GameClient();
-  client.connect(gameId, playerId);
+  if (isMock) {
+    game.scene.add("GameScene", GameScene);
+  } else {
+    const client = new GameClient();
+    client.connect(gameId, playerId);
 
-  (game as any).client = client;
+    (game as any).client = client;
 
-  game.scene.add("GameScene", GameScene, false, { gameClient: client });
+    game.scene.add("GameScene", GameScene, false, { gameClient: client });
+  }
 
   return game;
 }

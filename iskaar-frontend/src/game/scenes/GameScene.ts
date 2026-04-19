@@ -1,19 +1,21 @@
 import Phaser from "phaser";
 import { HandView } from "../ui/HandView";
-import { InPlayViewData } from "../view/InPlayViewData";
+import { InPlayView } from "../ui/InPlayView";
 import { GameEventBus } from "../events/GameEventBus";
 import { GameClient } from "../../core/network/GameClient";
 import type { GameViewData } from "../view/GameViewData";
 import { OpponentView } from "../ui/OpponentView";
 import { StackView } from "../ui/StatckView";
+import { MOCK_GAME_VIEW } from "../../core/mock/MockGameData";
 
 export class GameScene extends Phaser.Scene {
   private gameClient!: GameClient;
   private handView!: HandView;
-  private inPlayView!: InPlayViewData;
+  private inPlayView!: InPlayView;
   private opponentViews: OpponentView[] = [];
   private drawPileView!: StackView;
   private discardPileView!: StackView;
+  private isMock = import.meta.env.VITE_USE_MOCK === "true";
 
   getCenterX() {
     return this.scale.width / 2;
@@ -40,11 +42,14 @@ export class GameScene extends Phaser.Scene {
     this.drawPileView = new StackView(this, 0.6);
     this.handView = new HandView(this);
     this.discardPileView = new StackView(this, 0.6, false, true);
-    this.inPlayView = new InPlayViewData(this);
+    this.inPlayView = new InPlayView(this);
 
     // 🔥 Events
     GameEventBus.on("gameView", this.onGameView);
     GameEventBus.on("cardPlayed", this.onCardPlayed);
+    if (this.isMock) {
+      this.emitMockGameView();
+    }
   }
 
   shutdown() {
@@ -53,30 +58,32 @@ export class GameScene extends Phaser.Scene {
   }
 
   private onCardPlayed = (event: { cardId: string }) => {
-    console.log("Play card:", event.cardId);
-
     this.gameClient.playCard(
       "11111111-1111-1111-1111-111111111111",
       event.cardId,
     );
+    console.log("Click card:", event.cardId);
   };
 
-  private onGameView = (event: { view: GameViewData }) => {
-    const view = event.view;
+  private onGameView = (event: GameViewData) => {
+    const view = event;
+    console.log("View: ", view);
 
-    console.log("GAME VIEW:", view);
+    if (!view?.me) {
+      console.warn("Invalid GameViewData", event);
+      return;
+    }
+    const { me } = view;
 
-    if (view?.me?.drawPileSize !== undefined) {
+    if (me.drawPileSize !== undefined) {
       this.updateDrawPile(view.me.drawPileSize);
     }
 
-    if (view?.me?.discard) {
-      this.updateDiscardPile(
-        view?.me?.discard as unknown as { name: string }[],
-      );
+    if (me.discard) {
+      this.updateDiscardPile(me.discard);
     }
-    if (view?.me?.hand) {
-      this.handView.setCards(view.me.hand);
+    if (me.hand) {
+      this.handView.setCards(me.hand);
     }
     const inPlayCards = this.getActiveInPlay(view);
     this.inPlayView.setCards(inPlayCards);
@@ -143,5 +150,9 @@ export class GameScene extends Phaser.Scene {
         this.opponentViews[index].update(opponentData);
       }
     });
+  }
+
+  private emitMockGameView() {
+    GameEventBus.emit("gameView", MOCK_GAME_VIEW.view);
   }
 }

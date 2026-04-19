@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 import { Card } from "../objects/Card";
-import type { CardViewData } from "./CardViewData";
+import type { CardViewData } from "../view/CardViewData";
 
-export class InPlayViewData {
+export class InPlayView {
   private scene: Phaser.Scene;
   private cards: Card[] = [];
 
