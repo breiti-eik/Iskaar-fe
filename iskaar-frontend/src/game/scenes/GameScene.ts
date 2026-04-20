@@ -12,7 +12,6 @@ export class GameScene extends Phaser.Scene {
   private gameClient!: GameClient;
   private handView!: HandView;
   private inPlayView!: InPlayView;
-  private activeFrame!: Phaser.GameObjects.Image;
   private opponentViews: OpponentView[] = [];
   private drawPileView!: StackView;
   private discardPileView!: StackView;
@@ -38,17 +37,6 @@ export class GameScene extends Phaser.Scene {
       "Background",
     );
     bg.setDisplaySize(this.scale.width, this.scale.height);
-
-    this.activeFrame = this.add.image(0, 0, "Frame");
-
-    this.activeFrame.setOrigin(0.5);
-    this.activeFrame.setDisplaySize(
-      this.scale.width * 0.5,
-      this.scale.height * 0.35,
-    );
-
-    this.activeFrame.setDepth(5);
-    this.activeFrame.setVisible(false);
 
     // Views
     this.drawPileView = new StackView(this, 0.6);
@@ -104,10 +92,9 @@ export class GameScene extends Phaser.Scene {
     const inPlayCards = this.getActiveInPlay(view);
     this.inPlayView.setCards(inPlayCards);
     const isActive = me.playerId === view.activePlayerId;
-    this.updateActiveFrame(isActive);
+    this.inPlayView.updateFrame(isActive);
 
     this.updateOpponents(view);
-    console.log(this.activeFrame.width, this.activeFrame.height);
   };
 
   private getActiveInPlay(view: GameViewData) {
@@ -120,38 +107,6 @@ export class GameScene extends Phaser.Scene {
     );
 
     return opponent?.inPlay ?? [];
-  }
-
-  private updateActiveFrame(active: boolean) {
-    const bounds = this.inPlayView.getBounds();
-
-    let x: number;
-    let y: number;
-
-    if (bounds.width === 0 || bounds.height === 0) {
-      x = this.scale.width / 2;
-      y = this.scale.height / 2;
-    } else {
-      x = bounds.centerX;
-      y = bounds.centerY;
-    }
-
-    this.activeFrame.setPosition(x, y);
-    this.activeFrame.setVisible(true);
-
-    const paddingX = this.scale.width * 0.1;
-    const targetWidth = this.scale.width * 0.5 - paddingX;
-
-    const aspectRatio = 0.419; //RATIO bei 1050x440
-    const targetHeight = targetWidth * aspectRatio;
-
-    this.activeFrame.setDisplaySize(targetWidth, targetHeight);
-
-    if (active) {
-      this.activeFrame.setTint(0xfff3cd);
-    } else {
-      this.activeFrame.clearTint();
-    }
   }
 
   private updateDrawPile(size: number) {
