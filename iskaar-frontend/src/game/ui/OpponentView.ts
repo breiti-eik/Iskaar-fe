@@ -175,7 +175,7 @@ export class OpponentView {
     // DRAW
     this.drawPileIcon.setVisible(data.drawPileSize > 0);
 
-    const textureKey = data.discardTopCard?.textureKey;
+    const textureKey = data.discardTopCard?.name;
 
     if (textureKey) {
       this.discardImage.setTexture(textureKey);

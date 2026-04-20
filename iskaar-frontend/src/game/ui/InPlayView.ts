@@ -3,14 +3,18 @@ import { Card } from "../objects/Card";
 import type { CardViewData } from "../view/CardViewData";
 
 export class InPlayView {
+  private container: Phaser.GameObjects.Container;
   private scene: Phaser.Scene;
   private cards: Card[] = [];
 
-  private readonly centerX = 1000;
   private readonly spacing = 140;
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
+    this.container = this.scene.add.container(
+      this.scene.scale.width / 2,
+      this.scene.scale.height / 2,
+    );
   }
 
   setCards(cards: CardViewData[]) {
@@ -19,6 +23,7 @@ export class InPlayView {
     cards.forEach(cardData => {
       const card = new Card(this.scene, 0, 0, cardData.id, cardData.name);
 
+      this.container.add(card);
       this.cards.push(card);
     });
 
@@ -30,13 +35,9 @@ export class InPlayView {
     this.cards = [];
   }
 
-  private get baseY(): number {
-    return this.scene.scale.height / 2; // 👈 Mitte!
-  }
-
   private getCardX(index: number, total: number): number {
     const totalWidth = (total - 1) * this.spacing;
-    return this.centerX - totalWidth / 2 + index * this.spacing;
+    return -totalWidth / 2 + index * this.spacing;
   }
 
   private updateLayout() {
@@ -44,7 +45,7 @@ export class InPlayView {
 
     this.cards.forEach((card, index) => {
       const x = this.getCardX(index, total);
-      const y = this.baseY;
+      const y = 0;
 
       this.scene.tweens.add({
         targets: card,
@@ -55,5 +56,9 @@ export class InPlayView {
         duration: 150,
       });
     });
+  }
+
+  getBounds(): Phaser.Geom.Rectangle {
+    return this.container.getBounds();
   }
 }

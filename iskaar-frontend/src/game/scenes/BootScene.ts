@@ -6,15 +6,22 @@ export class BootScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("Knut", "assets/cards/knut.png");
-    this.load.image("Gro", "assets/cards/gro.png");
-    this.load.image("Rand", "assets/cards/rand.png");
-    this.load.image("Troll", "assets/cards/troll.png");
-    this.load.image("CardBack", "assets/cards/back.png");
+    //cards
+    this.load.setPath("assets/cards");
+    this.load.image("CardBack", "back.png");
+    this.load.image("Knut", "knut.png");
+    this.load.image("Gro", "gro.png");
+    this.load.image("Rand", "rand.png");
+    this.load.image("Troll", "troll.png");
 
-    //background
-    this.load.image("Background", "assets/general/background.png");
-    this.load.image("OpponentBarBg", "assets/general/opponent_area_back.png");
+    //backgrounds
+    this.load.setPath("assets/backgrounds");
+    this.load.image("Background", "background.png");
+
+    //panels
+    this.load.setPath("assets/ui/panels");
+    this.load.image("Frame", "frame.png");
+    this.load.image("OpponentBarBg", "opponent_area_back.png");
   }
 
   create() {
