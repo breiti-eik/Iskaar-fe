@@ -7,7 +7,7 @@ export class InPlayView {
   private scene: Phaser.Scene;
   private cards: Card[] = [];
 
-  private readonly spacing = 140;
+  private readonly spacing = 155;
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
@@ -20,8 +20,11 @@ export class InPlayView {
   setCards(cards: CardViewData[]) {
     this.clear();
 
-    cards.forEach(cardData => {
-      const card = new Card(this.scene, 0, 0, cardData.id, cardData.name);
+    const total = cards.length;
+
+    cards.forEach((cardData, index) => {
+      const x = this.getCardX(index, total);
+      const card = new Card(this.scene, x, 0, cardData.id, cardData.name);
 
       this.container.add(card);
       this.cards.push(card);
