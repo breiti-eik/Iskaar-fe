@@ -1,0 +1,297 @@
+S0
+
+Du befindest dich in der Welt Iskaar.
+
+Der König von Iskaar sucht einen neuen Leibwächter, da sein bisheriger Leibwächter in den wohlverdienten Ruhestand geht. Der König ist sehr anspruchsvoll und duldet ausschließlich den Besten an seiner Seite. Aus diesem Grund hat er einen Wettbewerb ausgerufen, in dem ein geeigneter Nachfolger gefunden werden soll.
+
+Die Teilnehmenden müssen ausreichend Erfahrung und Erfolge vorweisen, um den König zu beeindrucken. Dabei ist Vorsicht geboten, denn nicht alle Mitstreiter kämpfen mit fairen Mitteln.
+
+Rahmenbedingungen des Spiels
+
+Spieleranzahl: 2–4 Spieler
+Altersempfehlung: ab 10 Jahren
+Genre: Deckbuilder
+Spieldauer: ca. 30 Minuten pro Spieler
+Spielcharakter: Taktik und Glück sind ausgewogen
+
+Spielmaterial (gegeben und fix)
+
+1 Spielbrett
+4 Spieler-Tableaus
+8 blaue Positionsmarker
+8 Marker mit je 10 Siegpunkten
+16 Marker mit je 5 Siegpunkten
+16 Marker mit je 1 Siegpunkt
+9 Münzchips
+54 Geldkarten mit den Werten 1, 2 und 3
+80 Ausrüstungskarten
+20 Trollkarten
+1 Bankregel (kompakt)
+1 Anleitung
+1 Kartenerklärung
+
+Ziel
+
+Die Spieler konkurrieren darum, sich als würdigster Leibwächter des Königs zu erweisen.
+
+S1 – Spielaufbau
+Übersicht
+
+Der Spielaufbau besteht aus vier klar getrennten Bereichen:
+
+Spielerbereiche
+Zentrale Kartenstapel
+Spielplan mit Auslage
+Bank- und Vorratsbereiche
+
+Alle Bereiche werden vor Spielbeginn vollständig vorbereitet.
+
+1. Spielerbereiche
+
+Jeder Spieler erhält:
+
+1 Spieler-Tableau
+2 blaue Positionsmarker
+2 Siegpunktmarker
+
+Startkarten
+
+4 Geldkarten „Knut“
+1 Trollkarte
+
+Diese Karten bilden das Startdeck des Spielers.
+
+Starthand
+
+Jeder Spieler zieht 3 Handkarten.
+
+2. Zentrale Kartenstapel
+
+Im Spielerbereich befinden sich:
+
+1 Nachziehstapel (verdeckt)
+1 Ablagestapel
+die aktuell gehaltenen Handkarten
+
+3. Spielplan und Auslage
+
+Der Spielplan liegt zentral aus.
+
+4 Auslageplätze für Ausrüstungskarten
+Auf jedem Platz liegt ein Ausrüstungskartenstapel
+Die oberste Karte jedes Stapels wird aufgedeckt
+
+4. Bank- und Vorratsbereiche
+
+Am Rand des Spielplans:
+
+Geldkarten (Knut, Gro, Rand)
+Trollkarten (Vorrat)
+
+Anzahl Trollkarten abhängig von Spielerzahl.
+
+6. Zugkonto
+
+Zu Beginn jeder Runde:
+
+1 Zug
+0 Geldzüge
+1 Kauf
+
+S2 – Spielziel
+
+Das Spiel endet, sobald ein Vorratsstapel leer ist.
+
+Gewinner ist der Spieler mit den meisten Siegpunkten.
+
+Gleichstand:
+
+Mehr Körperkraft
+
+Höhere Position auf Abenteuerleiste
+
+Mehrere Gewinner
+
+S3 – Spielablauf
+
+Zu Beginn mischt jeder Spieler seine 5 Startkarten.
+
+Ein Spielzug besteht aus folgenden Schritten:
+
+Karte ausspielen
+2a. Bank (Einzahlen oder Auszahlen)
+2b. Kaufen
+
+Stapel verschieben
+
+Karten ablegen und nachziehen
+
+1. Karte ausspielen
+
+Der aktive Spieler spielt genau eine Karte aus seiner Hand aus und befolgt die Kartenanweisungen vollständig.
+
+2a. Bank (Einzahlen oder Auszahlen)
+
+Der Spieler darf genau eine der folgenden Aktionen ausführen:
+
+• Alle ausgespielten Geldkarten einzahlen
+• Sein gesamtes Bankgeld vollständig abheben
+• Nichts tun
+
+Einzahlung
+
+Nur Geldkarten aus dem „Im Spiel“-Bereich dürfen eingezahlt werden.
+
+Es müssen immer alle ausgespielten Geldkarten gemeinsam eingezahlt werden.
+
+Teilbeträge sind nicht erlaubt.
+
+Münzchips dürfen niemals eingezahlt werden.
+
+Nach Einzahlung stehen diese Geldkarten in dieser Runde nicht als Kaufgeld zur Verfügung.
+
+Auszahlung
+
+Bankgeld ist nicht direkt verwendbar.
+
+Möchte ein Spieler Bankgeld nutzen, muss er es vollständig abheben.
+
+Teil-Auszahlungen sind nicht erlaubt.
+
+Erst nachdem die Geldkarten wieder im „Im Spiel“-Bereich liegen, zählen sie als verfügbares Geld.
+
+2b. Kaufen
+
+Ein Kauf wird ausschließlich mit:
+
+• Geldkarten im „Im Spiel“-Bereich
+• Münzchips
+
+bezahlt.
+
+Bankgeld zählt nur, wenn es zuvor vollständig abgehoben wurde.
+
+Geldfluss (verbindlich)
+
+Hand → Im Spiel → Bank → Im Spiel → Ablagestapel
+
+Es existiert kein virtuelles Bankguthaben.
+
+Sparen und Kaufen im selben Zug
+
+Ein Spieler darf:
+
+Geld einzahlen
+
+anschließend ausschließlich mit Münzchips kaufen
+
+3. Stapel verschieben
+
+Eine Karte darf in Pfeilrichtung verschoben werden.
+Vom −1-Stapel → Friedhof.
+
+4. Karten ablegen und nachziehen
+
+Alle ausgespielten Karten werden abgelegt.
+Der Spieler zieht 3 neue Karten.
+
+Ist der Nachziehstapel leer, wird der Ablagestapel gemischt.
+
+S4 – Kartentexte
+
++1 Zug
++1 Geld
++1 Ziehen
++1 Schritt
++1 Heilen
++1 Kauf
+
+S5 – Trolle
+
+Trolle sind weder Geldkarten noch Ausrüstungskarten.
+
+Ein Troll erscheint auf dem +2-Stapel, wenn:
+
+• ein Spieler Geld einzahlt
+• kein Troll öffentlich liegt
+
+Öffentlich:
+
+4 Ausrüstungsstapel
+3 Geldvorräte
+
+Nicht öffentlich:
+
+Banken
+Trollvorrat
+
+Troll auf Bank
+
+Ein Troll blockiert Ein- und Auszahlung vollständig.
+
+Troll bekämpfen
+
+Waffen funktionieren wie Angriffe.
+
+Pro Treffer:
+
+• Troll bewegt sich
+• Spieler erhält 1 Münzchip
+
+S6 – Friedhof
+
+Nicht kaufbar.
+Nicht blockierbar.
+
+S7 – Angriff & Reaktionen
+
+Angriffe können Siegpunkte stehlen.
+Reaktionskarten dürfen nur gespielt werden, wenn der Text es erlaubt.
+
+S8 – Münzchips
+
+Temporäres Geld.
+Verfallen am Zugende.
+
+S9 – Körperkraft & Zugkonto
+
+Volle Körperkraft zu Spielbeginn.
+
+Verliert ein Spieler alle Punkte:
+
+• Angreifer erhält 1 Siegpunkt
+• Spieler bleibt ohnmächtig bis nächste Runde
+
+FAQ – Konsistente Fassung
+Muss ich eine Karte ausspielen?
+
+Ja.
+
+Kann ich Bankgeld direkt verwenden?
+
+Nein.
+Es muss vollständig abgehoben werden.
+
+Welche Geldarten darf ich kombinieren?
+
+• Geldkarten im „Im Spiel“-Bereich
+• Münzchips
+
+Bankgeld zählt nur nach vollständiger Auszahlung.
+
+Kann ich Geld einzahlen und im selben Zug kaufen?
+
+Ja.
+Nach Einzahlung kann ausschließlich mit Münzchips bezahlt werden.
+
+Können Münzchips eingezahlt werden?
+
+Nein.
+
+Wann erscheint ein Troll?
+
+Bei Einzahlung in Schritt 2a, wenn kein Troll öffentlich liegt.
+
+Wann endet das Spiel?
+
+Sobald ein Vorratsstapel leer ist.
