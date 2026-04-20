@@ -29,17 +29,25 @@ export class HandView {
   setCards(cards: CardViewData[]) {
     this.clear();
 
-    cards.forEach(cardData => {
+    const total = cards.length;
+
+    cards.forEach((cardData, index) => {
       const textureKey = cardData.name;
       const id = cardData.id;
 
-      const card = new Card(this.scene, 0, 0, id, textureKey);
+      // 👉 Zielposition vorher berechnen
+      const { x, y, rotation } = this.getCardTransform(index, total);
+
+      // 👉 NICHT mehr (0,0)!
+      const card = new Card(this.scene, x, y, id, textureKey);
+      card.setRotation(rotation);
 
       this.setupInteractions(card);
       this.cards.push(card);
     });
 
-    this.updateLayout();
+    // 👉 WICHTIG: erstes Layout ohne Animation
+    this.updateLayout(false);
   }
 
   removeCard(card: Card) {
@@ -74,13 +82,20 @@ export class HandView {
     });
   }
 
-  private updateLayout() {
+  private updateLayout(animated: boolean = true) {
     const total = this.cards.length;
 
     this.cards.forEach((card, index) => {
       const { x, y, rotation } = this.getCardTransform(index, total);
-
       const isHovered = card === this.hoveredCard;
+
+      if (!animated) {
+        // 👉 direkt setzen (kein Flug!)
+        card.setPosition(x, isHovered ? y - 60 : y);
+        card.setScale(isHovered ? 1.1 : 1);
+        card.setRotation(isHovered ? 0 : rotation);
+        return;
+      }
 
       this.scene.tweens.add({
         targets: card,
@@ -100,18 +115,28 @@ export class HandView {
     if (total === 1) {
       return { x: centerX, y: baseY, rotation: 0 };
     }
+    const microWidth = 90;
+    const minWidth = 110;
+    const midWidth = 260;
+    const maxWidth = 400;
 
-    const minWidth = 180; // kleine Hände (2–3 Karten)
-    const maxWidth = 400; // 🔥 harte Grenze wegen Kollision
-
-    // normalisieren (wie viele Karten im Verhältnis zu "viel")
-    const t = Phaser.Math.Clamp((total - 1) / 12, 0, 1);
-
-    // 🔥 easing → wichtig für gutes Gefühl bei kleinen Händen
-    const eased = Math.pow(t, 0.75);
-
-    // finale Breite
-    const maxTotalWidth = Phaser.Math.Linear(minWidth, maxWidth, eased);
+    let maxTotalWidth: number;
+    if (total == 2) {
+      // Phase 1: klein → mittel
+      const t = Phaser.Math.Clamp((total - 1) / 3, 0, 1);
+      const eased = Math.pow(t, 0.75);
+      maxTotalWidth = Phaser.Math.Linear(microWidth, minWidth, eased);
+    } else if (total <= 4) {
+      // Phase 1: klein → mittel
+      const t = Phaser.Math.Clamp((total - 1) / 3, 0, 1);
+      const eased = Math.pow(t, 0.75);
+      maxTotalWidth = Phaser.Math.Linear(minWidth, midWidth, eased);
+    } else {
+      // Phase 2: mittel → groß
+      const t = Phaser.Math.Clamp((total - 4) / 8, 0, 1);
+      const eased = Math.pow(t, 0.9); // etwas flacher
+      maxTotalWidth = Phaser.Math.Linear(midWidth, maxWidth, eased);
+    }
 
     // Radius bleibt gleich
     const radius = 500;
