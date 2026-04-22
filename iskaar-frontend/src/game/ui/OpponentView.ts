@@ -61,6 +61,8 @@ export class OpponentView {
     this.nameText = this.scene.add
       .text(-this.BAR_WIDTH + this.LEFT_PADDING, 5, "", {
         fontSize: "20px",
+        fontFamily: "Cinzel",
+        fontStyle: "bold",
         color: "#ffffff",
         stroke: "#000000",
         strokeThickness: 3,

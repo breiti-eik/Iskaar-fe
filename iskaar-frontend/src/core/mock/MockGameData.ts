@@ -8,9 +8,8 @@ export const MOCK_GAME_VIEW = {
       drawPileSize: 2,
       persistentCards: [],
       hand: [
-        { id: "1", name: "Knut" },
-        { id: "2", name: "Knut" },
-        { id: "3", name: "Knut" },
+        { id: "4", name: "Knut" },
+        { id: "5", name: "Knut" },
       ],
       inPlay: [{ id: "3", name: "Knut" }],
       discard: [

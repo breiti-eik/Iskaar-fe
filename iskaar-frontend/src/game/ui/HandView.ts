@@ -90,9 +90,8 @@ export class HandView {
       const isHovered = card === this.hoveredCard;
 
       if (!animated) {
-        // 👉 direkt setzen (kein Flug!)
         card.setPosition(x, isHovered ? y - 60 : y);
-        card.setScale(isHovered ? 1.1 : 1);
+        card.setScale(isHovered ? 1.1 : 0.95);
         card.setRotation(isHovered ? 0 : rotation);
         return;
       }
@@ -101,7 +100,7 @@ export class HandView {
         targets: card,
         x,
         y: isHovered ? y - 60 : y,
-        scale: isHovered ? 1.1 : 1,
+        scale: isHovered ? 1.1 : 0.95,
         rotation: isHovered ? 0 : rotation,
         duration: 150,
       });

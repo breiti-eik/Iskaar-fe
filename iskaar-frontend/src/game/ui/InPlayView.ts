@@ -3,7 +3,7 @@ import { Card } from "../objects/Card";
 import type { CardViewData } from "../view/CardViewData";
 
 export class InPlayView {
-  private container: Phaser.GameObjects.Container;
+  private container!: Phaser.GameObjects.Container;
   private scene: Phaser.Scene;
   private frame!: Phaser.GameObjects.Image;
   private cards: Card[] = [];
@@ -12,21 +12,22 @@ export class InPlayView {
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
+  }
+
+  create() {
+    // 👉 Container
     this.container = this.scene.add.container(
       this.scene.scale.width / 2,
       this.scene.scale.height / 2,
     );
+
+    // 👉 Frame
     this.frame = this.scene.add.image(0, 0, "Frame");
     this.frame.setOrigin(0.5);
-
-    // wichtig: in Container!
-    this.container.add(this.frame);
-
-    // initial sichtbar (wie bei dir später sowieso)
     this.frame.setVisible(false);
-
-    // Depth wie vorher
     this.frame.setDepth(5);
+
+    this.container.add(this.frame);
   }
 
   setCards(cards: CardViewData[]) {
@@ -44,23 +45,8 @@ export class InPlayView {
 
     this.updateLayout();
   }
-
   updateFrame(active: boolean) {
-    const bounds = this.getBounds();
-
-    let x: number;
-    let y: number;
-
-    if (bounds.width === 0 || bounds.height === 0) {
-      x = this.scene.scale.width / 2;
-      y = this.scene.scale.height / 2;
-    } else {
-      x = bounds.centerX;
-      y = bounds.centerY;
-    }
-
-    this.frame.setPosition(x - this.container.x, y - this.container.y);
-
+    this.frame.setPosition(0, 0);
     this.frame.setVisible(true);
 
     const paddingX = this.scene.scale.width * 0.1;
