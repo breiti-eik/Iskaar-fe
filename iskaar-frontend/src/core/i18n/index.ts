@@ -17,7 +17,17 @@ const resources = {
   },
 };
 
-let currentLang: Lang = "de";
+function resolveInitialLang(): Lang {
+  const envLang = import.meta.env.VITE_LANGUAGE;
+
+  if (envLang === "en" || envLang === "de") {
+    return envLang;
+  }
+
+  return "en"; // fallback
+}
+
+let currentLang: Lang = resolveInitialLang();
 
 export function setLanguage(lang: Lang) {
   currentLang = lang;
@@ -28,5 +38,6 @@ export function t(namespace: Namespace, key: string): string {
     resources[currentLang][namespace][
       key as keyof (typeof resources)["en"][typeof namespace]
     ];
+
   return value ?? `[missing:${namespace}.${key}]`;
 }

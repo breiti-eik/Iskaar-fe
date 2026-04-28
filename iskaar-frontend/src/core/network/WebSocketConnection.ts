@@ -4,7 +4,6 @@ import { GameEventBus } from "../../game/events/GameEventBus";
 import { MessageFactory } from "../message/MessageFactory";
 import type { ServerMessage } from "../message/ServerMessage";
 import { GameViewMessage } from "../message/GameViewMessage";
-import { MOCK_GAME_VIEW } from "../mock/MockGameData";
 
 export class WebSocketConnection {
   private client?: Client;
