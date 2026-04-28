@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import type { SupplyViewData } from "../view/SupplyViewData";
 
 export class StackView {
   private scene: Phaser.Scene;
@@ -14,6 +15,8 @@ export class StackView {
   private hoverEnabled: boolean = false;
   private isExpanded: boolean = false;
   private fullCards: { name: string }[] = [];
+  private coinIcon?: Phaser.GameObjects.Image;
+  private costText?: Phaser.GameObjects.Text;
 
   setHoverEnabled(enabled: boolean) {
     this.hoverEnabled = enabled;
@@ -29,7 +32,9 @@ export class StackView {
     this.scale = scale;
     this.hasCounter = hasCounter;
     this.hoverEnabled = hoverEnabled;
-    this.scene.input.on("pointermove", this.handlePointerMove, this);
+    if (!this.scene.input.listenerCount("pointermove")) {
+      this.scene.input.on("pointermove", this.handlePointerMove, this);
+    }
   }
 
   setPosition(x: number, y: number) {
@@ -113,6 +118,90 @@ export class StackView {
     this.renderCounter(count, topSprite, stackLift);
   }
 
+  setSupplyScaled(
+    supply: SupplyViewData,
+    targetWidth: number,
+    targetHeight: number,
+  ) {
+    this.clear();
+
+    if (!supply?.topCard) return;
+
+    const textureKey = supply.topCard.name;
+
+    const card = this.scene.add.image(0, 0, textureKey);
+    card.setOrigin(0, 0);
+
+    const INNER_PADDING = 0.15;
+
+    const availableWidth = targetWidth * (1 - INNER_PADDING);
+    const availableHeight = targetHeight * (1 - INNER_PADDING);
+
+    const scaleX = availableWidth / card.width;
+    const scaleY = availableHeight / card.height;
+    const scale = Math.min(scaleX, scaleY);
+
+    card.setScale(scale);
+
+    const offsetX = (targetWidth - card.displayWidth) / 2;
+    const offsetY = (targetHeight - card.displayHeight) / 2;
+
+    card.setPosition(this.x + offsetX, this.y + offsetY);
+
+    this.cards.push(card);
+
+    // 🔢 Counter (unten rechts)
+    const count = this.scene.add.text(
+      card.x + card.displayWidth * 0.95,
+      card.y + card.displayHeight * 0.95,
+      `${supply.size}`,
+      {
+        fontSize: `${Math.max(14, card.displayWidth * 0.18)}px`,
+        color: "#ffffff",
+        stroke: "#000000",
+        strokeThickness: 3,
+        fontStyle: "bold",
+      },
+    );
+
+    count.setOrigin(1, 1);
+    count.setDepth(1000);
+    this.counter = count;
+
+    // 🪙 COIN + COST (nur wenn open)
+    if (supply.open) {
+      const coinX = card.x + card.displayWidth * 0.05;
+      const coinY = card.y + card.displayHeight * 0.95;
+
+      const coin = this.scene.add.image(coinX, coinY, "Coin");
+      coin.setOrigin(0, 1);
+
+      const coinScale = (card.displayWidth * 0.3) / coin.width;
+      coin.setScale(coinScale);
+      coin.setDepth(1000);
+
+      this.coinIcon = coin;
+
+      const costText = this.scene.add.text(
+        coin.x + coin.displayWidth / 2,
+        coin.y - coin.displayHeight * 0.1,
+        `${supply.cost}`,
+        {
+          fontSize: `${Math.max(14, card.displayWidth * 0.16)}px`,
+          color: "#ffffff",
+          stroke: "#000000",
+          strokeThickness: 3,
+          fontStyle: "bold",
+        },
+      );
+
+      costText.setOrigin(0.5, 1);
+      costText.setDepth(1000);
+
+      this.costText = costText;
+    }
+  }
+
   private handlePointerMove(pointer: Phaser.Input.Pointer) {
     if (!this.isExpanded || this.cards.length === 0) return;
 
@@ -189,6 +278,11 @@ export class StackView {
   }
 
   private clear() {
+    this.coinIcon?.destroy();
+    this.coinIcon = undefined;
+
+    this.costText?.destroy();
+    this.costText = undefined;
     this.scene.tweens.killTweensOf(this.cards);
 
     this.cards.forEach(c => {

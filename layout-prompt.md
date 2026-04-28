@@ -2,6 +2,8 @@
 
 Implementiere ein UI-Layout für das Multiplayer-Deckbuilder-Spiel **Iskaar**, basierend auf einer server-authoritative Architektur.
 
+TRIFF NIE ANNAHMEN, mache Implementierungsvorschläge NUR bezogen auf Code den du sicher kennst!!!, falls dir Informationen fehlen frage nach!
+
 ## 🧠 Grundprinzipien
 
 * UI basiert ausschließlich auf `GameView`
@@ -27,15 +29,16 @@ Position: oberer Bildschirmbereich
 
 Inhalt:
 
-* EquipmentPiles (4 Stapel, oberste Karte sichtbar)
-* Geldvorräte (Knut, Gro, Rand)
-* Troll-Karte (falls vorhanden)
+* EquipmentPiles (4 Stapel, oberste Karte sichtbar)- oben mittig [y]
+* Geldvorräte/Trollvorräte (Knut, Gro, Rand, Troll)- oben links [x]
+
+[x] [x]    [y][y][y][y]
+[x] [x]
 
 Layout:
 
 * horizontal zentriert
 * gleichmäßiger Abstand zwischen Karten
-* statisch (keine Interaktion aktuell)
 
 ---
 

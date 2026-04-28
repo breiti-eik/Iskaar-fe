@@ -2,6 +2,32 @@ export const MOCK_GAME_VIEW = {
   type: "GAME_VIEW",
   view: {
     gameId: "11111111-1111-1111-1111-111111111111",
+    board: {
+      knutSupply: {
+        topCard: { id: "1", name: "Knut" },
+        size: 10,
+        cost: 0,
+        open: true,
+      },
+      groSupply: {
+        topCard: { id: "2", name: "Gro" },
+        size: 8,
+        cost: 3,
+        open: false,
+      },
+      randSupply: {
+        topCard: { id: "3", name: "Rand" },
+        size: 6,
+        cost: 5,
+        open: false,
+      },
+      trollSupply: {
+        topCard: { id: "4", name: "Troll" },
+        size: 4,
+        cost: 5,
+        open: false,
+      },
+    },
     me: {
       playerId: "mock-player-id",
       playerName: "Mock Player A",
