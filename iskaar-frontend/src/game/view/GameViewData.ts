@@ -1,3 +1,4 @@
+import type { AccountViewData } from "./AccountViewData";
 import type { MeViewData } from "./MeViewData";
 import type { OpponentViewData } from "./OpponentViewData";
 import type { TurnViewData } from "./TurnViewData";
@@ -8,6 +9,7 @@ export class GameViewData {
   opponents: OpponentViewData[];
   activePlayerId: string;
   turn: TurnViewData;
+  account: AccountViewData;
 
   constructor(
     gameId: string,
@@ -15,11 +17,13 @@ export class GameViewData {
     opponents: OpponentViewData[],
     activePlayerId: string,
     turn: TurnViewData,
+    account: AccountViewData,
   ) {
     this.gameId = gameId;
     this.me = me;
     this.opponents = opponents;
     this.activePlayerId = activePlayerId;
     this.turn = turn;
+    this.account = account;
   }
 }

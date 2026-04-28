@@ -22,6 +22,7 @@ export class BootScene extends Phaser.Scene {
     this.load.setPath("assets/ui/panels");
     this.load.image("Frame", "frame.png");
     this.load.image("OpponentBarBg", "opponent_area_back.png");
+    this.load.image("Rosette", "rosette.png");
 
     //buttons
     this.load.setPath("assets/ui/buttons");
@@ -30,6 +31,14 @@ export class BootScene extends Phaser.Scene {
   }
 
   create() {
+    this.cache.obj.add("textStyle-label", {
+      fontFamily: "Arial Black",
+      fontSize: 40,
+      color: "#ffffff",
+      stroke: "#000000",
+      strokeThickness: 5,
+      align: "center",
+    });
     this.scene.start("GameScene");
   }
 }

@@ -34,5 +34,11 @@ export const MOCK_GAME_VIEW = {
       phase: "BANK",
       allowedActions: ["PASS_BANK"] as const,
     },
+    account: {
+      action: 1,
+      budget: 2,
+      buy: 1,
+      moneyAction: 0,
+    },
   },
 };

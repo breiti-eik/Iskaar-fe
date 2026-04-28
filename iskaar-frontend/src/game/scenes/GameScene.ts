@@ -8,6 +8,7 @@ import { OpponentView } from "../ui/OpponentView";
 import { StackView } from "../ui/StatckView";
 import { MOCK_GAME_VIEW } from "../../core/mock/MockGameData";
 import { ActionView } from "../ui/ActionView";
+import { AccountView } from "../ui/AccountView";
 import type { ActionType } from "../objects/Actions";
 
 export class GameScene extends Phaser.Scene {
@@ -15,6 +16,7 @@ export class GameScene extends Phaser.Scene {
   private handView!: HandView;
   private inPlayView!: InPlayView;
   private actionView!: ActionView;
+  private accountView!: AccountView;
   private opponentViews: OpponentView[] = [];
   private drawPileView!: StackView;
   private discardPileView!: StackView;
@@ -50,6 +52,8 @@ export class GameScene extends Phaser.Scene {
 
     this.actionView = new ActionView(this);
     this.actionView.create();
+    this.accountView = new AccountView(this);
+    this.accountView.create();
 
     // 🔥 Events
     GameEventBus.on("gameView", this.onGameView);
@@ -98,6 +102,9 @@ export class GameScene extends Phaser.Scene {
     if (me.hand) {
       this.handView.setCards(me.hand);
     }
+    if (view.account) {
+      this.accountView.setAccount(view.account);
+    }
     const inPlayCards = this.getActiveInPlay(view);
     this.inPlayView.setCards(inPlayCards);
     const isActive = me.playerId === view.activePlayerId;
@@ -105,7 +112,7 @@ export class GameScene extends Phaser.Scene {
 
     const bounds = this.inPlayView.getBounds();
     this.actionView.updateActionView(bounds, view.turn);
-
+    this.accountView.updateAccountView(bounds);
     this.updateOpponents(view);
   };
 
