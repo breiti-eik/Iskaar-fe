@@ -3,8 +3,8 @@
   "PASS_BANK": "Bank beenden",
   "DEPOSIT": "Einzahlen",
   "WITHDRAW": "Abheben",
-  "PASS_BUY": "Überspringen ",
-  "PASS_SHIFTING_CARDS": "Weiter ...",
+  "PASS_BUY": "Kauf beenden",
+  "PASS_SHIFTING_CARDS": "Überspringen ...",
   "PASS_REACTION": "Keine Reaktion",
   "PASS_SELECTION": "Keine Auswahl"
 }

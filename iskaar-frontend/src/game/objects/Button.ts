@@ -32,19 +32,17 @@ export class Button extends Phaser.GameObjects.Container {
       })
       .setOrigin(0.5)
       .setShadow(2, 2, "#000000", 4, true, true);
-
     this.displayText.setPosition(0, 0);
     this.displayText.setOrigin(0.5);
 
     this.add(this.image);
     this.add(this.displayText);
 
-    this.setInteractive();
-
     const scale = this.getScale(this.image, width);
     this.image.setScale(scale);
-
     this.setSize(width, this.image.height * scale);
+
+    this.setInteractive();
 
     this.fitTextToWidth(width * 0.7);
 
