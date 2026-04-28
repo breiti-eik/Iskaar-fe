@@ -32,7 +32,6 @@ export class ActionView {
   }
 
   private renderButtons(turn: TurnViewData) {
-    // alte Buttons entfernen
     this.actionButtons.forEach(btn => btn.destroy());
     this.actionButtons.clear();
 

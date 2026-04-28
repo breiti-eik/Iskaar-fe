@@ -31,8 +31,8 @@ export const MOCK_GAME_VIEW = {
     ],
     activePlayerId: "mock-player-id",
     turn: {
-      phase: "PLAY",
-      allowedActions: ["PASS_PLAY"] as const,
+      phase: "BANK",
+      allowedActions: ["PASS_BANK"] as const,
     },
   },
 };

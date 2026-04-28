@@ -1,6 +1,6 @@
 {
-  "PASS_PLAY": "Weiter ...",
-  "PASS_BANK": "Überspringen",
+  "PASS_PLAY": "Spielen beenden",
+  "PASS_BANK": "Bank beenden",
   "DEPOSIT": "Einzahlen",
   "WITHDRAW": "Abheben",
   "PASS_BUY": "Überspringen ",

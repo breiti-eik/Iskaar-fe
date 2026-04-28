@@ -12,16 +12,17 @@ export class Button extends Phaser.GameObjects.Container {
     width: number,
     text: string,
     texture: string,
-    onClick?: () => void,
   ) {
     super(scene, x, y);
 
     this.textureKey = texture;
     this.image = scene.add.image(0, 0, texture);
 
+    const BASE_FONT_SIZE = 40;
+
     this.displayText = scene.add
       .text(0, 0, text, {
-        fontSize: "70px",
+        fontSize: `${BASE_FONT_SIZE}px`,
         fontFamily: "Cinzel",
         fontStyle: "bold",
         color: "#ffffff",
@@ -32,19 +33,41 @@ export class Button extends Phaser.GameObjects.Container {
       .setOrigin(0.5)
       .setShadow(2, 2, "#000000", 4, true, true);
 
+    this.displayText.setPosition(0, 0);
+    this.displayText.setOrigin(0.5);
+
     this.add(this.image);
     this.add(this.displayText);
 
-    this.setSize(this.image.width, this.image.height);
     this.setInteractive();
 
-    this.setScale(this.getScale(this.image, width));
+    const scale = this.getScale(this.image, width);
+    this.image.setScale(scale);
 
-    if (onClick) {
-      this.on("pointerdown", onClick);
-    }
+    this.setSize(width, this.image.height * scale);
+
+    this.fitTextToWidth(width * 0.7);
 
     scene.add.existing(this);
+  }
+
+  public fitTextToWidth(maxWidth: number) {
+    const text = this.displayText;
+
+    const baseFontSize = 40;
+    const minFontSize = 16;
+
+    text.setFontSize(baseFontSize);
+
+    // ❗ KEIN scale berücksichtigen
+    const actualWidth = text.width;
+
+    if (actualWidth <= maxWidth) return;
+
+    const ratio = maxWidth / actualWidth;
+    const newSize = Math.max(minFontSize, Math.floor(baseFontSize * ratio));
+
+    text.setFontSize(newSize);
   }
 
   private getScale(image: Phaser.GameObjects.Image, targetWidth: number) {
