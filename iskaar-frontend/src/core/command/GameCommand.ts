@@ -1,5 +1,5 @@
 export abstract class GameCommand {
-  abstract readonly type: string;
+  abstract type: string;
   gameId: string;
 
   protected constructor(gameId: string) {

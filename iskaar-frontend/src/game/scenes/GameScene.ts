@@ -8,6 +8,7 @@ import { OpponentView } from "../ui/OpponentView";
 import { StackView } from "../ui/StatckView";
 import { MOCK_GAME_VIEW } from "../../core/mock/MockGameData";
 import { ActionView } from "../ui/ActionView";
+import type { ActionType } from "../objects/Actions";
 
 export class GameScene extends Phaser.Scene {
   private gameClient!: GameClient;
@@ -53,6 +54,7 @@ export class GameScene extends Phaser.Scene {
     // 🔥 Events
     GameEventBus.on("gameView", this.onGameView);
     GameEventBus.on("cardPlayed", this.onCardPlayed);
+    GameEventBus.on("playerAction", this.sendActionToBackend);
     if (this.isMock) {
       this.emitMockGameView();
     }
@@ -63,11 +65,12 @@ export class GameScene extends Phaser.Scene {
     GameEventBus.off("cardPlayed", this.onCardPlayed);
   }
 
+  private sendActionToBackend = (event: ActionType) => {
+    this.gameClient.sendAction(event);
+  };
+
   private onCardPlayed = (event: { cardId: string }) => {
-    this.gameClient.playCard(
-      "11111111-1111-1111-1111-111111111111",
-      event.cardId,
-    );
+    this.gameClient.playCard(event.cardId);
     console.log("Click card:", event.cardId);
   };
 

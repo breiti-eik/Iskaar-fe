@@ -1,4 +1,6 @@
+import type { ActionType } from "../objects/Actions";
+
 export interface TurnViewData {
   phase: string;
-  skipable: boolean;
+  allowedActions: readonly ActionType[];
 }

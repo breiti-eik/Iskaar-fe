@@ -1,47 +1,58 @@
 import Phaser from "phaser";
 import { Button } from "../objects/Button";
-import { ssrImportKey } from "vite/module-runner";
 import type { TurnViewData } from "../view/TurnViewData";
-import { TurnPhase } from "../objects/TurnPhase";
+import { GameEventBus } from "../events/GameEventBus";
+import type { ActionType } from "../objects/Actions";
+import type { GameScene } from "../scenes/GameScene";
+import { t } from "../../core/i18n";
 
 export class ActionView {
-  private scene: Phaser.Scene;
+  private scene: GameScene;
+
   private container!: Phaser.GameObjects.Container;
   private debugBg!: Phaser.GameObjects.Rectangle;
 
-  private endTurnButton!: Button;
+  private actionButtons: Map<ActionType, Button> = new Map();
 
   private buttonPadding: number = 10;
   private VIEW_HEIGHT: number = 40;
   private MIN_BUTTON_WIDTH = 100;
   private GAP_TO_FRAME = 20;
 
-  constructor(scene: Phaser.Scene) {
+  constructor(scene: GameScene) {
     this.scene = scene;
   }
 
   create() {
     this.container = this.scene.add.container(0, 0);
 
-    this.endTurnButton = new Button(
-      this.scene,
-      0,
-      0,
-      200, // gewünschte Breite
-      "End Turn", // Text
-      "Button_3", // Texture
-      () => {
-        console.log("End Turn clicked");
-        // hier deine Logik
-      },
-    );
-    this.endTurnButton.setVisible(false);
-
     this.debugBg = this.scene.add.rectangle(0, 0, 100, 100, 0xff0000, 0);
 
     this.container.add(this.debugBg);
-    this.container.add(this.endTurnButton);
-    // EVENT kommt später
+  }
+
+  private renderButtons(turn: TurnViewData) {
+    // alte Buttons entfernen
+    this.actionButtons.forEach(btn => btn.destroy());
+    this.actionButtons.clear();
+
+    turn.allowedActions.forEach(action => {
+      const button = new Button(
+        this.scene,
+        0,
+        0,
+        200,
+        t("action", action),
+        "Button_3",
+      );
+
+      button.on("pointerdown", () => {
+        GameEventBus.emit("playerAction", action);
+      });
+
+      this.container.add(button);
+      this.actionButtons.set(action, button);
+    });
   }
 
   setPosition(x: number, y: number) {
@@ -51,27 +62,33 @@ export class ActionView {
   updateActionView(bounds: Phaser.Geom.Rectangle, turn: TurnViewData) {
     const referenceWidth = bounds.width;
 
-    // 1. Position setzen (sticky)
     this.setPosition(bounds.centerX, bounds.bottom + this.GAP_TO_FRAME);
-
-    // 2. Größe der View definieren (🔥 NEU)
     this.setSize(referenceWidth, this.VIEW_HEIGHT);
 
-    // 4. Button IM Container zentrieren (🔥 wichtig)
-    this.layoutButtons(referenceWidth, turn);
+    this.renderButtons(turn);
+
+    this.layoutButtons(referenceWidth);
   }
 
-  private layoutButtons(referenceWidth: number, turn: TurnViewData) {
-    // Button x berechen
+  private layoutButtons(referenceWidth: number) {
+    const buttons = Array.from(this.actionButtons.values());
+
+    if (buttons.length === 0) return;
+
     const bw = Math.max(
       this.MIN_BUTTON_WIDTH,
       this.calculateButtonWidth(referenceWidth),
     );
-    const buttonX = this.calculateButtonPosition(referenceWidth, 5, bw);
-    const bs = bw / this.endTurnButton.width;
-    this.endTurnButton.setScale(bs);
-    this.endTurnButton.setPosition(buttonX, 0);
-    this.endTurnButton.show(turn.phase === TurnPhase.PLAY && turn.skipable);
+    const maxSlots = 5;
+
+    buttons.forEach((button, index) => {
+      const slot = maxSlots - buttons.length + index;
+      const x = this.calculateButtonPosition(referenceWidth, slot, bw);
+      const scale = bw / button.width;
+
+      button.setScale(scale);
+      button.setPosition(x!, 0);
+    });
   }
 
   private setSize(width: number, height: number) {
@@ -79,7 +96,7 @@ export class ActionView {
   }
 
   private calculateButtonWidth(referenceWidth: number) {
-    return referenceWidth * 0.2 - this.buttonPadding; //1/5 vom Container
+    return referenceWidth * 0.25 - this.buttonPadding; //1/5 vom Container
   }
 
   private calculateButtonPosition(

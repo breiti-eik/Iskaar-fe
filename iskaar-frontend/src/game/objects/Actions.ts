@@ -1,0 +1,12 @@
+export const Action = {
+  PASS_PLAY: "PASS_PLAY",
+  PASS_BANK: "PASS_BANK",
+  DEPOSIT: "DEPOSIT",
+  WITHDRAW: "WITHDRAW",
+  PASS_BUY: "PASS_BUY",
+  PASS_SHIFTING_CARDS: "PASS_SHIFTING_CARDS",
+  PASS_REACTION: "PASS_REACTION",
+  PASS_SELECTION: "PASS_SELECTION",
+} as const;
+
+export type ActionType = (typeof Action)[keyof typeof Action];
