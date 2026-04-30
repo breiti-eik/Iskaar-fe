@@ -6,6 +6,7 @@ type Events = {
   cardPlayed: { cardId: string };
   playerAction: ActionType;
   gameView: GameViewData;
+  buyCard: { pileName: string; buyerId: string | undefined }; // pileName to buy from;
 };
 
 export const GameEventBus = mitt<Events>();

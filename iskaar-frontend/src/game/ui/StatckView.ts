@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import type { SupplyViewData } from "../view/SupplyViewData";
+import { GameEventBus } from "../events/GameEventBus";
 
 export class StackView {
   private scene: Phaser.Scene;
@@ -32,9 +33,7 @@ export class StackView {
     this.scale = scale;
     this.hasCounter = hasCounter;
     this.hoverEnabled = hoverEnabled;
-    if (!this.scene.input.listenerCount("pointermove")) {
-      this.scene.input.on("pointermove", this.handlePointerMove, this);
-    }
+    this.scene.input.on("pointermove", this.handlePointerMove, this);
   }
 
   setPosition(x: number, y: number) {
@@ -70,7 +69,7 @@ export class StackView {
       console.log("Card: ", card);
 
       card.setScale(this.scale);
-      card.setDepth(i);
+      card.setDepth(stackSize - i);
 
       this.cards.push(card);
 
@@ -129,9 +128,11 @@ export class StackView {
 
     const textureKey = supply.topCard.name;
 
+    // 🖼 Karte erstellen
     const card = this.scene.add.image(0, 0, textureKey);
     card.setOrigin(0, 0);
 
+    // 🎯 Layout / Scaling
     const INNER_PADDING = 0.15;
 
     const availableWidth = targetWidth * (1 - INNER_PADDING);
@@ -143,6 +144,7 @@ export class StackView {
 
     card.setScale(scale);
 
+    // 🎯 Zentrierung in der Grid-Zelle
     const offsetX = (targetWidth - card.displayWidth) / 2;
     const offsetY = (targetHeight - card.displayHeight) / 2;
 
@@ -150,7 +152,9 @@ export class StackView {
 
     this.cards.push(card);
 
-    // 🔢 Counter (unten rechts)
+    // =========================
+    // 🔢 STACK COUNT (unten rechts)
+    // =========================
     const count = this.scene.add.text(
       card.x + card.displayWidth * 0.95,
       card.y + card.displayHeight * 0.95,
@@ -168,7 +172,9 @@ export class StackView {
     count.setDepth(1000);
     this.counter = count;
 
-    // 🪙 COIN + COST (nur wenn open)
+    // =========================
+    // 🪙 COIN + COST
+    // =========================
     if (supply.open) {
       const coinX = card.x + card.displayWidth * 0.05;
       const coinY = card.y + card.displayHeight * 0.95;
@@ -199,6 +205,29 @@ export class StackView {
       costText.setDepth(1000);
 
       this.costText = costText;
+    }
+
+    // =========================
+    // 🖱 CLICK LISTENER (nur wenn open)
+    // =========================
+
+    // 🧼 Sicherheit: alte Listener weg
+    card.removeAllListeners();
+    card.disableInteractive();
+
+    if (supply.open) {
+      card.setInteractive({ useHandCursor: true });
+
+      card.on("pointerdown", () => {
+        // 👉 besser GameEventBus verwenden, falls vorhanden
+        GameEventBus.emit("buyCard", {
+          pileName: supply.pileName,
+          buyerId: supply.buyerId,
+        });
+      });
+
+      card.on("pointerover", () => card.setTint(0xdddddd));
+      card.on("pointerout", () => card.clearTint());
     }
   }
 

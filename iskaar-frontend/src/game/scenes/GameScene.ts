@@ -11,9 +11,11 @@ import { ActionView } from "../ui/ActionView";
 import { AccountView } from "../ui/AccountView";
 import type { ActionType } from "../objects/Actions";
 import { BasicSupplyView } from "../ui/BasicSupplyView";
+import { MarketView } from "../ui/MarketView";
 
 export class GameScene extends Phaser.Scene {
   private gameClient!: GameClient;
+  private marketView!: MarketView;
   private handView!: HandView;
   private inPlayView!: InPlayView;
   private actionView!: ActionView;
@@ -46,6 +48,7 @@ export class GameScene extends Phaser.Scene {
     bg.setDisplaySize(this.scale.width, this.scale.height);
 
     // Views
+    this.marketView = new MarketView(this);
     this.drawPileView = new StackView(this, 0.6);
     this.handView = new HandView(this);
     this.discardPileView = new StackView(this, 0.6, false, true);
@@ -63,6 +66,7 @@ export class GameScene extends Phaser.Scene {
     GameEventBus.on("gameView", this.onGameView);
     GameEventBus.on("cardPlayed", this.onCardPlayed);
     GameEventBus.on("playerAction", this.sendActionToBackend);
+    GameEventBus.on("buyCard", this.onBuyCard);
     if (this.isMock) {
       this.emitMockGameView();
     }
@@ -72,6 +76,19 @@ export class GameScene extends Phaser.Scene {
     GameEventBus.off("gameView", this.onGameView);
     GameEventBus.off("cardPlayed", this.onCardPlayed);
   }
+
+  private onBuyCard = (event: {
+    pileName: string;
+    buyerId: string | undefined;
+  }) => {
+    console.log(
+      "Buy card from pile:",
+      event.pileName,
+      "by buyer:",
+      event.buyerId,
+    );
+    this.gameClient.buyFromPileforMe(event.pileName, event.buyerId);
+  };
 
   private sendActionToBackend = (event: ActionType) => {
     this.gameClient.sendAction(event);
@@ -112,6 +129,10 @@ export class GameScene extends Phaser.Scene {
     if (view.board) {
       this.basicSupplyView.setBoard(view.board);
     }
+    if (view.market) {
+      this.marketView.setMarket(view.market);
+    }
+
     const inPlayCards = this.getActiveInPlay(view);
     this.inPlayView.setCards(inPlayCards);
     const isActive = me.playerId === view.activePlayerId;

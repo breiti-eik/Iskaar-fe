@@ -2,14 +2,17 @@ import { WebSocketConnection } from "./WebSocketConnection";
 import { PlayCardCommand } from "../command/PlayCardCommand";
 import { ActionCommand } from "../command/ActionCommand";
 import type { ActionType } from "../../game/objects/Actions";
+import { BuyFromPileCommand } from "../command/BuyFromPileCommand";
 
 export class GameClient {
   private connection = new WebSocketConnection();
   private gameId?: string;
+  private playerId?: string;
 
   connect(gameId: string, playerId: string, onConnected?: () => void) {
     this.connection.connect(gameId, playerId, onConnected);
     this.gameId = gameId;
+    this.playerId = playerId;
   }
 
   disconnect() {
@@ -26,6 +29,18 @@ export class GameClient {
     }
 
     this.send(new PlayCardCommand(this.gameId, cardId));
+  }
+
+  buyFromPileforMe(pileName: string, playerId: string | undefined) {
+    if (!playerId) {
+      console.warn("Player ID is undefined. Cannot buy from pile.");
+      return;
+    }
+    if (!this.gameId) {
+      throw new Error("GameClient not connected");
+    }
+
+    this.send(new BuyFromPileCommand(this.gameId, playerId, pileName));
   }
 
   sendAction(action: ActionType) {

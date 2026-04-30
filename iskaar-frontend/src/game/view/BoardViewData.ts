@@ -1,20 +1,11 @@
-import type { SupplyViewData } from "./SupplyViewData";
-
+import type { MarketViewData } from "./MarketViewData";
+import type { ResourceViewData } from "./ResourceViewData";
 export class BoardViewData {
-  knutSupply: SupplyViewData;
-  groSupply: SupplyViewData;
-  randSupply: SupplyViewData;
-  trollSupply: SupplyViewData;
+  resources: ResourceViewData;
+  market: MarketViewData;
 
-  constructor(
-    knutPileSize: SupplyViewData,
-    groPileSize: SupplyViewData,
-    randPileSize: SupplyViewData,
-    trollPileSize: SupplyViewData,
-  ) {
-    this.knutSupply = knutPileSize;
-    this.groSupply = groPileSize;
-    this.randSupply = randPileSize;
-    this.trollSupply = trollPileSize;
+  constructor(resources: ResourceViewData, market: MarketViewData) {
+    this.resources = resources;
+    this.market = market;
   }
 }

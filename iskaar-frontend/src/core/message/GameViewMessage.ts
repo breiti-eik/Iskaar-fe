@@ -5,6 +5,8 @@ import { MeViewData } from "../../game/view/MeViewData";
 import { OpponentViewData } from "../../game/view/OpponentViewData";
 import { AccountViewData } from "../../game/view/AccountViewData";
 import { SupplyViewData } from "../../game/view/SupplyViewData";
+import { MarketViewData } from "../../game/view/MarketViewData";
+import { ResourceViewData } from "../../game/view/ResourceViewData";
 
 export class GameViewMessage extends ServerMessage {
   readonly type = "GAME_VIEW";
@@ -19,29 +21,73 @@ export class GameViewMessage extends ServerMessage {
     return new GameViewData(
       raw.gameId,
       new BoardViewData(
-        new SupplyViewData(
-          raw.board?.knutSupply?.topCard ?? null,
-          raw.board?.knutSupply?.size ?? 0,
-          raw.board?.knutSupply?.cost ?? 0,
-          raw.board?.knutSupply?.open ?? false,
+        new ResourceViewData(
+          new SupplyViewData(
+            raw.board?.resources?.knutSupply?.pileName ?? null,
+            raw.board?.resources?.knutSupply?.buyerId ?? undefined,
+            raw.board?.resources?.knutSupply?.topCard ?? null,
+            raw.board?.resources?.knutSupply?.size ?? 0,
+            raw.board?.resources?.knutSupply?.cost ?? 0,
+            raw.board?.resources?.knutSupply?.open ?? false,
+          ),
+          new SupplyViewData(
+            raw.board?.resources?.groSupply?.pileName ?? null,
+            raw.board?.resources?.groSupply?.buyerId ?? undefined,
+            raw.board?.resources?.groSupply?.topCard ?? null,
+            raw.board?.resources?.groSupply?.size ?? 0,
+            raw.board?.resources?.groSupply?.cost ?? 0,
+            raw.board?.resources?.groSupply?.open ?? false,
+          ),
+          new SupplyViewData(
+            raw.board?.resources?.randSupply?.pileName ?? null,
+            raw.board?.resources?.randSupply?.buyerId ?? undefined,
+            raw.board?.resources?.randSupply?.topCard ?? null,
+            raw.board?.resources?.randSupply?.size ?? 0,
+            raw.board?.resources?.randSupply?.cost ?? 0,
+            raw.board?.resources?.randSupply?.open ?? false,
+          ),
+          new SupplyViewData(
+            raw.board?.resources?.trollSupply?.pileName ?? null,
+            raw.board?.resources?.trollSupply?.buyerId ?? undefined,
+            raw.board?.resources?.trollSupply?.topCard ?? null,
+            raw.board?.resources?.trollSupply?.size ?? 0,
+            raw.board?.resources?.trollSupply?.cost ?? 0,
+            raw.board?.resources?.trollSupply?.open ?? false,
+          ),
         ),
-        new SupplyViewData(
-          raw.board?.groSupply?.topCard ?? null,
-          raw.board?.groSupply?.size ?? 0,
-          raw.board?.groSupply?.cost ?? 0,
-          raw.board?.groSupply?.open ?? false,
-        ),
-        new SupplyViewData(
-          raw.board?.randSupply?.topCard ?? null,
-          raw.board?.randSupply?.size ?? 0,
-          raw.board?.randSupply?.cost ?? 0,
-          raw.board?.randSupply?.open ?? false,
-        ),
-        new SupplyViewData(
-          raw.board?.trollSupply?.topCard ?? null,
-          raw.board?.trollSupply?.size ?? 0,
-          raw.board?.trollSupply?.cost ?? 0,
-          raw.board?.trollSupply?.open ?? false,
+        new MarketViewData(
+          new SupplyViewData(
+            raw.board?.market?.minusOne?.pileName ?? null,
+            raw.board?.market?.minusOne?.buyerId ?? undefined,
+            raw.board?.market?.minusOne?.topCard ?? null,
+            raw.board?.market?.minusOne?.size ?? 0,
+            raw.board?.market?.minusOne?.cost ?? 0,
+            raw.board?.market?.minusOne?.open ?? false,
+          ),
+          new SupplyViewData(
+            raw.board?.market?.plusZero?.pileName ?? null,
+            raw.board?.market?.plusZero?.buyerId ?? undefined,
+            raw.board?.market?.plusZero?.topCard ?? null,
+            raw.board?.market?.plusZero?.size ?? 0,
+            raw.board?.market?.plusZero?.cost ?? 0,
+            raw.board?.market?.plusZero?.open ?? false,
+          ),
+          new SupplyViewData(
+            raw.board?.market?.plusOne?.pileName ?? null,
+            raw.board?.market?.plusOne?.buyerId ?? undefined,
+            raw.board?.market?.plusOne?.topCard ?? null,
+            raw.board?.market?.plusOne?.size ?? 0,
+            raw.board?.market?.plusOne?.cost ?? 0,
+            raw.board?.market?.plusOne?.open ?? false,
+          ),
+          new SupplyViewData(
+            raw.board?.market?.plusTwo?.pileName ?? null,
+            raw.board?.market?.plusTwo?.buyerId ?? undefined,
+            raw.board?.market?.plusTwo?.topCard ?? null,
+            raw.board?.market?.plusTwo?.size ?? 0,
+            raw.board?.market?.plusTwo?.cost ?? 0,
+            raw.board?.market?.plusTwo?.open ?? false,
+          ),
         ),
       ),
 
