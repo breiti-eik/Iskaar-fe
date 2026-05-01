@@ -9,10 +9,46 @@ export class BootScene extends Phaser.Scene {
     //cards
     this.load.setPath("assets/cards");
     this.load.image("CardBack", "back.png");
+
+    //Money
     this.load.image("Knut", "knut.png");
     this.load.image("Gro", "gro.png");
     this.load.image("Rand", "rand.png");
+
+    //Troll
     this.load.image("Troll", "troll.png");
+
+    //Yellow
+    this.load.image("Knueppel", "knueppel.png");
+    this.load.image("Haube", "haube.png");
+    this.load.image("Kutte", "kutte.png");
+    this.load.image("Lederschuhe", "lederschuhe.png");
+
+    //Orange
+    this.load.image("Messer", "messer.png");
+    this.load.image("Helm", "helm.png");
+    this.load.image("Stiefel", "stiefel.png");
+    this.load.image("Kettenhemd", "kettenhemd.png");
+
+    //Red
+    this.load.image("Schwert", "schwert.png");
+    this.load.image("Krone", "krone.png");
+    this.load.image("Vollruestung", "vollruestung.png");
+    this.load.image("Metallschienen", "metallschienen.png");
+
+    //Ringe
+    this.load.image("Laufring", "laufring.png");
+    this.load.image("Friedensring", "friedensring.png");
+    this.load.image("Chaosring", "chaosring.png");
+    this.load.image("Totenring", "totenring.png");
+    this.load.image("Nekromanenring", "nekromanenring.png");
+    this.load.image("Fluchring", "fluchring.png");
+
+    //Halsketten
+    this.load.image("Diebesband", "diebesband.png");
+    this.load.image("Talisman", "talisman.png");
+    this.load.image("Stahlkette", "stahlkette.png");
+    this.load.image("Bannreif", "bannreif.png");
 
     //backgrounds
     this.load.setPath("assets/backgrounds");

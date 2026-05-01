@@ -22,14 +22,14 @@ export class MarketView {
     if (count !== 4) return; // strikt laut Domain
 
     // 🎯 Layout Parameter
-    const totalWidth = sceneWidth * 0.5;
-    const gap = totalWidth * 0.05;
+    const totalWidth = sceneWidth * 0.38;
+    const gap = totalWidth * 0.025;
 
     const cellWidth = (totalWidth - gap * (count - 1)) / count;
     const cellHeight = cellWidth * 1.4;
 
     const startX = (sceneWidth - totalWidth) / 2;
-    const y = this.scene.scale.height * 0.08;
+    const y = this.scene.scale.height * 0.02;
 
     supplies.forEach((supply, index) => {
       const x = startX + index * (cellWidth + gap);

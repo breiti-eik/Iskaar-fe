@@ -1,5 +1,5 @@
 import type { MarketViewData } from "./MarketViewData";
-import type { ResourceViewData } from "./ResourceViewData";
+import type { ResourceViewData } from "./RessourceViewData";
 export class BoardViewData {
   resources: ResourceViewData;
   market: MarketViewData;

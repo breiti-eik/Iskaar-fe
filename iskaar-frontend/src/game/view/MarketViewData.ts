@@ -19,6 +19,6 @@ export class MarketViewData {
   }
 
   getSupplies(): SupplyViewData[] {
-    return [this.minusOne, this.plusZero, this.plusOne, this.plusTwo];
+    return [this.plusTwo, this.plusOne, this.plusZero, this.minusOne];
   }
 }

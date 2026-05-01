@@ -1,5 +1,3 @@
-import { MarketViewData } from "../../game/view/MarketViewData";
-
 export const MOCK_GAME_VIEW = {
   type: "GAME_VIEW",
   view: {
@@ -35,74 +33,74 @@ export const MOCK_GAME_VIEW = {
           open: false,
         },
       },
-      market: new MarketViewData(
-        {
+      market: {
+        minusOne: {
           pileName: "MinusOne",
           topCard: { id: "5", name: "Messer" },
           size: 3,
           cost: 1,
           open: false,
         },
-        {
+        plusZero: {
           pileName: "PlusZero",
           topCard: { id: "6", name: "Knueppel" },
           size: 3,
           cost: 1,
           open: false,
         },
-        {
+        plusOne: {
           pileName: "PlusOne",
           topCard: { id: "7", name: "Knueppel" },
           size: 3,
           cost: 1,
           open: false,
         },
-        {
+        plusTwo: {
           pileName: "PlusTwo",
           topCard: { id: "8", name: "Knueppel" },
           size: 3,
           cost: 1,
           open: false,
         },
-      ),
-    },
-    me: {
-      playerId: "mock-player-id",
-      playerName: "Mock Player A",
-      drawPileSize: 2,
-      persistentCards: [],
-      hand: [
-        { id: "4", name: "Knut" },
-        { id: "5", name: "Knut" },
-      ],
-      inPlay: [{ id: "3", name: "Knut" }],
-      discard: [
-        { id: "4", name: "Knut" },
-        { id: "5", name: "Knut" },
-        { id: "6", name: "Knut" },
-      ],
-    },
-    opponents: [
-      {
-        playerId: "mock-opponent-id",
-        playerName: "Mock Player B",
-        drawPileSize: 2,
-        handSize: 3,
-        inPlay: [],
-        persistentCards: [],
-        discardTopCard: null,
       },
-    ],
-    activePlayerId: "mock-player-id",
-    turn: {
-      phase: "BANK",
-      allowedActions: ["PASS_BANK"] as const,
-    },
-    account: {
-      action: 1,
-      budget: 2,
-      buy: 1,
-      moneyAction: 0,
+      me: {
+        playerId: "mock-player-id",
+        playerName: "Mock Player A",
+        drawPileSize: 2,
+        persistentCards: [],
+        hand: [
+          { id: "4", name: "Knut" },
+          { id: "5", name: "Knut" },
+        ],
+        inPlay: [{ id: "3", name: "Knut" }],
+        discard: [
+          { id: "4", name: "Knut" },
+          { id: "5", name: "Knut" },
+          { id: "6", name: "Knut" },
+        ],
+      },
+      opponents: [
+        {
+          playerId: "mock-opponent-id",
+          playerName: "Mock Player B",
+          drawPileSize: 2,
+          handSize: 3,
+          inPlay: [],
+          persistentCards: [],
+          discardTopCard: null,
+        },
+      ],
+      activePlayerId: "mock-player-id",
+      turn: {
+        phase: "BANK",
+        allowedActions: ["PASS_BANK"] as const,
+      },
+      account: {
+        action: 1,
+        budget: 2,
+        buy: 1,
+        moneyAction: 0,
+      },
     },
   },
 };

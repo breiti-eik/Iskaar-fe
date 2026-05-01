@@ -10,7 +10,7 @@ import { MOCK_GAME_VIEW } from "../../core/mock/MockGameData";
 import { ActionView } from "../ui/ActionView";
 import { AccountView } from "../ui/AccountView";
 import type { ActionType } from "../objects/Actions";
-import { BasicSupplyView } from "../ui/BasicSupplyView";
+import { RessourceView } from "../ui/RessourceView";
 import { MarketView } from "../ui/MarketView";
 
 export class GameScene extends Phaser.Scene {
@@ -20,7 +20,7 @@ export class GameScene extends Phaser.Scene {
   private inPlayView!: InPlayView;
   private actionView!: ActionView;
   private accountView!: AccountView;
-  private basicSupplyView!: BasicSupplyView;
+  private resourceView!: RessourceView;
   private opponentViews: OpponentView[] = [];
   private drawPileView!: StackView;
   private discardPileView!: StackView;
@@ -60,7 +60,7 @@ export class GameScene extends Phaser.Scene {
     this.accountView = new AccountView(this);
     this.accountView.create();
 
-    this.basicSupplyView = new BasicSupplyView(this);
+    this.resourceView = new RessourceView(this);
 
     // 🔥 Events
     GameEventBus.on("gameView", this.onGameView);
@@ -127,7 +127,7 @@ export class GameScene extends Phaser.Scene {
       this.accountView.setAccount(view.account);
     }
     if (view.board) {
-      this.basicSupplyView.setBoard(view.board);
+      this.resourceView.setBoard(view.board);
     }
     if (view.board?.market) {
       const { market } = view.board;

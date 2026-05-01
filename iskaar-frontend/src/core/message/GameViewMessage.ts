@@ -6,7 +6,7 @@ import { OpponentViewData } from "../../game/view/OpponentViewData";
 import { AccountViewData } from "../../game/view/AccountViewData";
 import { SupplyViewData } from "../../game/view/SupplyViewData";
 import { MarketViewData } from "../../game/view/MarketViewData";
-import { ResourceViewData } from "../../game/view/ResourceViewData";
+import { RessourceViewData } from "../../game/view/RessourceViewData";
 
 export class GameViewMessage extends ServerMessage {
   readonly type = "GAME_VIEW";
@@ -21,38 +21,38 @@ export class GameViewMessage extends ServerMessage {
     return new GameViewData(
       raw.gameId,
       new BoardViewData(
-        new ResourceViewData(
+        new RessourceViewData(
           new SupplyViewData(
-            raw.board?.resources?.knutSupply?.pileName ?? null,
-            raw.board?.resources?.knutSupply?.buyerId ?? undefined,
-            raw.board?.resources?.knutSupply?.topCard ?? null,
-            raw.board?.resources?.knutSupply?.size ?? 0,
-            raw.board?.resources?.knutSupply?.cost ?? 0,
-            raw.board?.resources?.knutSupply?.open ?? false,
+            raw.board?.ressources?.knutSupply?.pileName ?? null,
+            raw.board?.ressources?.knutSupply?.buyerId ?? undefined,
+            raw.board?.ressources?.knutSupply?.topCard ?? null,
+            raw.board?.ressources?.knutSupply?.size ?? 0,
+            raw.board?.ressources?.knutSupply?.cost ?? 0,
+            raw.board?.ressources?.knutSupply?.open ?? false,
           ),
           new SupplyViewData(
-            raw.board?.resources?.groSupply?.pileName ?? null,
-            raw.board?.resources?.groSupply?.buyerId ?? undefined,
-            raw.board?.resources?.groSupply?.topCard ?? null,
-            raw.board?.resources?.groSupply?.size ?? 0,
-            raw.board?.resources?.groSupply?.cost ?? 0,
-            raw.board?.resources?.groSupply?.open ?? false,
+            raw.board?.ressources?.groSupply?.pileName ?? null,
+            raw.board?.ressources?.groSupply?.buyerId ?? undefined,
+            raw.board?.ressources?.groSupply?.topCard ?? null,
+            raw.board?.ressources?.groSupply?.size ?? 0,
+            raw.board?.ressources?.groSupply?.cost ?? 0,
+            raw.board?.ressources?.groSupply?.open ?? false,
           ),
           new SupplyViewData(
-            raw.board?.resources?.randSupply?.pileName ?? null,
-            raw.board?.resources?.randSupply?.buyerId ?? undefined,
-            raw.board?.resources?.randSupply?.topCard ?? null,
-            raw.board?.resources?.randSupply?.size ?? 0,
-            raw.board?.resources?.randSupply?.cost ?? 0,
-            raw.board?.resources?.randSupply?.open ?? false,
+            raw.board?.ressources?.randSupply?.pileName ?? null,
+            raw.board?.ressources?.randSupply?.buyerId ?? undefined,
+            raw.board?.ressources?.randSupply?.topCard ?? null,
+            raw.board?.ressources?.randSupply?.size ?? 0,
+            raw.board?.ressources?.randSupply?.cost ?? 0,
+            raw.board?.ressources?.randSupply?.open ?? false,
           ),
           new SupplyViewData(
-            raw.board?.resources?.trollSupply?.pileName ?? null,
-            raw.board?.resources?.trollSupply?.buyerId ?? undefined,
-            raw.board?.resources?.trollSupply?.topCard ?? null,
-            raw.board?.resources?.trollSupply?.size ?? 0,
-            raw.board?.resources?.trollSupply?.cost ?? 0,
-            raw.board?.resources?.trollSupply?.open ?? false,
+            raw.board?.ressources?.trollSupply?.pileName ?? null,
+            raw.board?.ressources?.trollSupply?.buyerId ?? undefined,
+            raw.board?.ressources?.trollSupply?.topCard ?? null,
+            raw.board?.ressources?.trollSupply?.size ?? 0,
+            raw.board?.ressources?.trollSupply?.cost ?? 0,
+            raw.board?.ressources?.trollSupply?.open ?? false,
           ),
         ),
         new MarketViewData(

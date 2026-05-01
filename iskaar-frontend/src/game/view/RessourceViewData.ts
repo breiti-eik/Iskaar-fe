@@ -1,6 +1,6 @@
 import type { SupplyViewData } from "./SupplyViewData";
 
-export class ResourceViewData {
+export class RessourceViewData {
   knutSupply: SupplyViewData;
   groSupply: SupplyViewData;
   randSupply: SupplyViewData;

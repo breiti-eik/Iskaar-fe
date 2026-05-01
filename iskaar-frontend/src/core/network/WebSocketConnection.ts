@@ -51,7 +51,7 @@ export class WebSocketConnection {
   private onMessage(raw: IMessage) {
     const json = JSON.parse(raw.body);
     let message = undefined;
-    console.debug(json);
+    console.debug("JSON ", json);
     message = MessageFactory.fromJson(json);
 
     this.dispatch(message);

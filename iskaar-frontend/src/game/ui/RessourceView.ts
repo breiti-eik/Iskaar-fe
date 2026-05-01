@@ -3,7 +3,7 @@ import Phaser from "phaser";
 import { StackView } from "./StatckView";
 import type { BoardViewData } from "../view/BoardViewData";
 
-export class BasicSupplyView {
+export class RessourceView {
   private stacks: StackView[] = [];
   private scene: Phaser.Scene;
 
