@@ -129,8 +129,9 @@ export class GameScene extends Phaser.Scene {
     if (view.board) {
       this.basicSupplyView.setBoard(view.board);
     }
-    if (view.market) {
-      this.marketView.setMarket(view.market);
+    if (view.board?.market) {
+      const { market } = view.board;
+      this.marketView.setMarket(market.getSupplies());
     }
 
     const inPlayCards = this.getActiveInPlay(view);

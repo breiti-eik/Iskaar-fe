@@ -7,14 +7,14 @@ export class ResourceViewData {
   trollSupply: SupplyViewData;
 
   constructor(
-    knutPileSize: SupplyViewData,
-    groPileSize: SupplyViewData,
-    randPileSize: SupplyViewData,
-    trollPileSize: SupplyViewData,
+    knutPile: SupplyViewData,
+    groPile: SupplyViewData,
+    randPile: SupplyViewData,
+    trollPile: SupplyViewData,
   ) {
-    this.knutSupply = knutPileSize;
-    this.groSupply = groPileSize;
-    this.randSupply = randPileSize;
-    this.trollSupply = trollPileSize;
+    this.knutSupply = knutPile;
+    this.groSupply = groPile;
+    this.randSupply = randPile;
+    this.trollSupply = trollPile;
   }
 }

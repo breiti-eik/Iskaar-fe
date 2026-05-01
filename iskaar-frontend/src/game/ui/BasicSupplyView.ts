@@ -19,10 +19,10 @@ export class BasicSupplyView {
     const sceneWidth = this.scene.scale.width;
 
     const supplies = [
-      board.knutSupply,
-      board.groSupply,
-      board.randSupply,
-      board.trollSupply,
+      board.resources.knutSupply,
+      board.resources.groSupply,
+      board.resources.randSupply,
+      board.resources.trollSupply,
     ];
 
     // 🎯 Layout-Bereich (oben links)
