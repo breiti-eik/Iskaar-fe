@@ -1,10 +1,11 @@
 {
-  "PASS_PLAY": "Spielen beenden",
-  "PASS_BANK": "Bank beenden",
-  "DEPOSIT": "Einzahlen",
-  "WITHDRAW": "Abheben",
-  "PASS_BUY": "Kauf beenden",
-  "PASS_SHIFTING_CARDS": "Überspringen ...",
-  "PASS_REACTION": "Keine Reaktion",
-  "PASS_SELECTION": "Keine Auswahl"
+    "PASS_PLAY": "Spielen beenden",
+    "PASS_BANK": "Bank beenden",
+    "DEPOSIT": "Einzahlen",
+    "WITHDRAW": "Abheben",
+    "PASS_BUY": "Kauf beenden",
+    "PASS_SHIFTING_CARDS": "Überspringen ...",
+    "PASS_REACTION": "Keine Reaktion",
+    "PASS_SELECTION": "Keine Auswahl",
+    "CLEAN_UP": "Runde beenden"
 }

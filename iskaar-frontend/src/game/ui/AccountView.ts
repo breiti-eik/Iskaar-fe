@@ -17,8 +17,8 @@ export class AccountView extends Phaser.GameObjects.Container {
 
     const items: { key: keyof AccountViewData; color: number }[] = [
       { key: "action", color: 0x7a7aff },
-      { key: "buy", color: 0xff7aff },
-      { key: "moneyAction", color: 0x7aff7a },
+      { key: "moneyAction", color: 0xff7aff },
+      { key: "buy", color: 0x7aff7a },
       { key: "budget", color: 0xffff7a },
     ];
 
