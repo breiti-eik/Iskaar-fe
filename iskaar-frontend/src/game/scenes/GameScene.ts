@@ -63,6 +63,10 @@ export class GameScene extends Phaser.Scene {
     this.handView.setPosition(w * 0.5, h - 150);
     this.discardPileView = new StackView(this, 0.6, false, true);
     this.inPlayView = new InPlayView(this);
+    this.inPlayView.setPosition(
+      this.scale.width * 0.5,
+      this.scale.height * 0.5,
+    );
     this.inPlayView.create();
     this.tableauView = new TableauView(this);
     this.actionView = new ActionView(this);

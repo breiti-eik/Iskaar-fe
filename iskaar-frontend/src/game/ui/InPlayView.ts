@@ -2,32 +2,25 @@ import Phaser from "phaser";
 import { Card } from "../objects/Card";
 import type { CardViewData } from "../view/CardViewData";
 
-export class InPlayView {
-  private container!: Phaser.GameObjects.Container;
-  private scene: Phaser.Scene;
+export class InPlayView extends Phaser.GameObjects.Container {
   private frame!: Phaser.GameObjects.Image;
   private cards: Card[] = [];
 
   private readonly spacing = 155;
 
   constructor(scene: Phaser.Scene) {
-    this.scene = scene;
+    super(scene, 0, 0);
+    this.scene.add.existing(this);
   }
 
   create() {
-    // 👉 Container
-    this.container = this.scene.add.container(
-      this.scene.scale.width / 2,
-      this.scene.scale.height / 2,
-    );
-
     // 👉 Frame
     this.frame = this.scene.add.image(0, 0, "Frame");
     this.frame.setOrigin(0.5);
     this.frame.setVisible(false);
     this.frame.setDepth(5);
 
-    this.container.add(this.frame);
+    this.add(this.frame);
   }
 
   setCards(cards: CardViewData[]) {
@@ -39,7 +32,7 @@ export class InPlayView {
       const x = this.getCardX(index, total);
       const card = new Card(this.scene, x, 0, cardData.id, cardData.name);
 
-      this.container.add(card);
+      this.add(card);
       this.cards.push(card);
     });
 
@@ -93,6 +86,6 @@ export class InPlayView {
   }
 
   getBounds(): Phaser.Geom.Rectangle {
-    return this.container.getBounds();
+    return super.getBounds();
   }
 }
