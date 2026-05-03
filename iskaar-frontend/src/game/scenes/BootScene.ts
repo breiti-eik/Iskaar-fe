@@ -58,6 +58,10 @@ export class BootScene extends Phaser.Scene {
     this.load.setPath("assets/backgrounds");
     this.load.image("Background", "background.png");
 
+    //Tableau
+    this.load.setPath("assets/tableau");
+    this.load.image("Tableau", "scoretableau_empty.png");
+
     //panels
     this.load.setPath("assets/ui/panels");
     this.load.image("Frame", "frame.png");

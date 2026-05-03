@@ -5,7 +5,7 @@ import { GameEventBus } from "../events/GameEventBus";
 import { GameClient } from "../../core/network/GameClient";
 import type { GameViewData } from "../view/GameViewData";
 import { OpponentView } from "../ui/OpponentView";
-import { StackView } from "../ui/StatckView";
+import { StackView } from "../ui/StackView";
 import mock from "../../core/mock/mock-game-view.json";
 import { MessageFactory } from "../../core/message/MessageFactory";
 import { ActionView } from "../ui/ActionView";

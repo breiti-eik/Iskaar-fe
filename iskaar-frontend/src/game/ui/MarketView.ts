@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { StackView } from "./StatckView";
+import { StackView } from "./StackView";
 import type { SupplyViewData } from "../view/SupplyViewData";
 
 export class MarketView {

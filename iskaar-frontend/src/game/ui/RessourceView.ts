@@ -1,6 +1,6 @@
 // src/game/ui/SupplyView.ts
 import Phaser from "phaser";
-import { StackView } from "./StatckView";
+import { StackView } from "./StackView";
 import type { BoardViewData } from "../view/BoardViewData";
 
 export class RessourceView {
