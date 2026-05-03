@@ -3,27 +3,19 @@ import { Card } from "../objects/Card";
 import { GameEventBus } from "../events/GameEventBus";
 import type { CardViewData } from "../view/CardViewData";
 
-export class HandView {
-  getCenterX() {
-    return this.scene.scale.width / 2;
-  }
-
+export class HandView extends Phaser.GameObjects.Container {
   getHandViewWidth() {
     return this.handViewWidth;
   }
 
-  private scene: Phaser.Scene;
   private cards: Card[] = [];
-
-  private get baseY(): number {
-    return this.scene.scale.height - 150;
-  }
 
   private hoveredCard?: Card;
   private handViewWidth = 400;
 
   constructor(scene: Phaser.Scene) {
-    this.scene = scene;
+    super(scene, 0, 0);
+    this.scene.add.existing(this);
   }
 
   setCards(cards: CardViewData[]) {
@@ -40,6 +32,7 @@ export class HandView {
 
       // 👉 NICHT mehr (0,0)!
       const card = new Card(this.scene, x, y, id, textureKey);
+      this.add(card);
       card.setRotation(rotation);
 
       this.setupInteractions(card);
@@ -108,8 +101,8 @@ export class HandView {
   }
 
   private getCardTransform(index: number, total: number) {
-    const centerX = this.getCenterX();
-    const baseY = this.baseY;
+    const centerX = 0;
+    const baseY = 0;
 
     if (total === 1) {
       return { x: centerX, y: baseY, rotation: 0 };

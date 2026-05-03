@@ -14,6 +14,7 @@ import type { ActionType } from "../objects/Actions";
 import { RessourceView } from "../ui/RessourceView";
 import { MarketView } from "../ui/MarketView";
 import { GameViewMessage } from "../../core/message/GameViewMessage";
+import { TableauView } from "../ui/TableauView";
 
 export class GameScene extends Phaser.Scene {
   private gameClient!: GameClient;
@@ -26,6 +27,7 @@ export class GameScene extends Phaser.Scene {
   private opponentViews: OpponentView[] = [];
   private drawPileView!: StackView;
   private discardPileView!: StackView;
+  private tableauView!: TableauView;
   private isMock = import.meta.env.VITE_USE_MOCK === "true";
 
   getCenterX() {
@@ -53,10 +55,16 @@ export class GameScene extends Phaser.Scene {
     this.marketView = new MarketView(this);
     this.drawPileView = new StackView(this, 0.6);
     this.handView = new HandView(this);
+
+    const w = this.scale.width;
+    const h = this.scale.height;
+
+    // 👉 Hand zentral unten
+    this.handView.setPosition(w * 0.5, h - 150);
     this.discardPileView = new StackView(this, 0.6, false, true);
     this.inPlayView = new InPlayView(this);
     this.inPlayView.create();
-
+    this.tableauView = new TableauView(this);
     this.actionView = new ActionView(this);
     this.actionView.create();
     this.accountView = new AccountView(this);
@@ -142,9 +150,18 @@ export class GameScene extends Phaser.Scene {
     this.inPlayView.updateFrame(isActive);
 
     const bounds = this.inPlayView.getBounds();
+
+    // ActionView bleibt wie gehabt (ist OK so)
     this.actionView.updateActionView(bounds, view.turn);
-    this.accountView.updateAccountView(bounds);
+
+    // 👉 AccountView Layout jetzt HIER (GameScene!)
+    const gapToFrame = 30;
+    const offsetX = bounds.width / 2 + gapToFrame;
+
+    this.accountView.setPosition(bounds.centerX - offsetX, bounds.centerY);
+    this.accountView.show();
     this.updateOpponents(view);
+    this.updateTableauLayout();
   };
 
   private getActiveInPlay(view: GameViewData) {
@@ -162,7 +179,7 @@ export class GameScene extends Phaser.Scene {
   private updateDrawPile(size: number) {
     const offsetX = -this.handView.getHandViewWidth();
 
-    const x = this.handView.getCenterX() + offsetX;
+    const x = this.scale.width * 0.5 + offsetX;
     const y = this.scale.height - 110;
 
     this.drawPileView.setPosition(x, y);
@@ -172,7 +189,7 @@ export class GameScene extends Phaser.Scene {
   private updateDiscardPile(cards: { name: string }[]) {
     const offsetX = this.handView.getHandViewWidth(); // 👉 rechts vom Fächer
 
-    const x = this.getCenterX() + offsetX;
+    const x = this.scale.width * 0.5 + offsetX;
     const y = this.scale.height - 120;
     this.discardPileView.setPosition(x, y);
     // ✅ echte Daten
@@ -206,6 +223,26 @@ export class GameScene extends Phaser.Scene {
         this.opponentViews[index].update(opponentData);
       }
     });
+  }
+
+  private updateTableauLayout() {
+    const leftMargin = 40; // vorher 20 → mehr Luft
+    const gapToDrawPile = 30; // NEU: Abstand zum Stack
+
+    // 👉 rechte Grenze = DrawPile
+    const drawPileX = this.drawPileView.getX();
+
+    const availableWidth = drawPileX - leftMargin - gapToDrawPile; // NEU: Abstand links + Abstand zum DrawPile + Abstand rechts
+
+    // 👉 Höhe begrenzen (nicht zu hoch)
+    const scaleFactor = 0.7; // 🔥 30% kleiner
+
+    const adjustedWidth = availableWidth * scaleFactor;
+    const maxHeight = this.scale.height * 0.5 * scaleFactor;
+
+    this.tableauView.create(leftMargin, this.scale.height - 20);
+
+    this.tableauView.updateLayout(adjustedWidth);
   }
 
   private emitMockGameView() {

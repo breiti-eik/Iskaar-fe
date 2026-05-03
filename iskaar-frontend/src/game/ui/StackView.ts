@@ -25,6 +25,10 @@ export class StackView {
     this.hoverEnabled = enabled;
   }
 
+  getX() {
+    return this.x;
+  }
+
   constructor(
     scene: Phaser.Scene,
     scale: number = 0.6,
