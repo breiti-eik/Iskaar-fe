@@ -4,6 +4,10 @@ import type { AccountViewData } from "../view/AccountViewData";
 export class AccountView extends Phaser.GameObjects.Container {
   private values: Record<string, Phaser.GameObjects.Text> = {};
   private gapToFrame = 30;
+  private actionColor = 0x7a9aff;
+  private moneyActionColor = 0xffff7a;
+  private buyColor = 0x7abf7a;
+  private budgetColor = 0xffaa7a;
 
   constructor(scene: Phaser.Scene) {
     super(scene, 0, 0);
@@ -16,10 +20,10 @@ export class AccountView extends Phaser.GameObjects.Container {
     const textStyle = this.scene.cache.obj.get("textStyle-label"); // 🔥 hier holen
 
     const items: { key: keyof AccountViewData; color: number }[] = [
-      { key: "action", color: 0x7a9aff },
-      { key: "moneyAction", color: 0xffff7a },
-      { key: "buy", color: 0x7abf7a },
-      { key: "budget", color: 0xffaa7a },
+      { key: "action", color: this.actionColor },
+      { key: "moneyAction", color: this.moneyActionColor },
+      { key: "buy", color: this.buyColor },
+      { key: "budget", color: this.budgetColor },
     ];
 
     const totalHeight = (items.length - 1) * spacing;
