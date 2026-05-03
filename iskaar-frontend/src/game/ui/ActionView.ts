@@ -6,9 +6,7 @@ import type { ActionType } from "../objects/Actions";
 import type { GameScene } from "../scenes/GameScene";
 import { t } from "../../core/i18n";
 
-export class ActionView {
-  private scene: GameScene;
-
+export class ActionView extends Phaser.GameObjects.Container {
   private container!: Phaser.GameObjects.Container;
   private debugBg!: Phaser.GameObjects.Rectangle;
 
@@ -20,15 +18,15 @@ export class ActionView {
   private GAP_TO_FRAME = 20;
 
   constructor(scene: GameScene) {
-    this.scene = scene;
+    super(scene);
+    this.scene.add.existing(this);
+    this.create();
   }
 
   create() {
-    this.container = this.scene.add.container(0, 0);
-
     this.debugBg = this.scene.add.rectangle(0, 0, 100, 100, 0xff0000, 0);
 
-    this.container.add(this.debugBg);
+    this.add(this.debugBg);
   }
 
   private renderButtons(turn: TurnViewData) {
@@ -49,20 +47,16 @@ export class ActionView {
         GameEventBus.emit("playerAction", action);
       });
 
-      this.container.add(button);
+      this.add(button);
       this.actionButtons.set(action, button);
     });
-  }
-
-  setPosition(x: number, y: number) {
-    this.container.setPosition(x, y);
   }
 
   updateActionView(bounds: Phaser.Geom.Rectangle, turn: TurnViewData) {
     const referenceWidth = bounds.width;
 
     this.setPosition(bounds.centerX, bounds.bottom + this.GAP_TO_FRAME);
-    this.setSize(referenceWidth, this.VIEW_HEIGHT);
+    this.updateSize(referenceWidth, this.VIEW_HEIGHT);
 
     this.renderButtons(turn);
 
@@ -90,7 +84,7 @@ export class ActionView {
     });
   }
 
-  private setSize(width: number, height: number) {
+  private updateSize(width: number, height: number) {
     this.debugBg.setDisplaySize(width, height);
   }
 
