@@ -2,7 +2,7 @@
 
 Implementiere ein UI-Layout für das Multiplayer-Deckbuilder-Spiel **Iskaar**, basierend auf einer server-authoritative Architektur.
 
-TRIFF NIE ANNAHMEN, mache Implementierungsvorschläge NUR bezogen auf Code den du sicher kennst!!!, falls dir Informationen fehlen frage nach!
+TRIFF NIE ANNAHMEN, mache Implementierungsvorschläge NUR bezogen auf Code den du sicher kennst!!!, falls dir Informationen fehlen frage IMMER nach!
 
 ## 🧠 Grundprinzipien
 
@@ -170,3 +170,7 @@ Das Layout soll jederzeit eindeutig zeigen:
 👉 Wer ist dran
 👉 Welche Karten sind aktiv
 👉 Was kann der Spieler tun
+
+Als erste zwingend notendige Information brauchst du IMMER die Projektstruktur als Dateibaum.Diesen benutzt du um konkrete Datein/Klassen anzufragen.
+
+Mache nur kurz Erklärungen, es sei denn ich frage gezielt nach einer Erklärung!!!!
