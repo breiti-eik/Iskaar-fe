@@ -2,15 +2,10 @@ import Phaser from "phaser";
 import type { SupplyViewData } from "../view/SupplyViewData";
 import { GameEventBus } from "../events/GameEventBus";
 
-export class StackView {
-  private scene: Phaser.Scene;
-
+export class StackView extends Phaser.GameObjects.Container {
   private cards: Phaser.GameObjects.Image[] = [];
   private counter?: Phaser.GameObjects.Text;
 
-  private x = 0;
-  private y = 0;
-  private scale: number;
   private hasCounter: boolean;
   private MAX_STACK_VISIBLE = 3;
   private hoverEnabled: boolean = false;
@@ -25,7 +20,8 @@ export class StackView {
     this.hoverEnabled = enabled;
   }
 
-  getX() {
+  // TODO remove after DrawPile refactor
+  getWorldX() {
     return this.x;
   }
 
@@ -35,16 +31,14 @@ export class StackView {
     hasCounter: boolean = true,
     hoverEnabled: boolean = false,
   ) {
-    this.scene = scene;
+    super(scene, 0, 0);
     this.scale = scale;
     this.hasCounter = hasCounter;
     this.hoverEnabled = hoverEnabled;
-    this.scene.input.on("pointermove", this.handlePointerMove, this);
-  }
 
-  setPosition(x: number, y: number) {
-    this.x = x;
-    this.y = y;
+    this.scene.add.existing(this);
+
+    this.scene.input.on("pointermove", this.handlePointerMove, this);
   }
 
   // 👉 Fall 1: Karten verdeckt (DrawPile etc.)
@@ -67,10 +61,11 @@ export class StackView {
       const cardData = cards[cards.length - 1 - i]; // 👈 von oben nach unten
 
       const card = this.scene.add.image(
-        this.x - i * offset,
-        this.y - i * offset,
+        -i * offset,
+        -i * offset,
         cardData.name,
       );
+      this.add(card);
 
       console.log("Card: ", card);
 
@@ -107,11 +102,8 @@ export class StackView {
     const offset = Math.max(2, stackLift);
 
     for (let i = 0; i < stackSize; i++) {
-      const card = this.scene.add.image(
-        this.x - i * offset,
-        this.y - i * offset,
-        "CardBack",
-      );
+      const card = this.scene.add.image(-i * offset, -i * offset, "CardBack");
+      this.add(card);
 
       card.setScale(this.scale);
       card.setDepth(i);
@@ -155,14 +147,15 @@ export class StackView {
     const offsetX = (targetWidth - card.displayWidth) / 2;
     const offsetY = (targetHeight - card.displayHeight) / 2;
 
-    card.setPosition(this.x + offsetX, this.y + offsetY);
+    card.setPosition(offsetX, offsetY);
+    this.add(card);
 
     this.cards.push(card);
 
     // =========================
     // 🔢 STACK COUNT (unten rechts)
     // =========================
-    const count = this.scene.add.text(
+    this.counter = this.scene.add.text(
       card.x + card.displayWidth * 0.95,
       card.y + card.displayHeight * 0.95,
       `${supply.size}`,
@@ -175,9 +168,9 @@ export class StackView {
       },
     );
 
-    count.setOrigin(1, 1);
-    count.setDepth(1000);
-    this.counter = count;
+    this.counter.setOrigin(1, 1);
+    this.counter.setDepth(1000);
+    this.add(this.counter);
 
     // =========================
     // 🪙 COIN + COST
@@ -186,18 +179,17 @@ export class StackView {
       const coinX = card.x + card.displayWidth * 0.05;
       const coinY = card.y + card.displayHeight * 0.95;
 
-      const coin = this.scene.add.image(coinX, coinY, "Coin");
-      coin.setOrigin(0, 1);
+      this.coinIcon = this.scene.add.image(coinX, coinY, "Coin");
+      this.add(this.coinIcon);
+      this.coinIcon.setOrigin(0, 1);
 
-      const coinScale = (card.displayWidth * 0.3) / coin.width;
-      coin.setScale(coinScale);
-      coin.setDepth(1000);
+      const coinScale = (card.displayWidth * 0.3) / this.coinIcon.width;
+      this.coinIcon.setScale(coinScale);
+      this.coinIcon.setDepth(1000);
 
-      this.coinIcon = coin;
-
-      const costText = this.scene.add.text(
-        coin.x + coin.displayWidth / 2,
-        coin.y - coin.displayHeight * 0.1,
+      this.costText = this.scene.add.text(
+        this.coinIcon.x + this.coinIcon.displayWidth / 2,
+        this.coinIcon.y - this.coinIcon.displayHeight * 0.1,
         `${supply.cost}`,
         {
           fontSize: `${Math.max(14, card.displayWidth * 0.16)}px`,
@@ -208,10 +200,10 @@ export class StackView {
         },
       );
 
-      costText.setOrigin(0.5, 1);
-      costText.setDepth(1000);
+      this.costText.setOrigin(0.5, 1);
+      this.costText.setDepth(1000);
 
-      this.costText = costText;
+      this.add(this.costText);
     }
 
     if (modifier !== undefined) {
@@ -231,6 +223,7 @@ export class StackView {
       this.modifierIcon.setScale(iconScale);
       this.modifierIcon.setTint(0x00aa00);
       this.modifierIcon.setAlpha(0.7);
+      this.add(this.modifierIcon);
 
       // 🔢 TEXT
       if (!this.modifierText) {
@@ -248,6 +241,7 @@ export class StackView {
 
       this.modifierText.setPosition(baseX, baseY);
       this.modifierText.setText(`${modifier > 0 ? "+" : ""}${modifier}`);
+      this.add(this.modifierText);
     }
 
     // =========================
@@ -314,6 +308,7 @@ export class StackView {
 
     // 🔥 garantiert über allen Karten
     this.counter.setDepth(1000);
+    this.add(this.counter);
   }
 
   private expandStack() {
@@ -332,10 +327,12 @@ export class StackView {
 
     this.fullCards.forEach((cardData, index) => {
       const card = this.scene.add.image(
-        this.x - totalWidth / 2 + index * spacing,
-        this.y - 15,
+        -totalWidth / 2 + index * spacing,
+        -15,
         cardData.name,
       );
+
+      this.add(card);
 
       card.setScale(this.scale);
       card.setDepth(100 + index);

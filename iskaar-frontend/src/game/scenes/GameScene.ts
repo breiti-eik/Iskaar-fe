@@ -51,13 +51,14 @@ export class GameScene extends Phaser.Scene {
     );
     bg.setDisplaySize(this.scale.width, this.scale.height);
 
-    // Views
-    this.marketView = new MarketView(this);
-    this.drawPileView = new StackView(this, 0.6);
-    this.handView = new HandView(this);
-
     const w = this.scale.width;
     const h = this.scale.height;
+
+    // Views
+    this.marketView = new MarketView(this);
+    this.marketView.setPosition(w * 0.5, h * 0.08);
+    this.drawPileView = new StackView(this, 0.6);
+    this.handView = new HandView(this);
 
     // 👉 Hand zentral unten
     this.handView.setPosition(w * 0.5, h - 150);
@@ -117,6 +118,8 @@ export class GameScene extends Phaser.Scene {
     const view = event;
     console.log("View: ", view);
 
+    const w = this.scale.width;
+
     if (!view.turn.phase) {
       return;
     }
@@ -145,7 +148,7 @@ export class GameScene extends Phaser.Scene {
     }
     if (view.board?.market) {
       const { market } = view.board;
-      this.marketView.setMarket(market.getSupplies());
+      this.marketView.setMarket(market.getSupplies(), w * 0.6);
     }
 
     const inPlayCards = this.getActiveInPlay(view);
@@ -234,7 +237,7 @@ export class GameScene extends Phaser.Scene {
     const gapToDrawPile = 30; // NEU: Abstand zum Stack
 
     // 👉 rechte Grenze = DrawPile
-    const drawPileX = this.drawPileView.getX();
+    const drawPileX = this.drawPileView.getWorldX();
 
     const availableWidth = drawPileX - leftMargin - gapToDrawPile; // NEU: Abstand links + Abstand zum DrawPile + Abstand rechts
 
