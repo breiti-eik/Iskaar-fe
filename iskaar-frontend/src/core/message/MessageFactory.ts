@@ -9,7 +9,6 @@ export class MessageFactory {
         return new CardPlayedMessage(json.playerId, json.card);
       case "GAME_VIEW":
         return new GameViewMessage(json.view);
-
       default:
         console.log("Unknown message type:", json.type, json);
         throw new Error("Unknown message type: " + json.type);

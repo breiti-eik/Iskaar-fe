@@ -37,7 +37,23 @@ export class MarketView {
       const stack = this.stacks[index];
 
       stack.setPosition(x, y);
-      stack.setSupplyScaled(supply, cellWidth, cellHeight);
+      const modifier = this.getModifierFromPile(supply.pileName);
+      stack.setSupplyScaled(supply, cellWidth, cellHeight, modifier);
     });
+  }
+
+  private getModifierFromPile(pileName: string): number {
+    switch (pileName) {
+      case "Slot +2":
+        return 2;
+      case "Slot +1":
+        return 1;
+      case "Slot 0":
+        return 0;
+      case "Slot -1":
+        return -1;
+      default:
+        return 0;
+    }
   }
 }

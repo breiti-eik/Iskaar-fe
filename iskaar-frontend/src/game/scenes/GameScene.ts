@@ -6,12 +6,14 @@ import { GameClient } from "../../core/network/GameClient";
 import type { GameViewData } from "../view/GameViewData";
 import { OpponentView } from "../ui/OpponentView";
 import { StackView } from "../ui/StatckView";
-import { MOCK_GAME_VIEW } from "../../core/mock/MockGameData";
+import mock from "../../core/mock/mock-game-view.json";
+import { MessageFactory } from "../../core/message/MessageFactory";
 import { ActionView } from "../ui/ActionView";
 import { AccountView } from "../ui/AccountView";
 import type { ActionType } from "../objects/Actions";
 import { RessourceView } from "../ui/RessourceView";
 import { MarketView } from "../ui/MarketView";
+import { GameViewMessage } from "../../core/message/GameViewMessage";
 
 export class GameScene extends Phaser.Scene {
   private gameClient!: GameClient;
@@ -207,6 +209,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private emitMockGameView() {
-    GameEventBus.emit("gameView", MOCK_GAME_VIEW.view);
+    const message = MessageFactory.fromJson(mock) as GameViewMessage; // oder .create / .parse (je nach API)
+    GameEventBus.emit("gameView", message.view);
   }
 }

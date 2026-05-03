@@ -18,6 +18,8 @@ export class StackView {
   private fullCards: { name: string }[] = [];
   private coinIcon?: Phaser.GameObjects.Image;
   private costText?: Phaser.GameObjects.Text;
+  private modifierIcon?: Phaser.GameObjects.Image;
+  private modifierText?: Phaser.GameObjects.Text;
 
   setHoverEnabled(enabled: boolean) {
     this.hoverEnabled = enabled;
@@ -121,6 +123,7 @@ export class StackView {
     supply: SupplyViewData,
     targetWidth: number,
     targetHeight: number,
+    modifier?: number,
   ) {
     this.clear();
 
@@ -205,6 +208,42 @@ export class StackView {
       costText.setDepth(1000);
 
       this.costText = costText;
+    }
+
+    if (modifier !== undefined) {
+      const baseX = card.x;
+      const baseY = card.y;
+
+      // 🪙 ICON
+      if (!this.modifierIcon) {
+        this.modifierIcon = this.scene.add.image(baseX, baseY, "Coin");
+        this.modifierIcon.setOrigin(0.5, 0.5);
+        this.modifierIcon.setDepth(999);
+      }
+
+      this.modifierIcon.setPosition(baseX, baseY);
+
+      const iconScale = (card.displayWidth * 0.35) / this.modifierIcon.width;
+      this.modifierIcon.setScale(iconScale);
+      this.modifierIcon.setTint(0x00aa00);
+      this.modifierIcon.setAlpha(0.7);
+
+      // 🔢 TEXT
+      if (!this.modifierText) {
+        this.modifierText = this.scene.add.text(baseX, baseY, "", {
+          fontSize: `${Math.max(14, card.displayWidth * 0.16)}px`,
+          color: "#000000",
+          stroke: "#ffffff",
+          strokeThickness: 3,
+          fontStyle: "bold",
+        });
+
+        this.modifierText.setOrigin(0.5, 0.5);
+        this.modifierText.setDepth(1000);
+      }
+
+      this.modifierText.setPosition(baseX, baseY);
+      this.modifierText.setText(`${modifier > 0 ? "+" : ""}${modifier}`);
     }
 
     // =========================
@@ -312,6 +351,13 @@ export class StackView {
 
     this.costText?.destroy();
     this.costText = undefined;
+
+    this.modifierIcon?.destroy();
+    this.modifierIcon = undefined;
+
+    this.modifierText?.destroy();
+    this.modifierText = undefined;
+
     this.scene.tweens.killTweensOf(this.cards);
 
     this.cards.forEach(c => {

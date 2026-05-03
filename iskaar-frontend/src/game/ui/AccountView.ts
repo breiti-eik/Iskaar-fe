@@ -16,10 +16,10 @@ export class AccountView extends Phaser.GameObjects.Container {
     const textStyle = this.scene.cache.obj.get("textStyle-label"); // 🔥 hier holen
 
     const items: { key: keyof AccountViewData; color: number }[] = [
-      { key: "action", color: 0x7a7aff },
-      { key: "moneyAction", color: 0xff7aff },
-      { key: "buy", color: 0x7aff7a },
-      { key: "budget", color: 0xffff7a },
+      { key: "action", color: 0x7a9aff },
+      { key: "moneyAction", color: 0xffff7a },
+      { key: "buy", color: 0x7abf7a },
+      { key: "budget", color: 0xffaa7a },
     ];
 
     const totalHeight = (items.length - 1) * spacing;

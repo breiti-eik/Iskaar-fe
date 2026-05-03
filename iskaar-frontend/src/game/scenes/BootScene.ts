@@ -50,6 +50,10 @@ export class BootScene extends Phaser.Scene {
     this.load.image("Stahlkette", "stahlkette.png");
     this.load.image("Bannreif", "bannreif.png");
 
+    //Neutral
+    this.load.image("Kristall", "kristall.png");
+    this.load.image("Sonnenuhr", "sonnenuhr.png");
+
     //backgrounds
     this.load.setPath("assets/backgrounds");
     this.load.image("Background", "background.png");
