@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { GrayscalePipeline } from "../../util/GrayscalePipeline";
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -76,6 +77,7 @@ export class BootScene extends Phaser.Scene {
   }
 
   create() {
+    const renderer = this.game.renderer;
     this.cache.obj.add("textStyle-label", {
       fontFamily: "Arial Black",
       fontSize: 40,
@@ -84,6 +86,10 @@ export class BootScene extends Phaser.Scene {
       strokeThickness: 5,
       align: "center",
     });
+
+    if (renderer instanceof Phaser.Renderer.WebGL.WebGLRenderer) {
+      renderer.pipelines.add("Grayscale", new GrayscalePipeline(this.game));
+    }
     this.scene.start("GameScene");
   }
 }

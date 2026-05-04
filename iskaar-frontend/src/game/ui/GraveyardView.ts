@@ -21,6 +21,9 @@ export class GraveyardView extends Phaser.GameObjects.Container {
     this.stack = new StackView(this.scene, 0.8, true, true, false);
     this.stack.setPosition(0, 0);
 
+    this.stack.onExpand = () => this.handleExpand();
+    this.stack.onCollapse = () => this.handleCollapse();
+
     // 🖼 Frame
     this.frame = this.scene.add.image(0, 0, "Frame");
     this.frame.setDisplaySize(100, 100); // vorläufige Größe
@@ -33,6 +36,7 @@ export class GraveyardView extends Phaser.GameObjects.Container {
   setCards(cards: CardViewData[]) {
     if (!this.stack) return;
     this.stack.setCards(cards);
+    this.handleCollapse();
     this.updateFrame();
   }
 
@@ -52,5 +56,29 @@ export class GraveyardView extends Phaser.GameObjects.Container {
 
     this.frame.setDisplaySize(width, height);
     this.frame.setPosition(0, 0);
+  }
+
+  private handleExpand() {
+    this.stack.list.forEach(obj => {
+      if (obj instanceof Phaser.GameObjects.Image && obj.scene && obj.active) {
+        obj.resetPipeline();
+        obj.setAlpha(1);
+      }
+    });
+  }
+  private handleCollapse() {
+    console.log("GraveyardView.handleCollapse");
+    if (
+      !(this.scene.game.renderer instanceof Phaser.Renderer.WebGL.WebGLRenderer)
+    ) {
+      return;
+    }
+
+    this.stack.list.forEach(obj => {
+      if (obj instanceof Phaser.GameObjects.Image && obj.scene && obj.active) {
+        obj.setPipeline("Grayscale");
+        obj.setAlpha(0.85);
+      }
+    });
   }
 }

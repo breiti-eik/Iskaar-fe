@@ -18,6 +18,9 @@ export class StackView extends Phaser.GameObjects.Container {
 
   private stackLock: boolean = true;
 
+  onExpand?: () => void;
+  onCollapse?: () => void;
+
   setHoverEnabled(enabled: boolean) {
     this.hoverEnabled = enabled;
   }
@@ -324,7 +327,6 @@ export class StackView extends Phaser.GameObjects.Container {
 
     this.isExpanded = true;
 
-    // 👉 neu rendern mit ALLEN Karten
     this.clear();
 
     const spacing = 60 * this.scale;
@@ -346,11 +348,13 @@ export class StackView extends Phaser.GameObjects.Container {
 
       this.cards.push(card);
     });
+    this.onExpand?.();
   }
 
   private collapseStack() {
     this.isExpanded = false;
     this.setCards(this.fullCards);
+    this.onCollapse?.();
   }
 
   private clear() {
