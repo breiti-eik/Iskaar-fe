@@ -58,8 +58,8 @@ export class StackView extends Phaser.GameObjects.Container {
     const stackSize = this.stackLock
       ? Math.min(cards.length, this.MAX_STACK_VISIBLE)
       : 1;
-    const stackLift = Math.round(16 * this.scale);
-    const offset = Math.max(2, stackLift);
+    const stackLift = this.stackLock ? Math.round(16 * this.scale) : 0;
+    const offset = this.stackLock ? Math.max(2, stackLift) : 0;
 
     let topSprite!: Phaser.GameObjects.Image;
 
@@ -106,8 +106,8 @@ export class StackView extends Phaser.GameObjects.Container {
 
     let topSprite!: Phaser.GameObjects.Image;
 
-    const stackLift = Math.round(16 * this.scale);
-    const offset = Math.max(2, stackLift);
+    const stackLift = this.stackLock ? Math.round(16 * this.scale) : 0;
+    const offset = this.stackLock ? Math.max(2, stackLift) : 0;
 
     for (let i = 0; i < stackSize; i++) {
       const card = this.scene.add.image(-i * offset, -i * offset, "CardBack");
