@@ -56,8 +56,8 @@ export class GameScene extends Phaser.Scene {
 
     // Views
     this.marketView = new MarketView(this);
-    this.marketView.setPosition(w * 0.5, h * 0.08);
-    this.drawPileView = new StackView(this, 0.6);
+    this.marketView.setPosition(w * 0.45, h * 0.08);
+    this.drawPileView = new StackView(this, 0.8);
     this.handView = new HandView(this);
 
     // 👉 Hand zentral unten
@@ -76,6 +76,7 @@ export class GameScene extends Phaser.Scene {
     this.accountView.create();
 
     this.resourceView = new RessourceView(this);
+    this.resourceView.setPosition(w * 0.02, h * 0.02);
 
     // 🔥 Events
     GameEventBus.on("gameView", this.onGameView);
@@ -144,11 +145,11 @@ export class GameScene extends Phaser.Scene {
       this.accountView.setAccount(view.account);
     }
     if (view.board) {
-      this.resourceView.setBoard(view.board);
+      this.resourceView.setBoard(view.board, w * 0.18);
     }
     if (view.board?.market) {
       const { market } = view.board;
-      this.marketView.setMarket(market.getSupplies(), w * 0.6);
+      this.marketView.setMarket(market.getSupplies(), w * 0.5);
     }
 
     const inPlayCards = this.getActiveInPlay(view);
