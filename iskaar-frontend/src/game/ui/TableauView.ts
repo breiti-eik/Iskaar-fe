@@ -1,12 +1,12 @@
 import Phaser from "phaser";
 
-export class TableauView {
-  private scene: Phaser.Scene;
+export class TableauView extends Phaser.GameObjects.Container {
   private container!: Phaser.GameObjects.Container;
   private background!: Phaser.GameObjects.Image;
 
   constructor(scene: Phaser.Scene) {
-    this.scene = scene;
+    super(scene);
+    this.scene.add.existing(this);
   }
 
   create(x: number, y: number) {
@@ -18,10 +18,6 @@ export class TableauView {
     this.background.setOrigin(0, 1); // unten links
 
     this.container.add(this.background);
-  }
-
-  setPosition(x: number, y: number) {
-    this.container.setPosition(x, y);
   }
 
   updateLayout(maxWidth: number) {
