@@ -1,11 +1,18 @@
+import type { CardViewData } from "./CardViewData";
 import type { MarketViewData } from "./MarketViewData";
-import type { ResourceViewData } from "./RessourceViewData";
+import type { RessourceViewData } from "./RessourceViewData";
 export class BoardViewData {
-  resources: ResourceViewData;
+  ressources: RessourceViewData;
   market: MarketViewData;
+  graveyard: CardViewData[];
 
-  constructor(resources: ResourceViewData, market: MarketViewData) {
-    this.resources = resources;
+  constructor(
+    ressources: RessourceViewData,
+    market: MarketViewData,
+    graveyard: CardViewData[],
+  ) {
+    this.ressources = ressources;
     this.market = market;
+    this.graveyard = graveyard;
   }
 }

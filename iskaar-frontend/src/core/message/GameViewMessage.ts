@@ -89,6 +89,7 @@ export class GameViewMessage extends ServerMessage {
             raw.board?.market?.plusTwo?.open ?? false,
           ),
         ),
+        raw.board?.graveyard ?? [],
       ),
 
       // 🔵 ME

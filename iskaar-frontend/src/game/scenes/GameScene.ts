@@ -15,6 +15,7 @@ import { RessourceView } from "../ui/RessourceView";
 import { MarketView } from "../ui/MarketView";
 import { GameViewMessage } from "../../core/message/GameViewMessage";
 import { TableauView } from "../ui/TableauView";
+import { GraveyardView } from "../ui/GraveyardView";
 
 export class GameScene extends Phaser.Scene {
   private gameClient!: GameClient;
@@ -28,6 +29,7 @@ export class GameScene extends Phaser.Scene {
   private drawPileView!: StackView;
   private discardPileView!: StackView;
   private tableauView!: TableauView;
+  private graveyardView!: GraveyardView;
   private isMock = import.meta.env.VITE_USE_MOCK === "true";
 
   getCenterX() {
@@ -57,7 +59,7 @@ export class GameScene extends Phaser.Scene {
     // Views
     this.marketView = new MarketView(this);
     this.marketView.setPosition(w * 0.45, h * 0.08);
-    this.drawPileView = new StackView(this, 0.8);
+    this.drawPileView = new StackView(this, 0.8, false, false);
     this.handView = new HandView(this);
 
     // 👉 Hand zentral unten
@@ -77,6 +79,13 @@ export class GameScene extends Phaser.Scene {
 
     this.resourceView = new RessourceView(this);
     this.resourceView.setPosition(w * 0.02, h * 0.02);
+
+    this.graveyardView = new GraveyardView(this);
+
+    this.graveyardView.setPosition(
+      this.scale.width * 0.9,
+      this.scale.height * 0.85,
+    );
 
     // 🔥 Events
     GameEventBus.on("gameView", this.onGameView);
@@ -130,26 +139,32 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     const { me } = view;
+    const { ressources } = view.board;
+    const { market } = view.board;
+    const { graveyard } = view.board;
 
-    if (me.drawPileSize !== undefined) {
-      this.updateDrawPile(view.me.drawPileSize);
+    if (market) {
+      this.marketView.setMarket(market.getSupplies(), w * 0.5);
     }
 
-    if (me.discard) {
-      this.updateDiscardPile(me.discard);
-    }
-    if (me.hand) {
-      this.handView.setCards(me.hand);
+    if (ressources) {
+      this.resourceView.setBoard(ressources, w * 0.18);
     }
     if (view.account) {
       this.accountView.setAccount(view.account);
     }
-    if (view.board) {
-      this.resourceView.setBoard(view.board, w * 0.18);
+    if (me.drawPileSize !== undefined) {
+      this.updateDrawPile(me.drawPileSize);
     }
-    if (view.board?.market) {
-      const { market } = view.board;
-      this.marketView.setMarket(market.getSupplies(), w * 0.5);
+
+    if (me.hand) {
+      this.handView.setCards(me.hand);
+    }
+    if (me.discard) {
+      this.updateDiscardPile(me.discard);
+    }
+    if (graveyard) {
+      this.graveyardView.setCards(graveyard);
     }
 
     const inPlayCards = this.getActiveInPlay(view);
@@ -185,29 +200,26 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateDrawPile(size: number) {
-    const offsetX = -this.handView.getHandViewWidth();
+    const centerX = this.getHandCenterX();
+    const offset = this.handView.getHandViewWidth();
 
-    const x = this.scale.width * 0.5 + offsetX;
-    const y = this.scale.height - 110;
+    const x = centerX - offset;
+    const y = this.scale.height * 0.85;
 
     this.drawPileView.setPosition(x, y);
     this.drawPileView.setCount(size);
   }
 
   private updateDiscardPile(cards: { name: string }[]) {
-    const offsetX = this.handView.getHandViewWidth(); // 👉 rechts vom Fächer
+    const centerX = this.getHandCenterX();
+    const offset = this.handView.getHandViewWidth();
 
-    const x = this.scale.width * 0.5 + offsetX;
-    const y = this.scale.height - 120;
+    const x = centerX + offset;
+    const y = this.scale.height * 0.85;
+
     this.discardPileView.setPosition(x, y);
-    // ✅ echte Daten
-    if (cards && cards.length > 0) {
-      console.log("REAL DISCARD", cards);
-      this.discardPileView.setCards(cards);
-      return;
-    }
-    // ✅ leer
-    this.discardPileView.setCards([]);
+
+    this.discardPileView.setCards(cards ?? []);
   }
 
   private updateOpponents(view: GameViewData) {
@@ -238,12 +250,16 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
+  private getHandCenterX() {
+    return this.scale.width * 0.5;
+  }
+
   private updateTableauLayout() {
     const leftMargin = 40; // vorher 20 → mehr Luft
     const gapToDrawPile = 30; // NEU: Abstand zum Stack
 
     // 👉 rechte Grenze = DrawPile
-    const drawPileX = this.drawPileView.getWorldX();
+    const drawPileX = this.drawPileView.x;
 
     const availableWidth = drawPileX - leftMargin - gapToDrawPile; // NEU: Abstand links + Abstand zum DrawPile + Abstand rechts
 

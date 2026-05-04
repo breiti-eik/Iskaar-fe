@@ -20,11 +20,6 @@ export class StackView extends Phaser.GameObjects.Container {
     this.hoverEnabled = enabled;
   }
 
-  // TODO remove after DrawPile refactor
-  getWorldX() {
-    return this.x;
-  }
-
   constructor(
     scene: Phaser.Scene,
     scale: number = 0.6,
@@ -41,15 +36,13 @@ export class StackView extends Phaser.GameObjects.Container {
     this.scene.input.on("pointermove", this.handlePointerMove, this);
   }
 
-  // 👉 Fall 1: Karten verdeckt (DrawPile etc.)
+  // 👉 Fall 1: Karten aufgedeckt (Discard etc.)
   setCards(cards: { name: string }[]) {
     this.isExpanded = false;
     this.clear();
 
     if (!cards || cards.length === 0) return;
     this.fullCards = [...cards];
-
-    console.log("SetCards:", this.fullCards);
 
     const stackSize = Math.min(cards.length, this.MAX_STACK_VISIBLE);
     const stackLift = Math.round(16 * this.scale);
@@ -66,8 +59,6 @@ export class StackView extends Phaser.GameObjects.Container {
         cardData.name,
       );
       this.add(card);
-
-      console.log("Card: ", card);
 
       card.setScale(this.scale);
       card.setDepth(stackSize - i);
@@ -87,8 +78,7 @@ export class StackView extends Phaser.GameObjects.Container {
       hitArea.on("pointerover", () => this.expandStack());
     }
   }
-
-  // 👉 Fall 2: Karten aufgedeckt (Discard etc.)
+  // 👉 Fall : Karten verdeckt (DrawPile etc.)
   setCount(count: number) {
     this.clear();
 
@@ -312,8 +302,7 @@ export class StackView extends Phaser.GameObjects.Container {
   }
 
   private expandStack() {
-    if (!this.hoverEnabled || this.fullCards.length <= this.MAX_STACK_VISIBLE)
-      return;
+    if (!this.hoverEnabled || this.fullCards.length <= 1) return;
 
     this.isExpanded = true;
 

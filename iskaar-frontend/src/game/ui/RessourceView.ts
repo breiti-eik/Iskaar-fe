@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { StackView } from "./StackView";
 import type { BoardViewData } from "../view/BoardViewData";
+import type { RessourceViewData } from "../view/RessourceViewData";
 
 export class RessourceView extends Phaser.GameObjects.Container {
   private stacks: StackView[] = [];
@@ -15,12 +16,12 @@ export class RessourceView extends Phaser.GameObjects.Container {
     }
   }
 
-  setBoard(board: BoardViewData, width: number) {
+  setBoard(ressources: RessourceViewData, width: number) {
     const supplies = [
-      board.resources.knutSupply,
-      board.resources.groSupply,
-      board.resources.randSupply,
-      board.resources.trollSupply,
+      ressources.knutSupply,
+      ressources.groSupply,
+      ressources.randSupply,
+      ressources.trollSupply,
     ];
 
     const cols = 2;
