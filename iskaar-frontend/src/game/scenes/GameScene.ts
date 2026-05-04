@@ -62,7 +62,7 @@ export class GameScene extends Phaser.Scene {
 
     // 👉 Hand zentral unten
     this.handView.setPosition(w * 0.5, h - 150);
-    this.discardPileView = new StackView(this, 0.6, false, true);
+    this.discardPileView = new StackView(this, 0.8, false, true);
     this.inPlayView = new InPlayView(this);
     this.inPlayView.setPosition(
       this.scale.width * 0.5,
@@ -211,10 +211,15 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateOpponents(view: GameViewData) {
-    const baseX = this.scale.width;
-    const baseY = 100;
-    const spacing = 120;
-    const width = 320;
+    const w = this.scale.width;
+    const h = this.scale.height;
+
+    const baseX = w; // ❗ NICHT ANFASSEN (wichtig für slide)
+
+    const baseY = h * 0.12;
+    const spacing = h * 0.14;
+
+    const width = 320; // ❗ NICHT ANFASSEN
 
     view.opponents.filter(Boolean).forEach((opponentData, index) => {
       if (!this.opponentViews[index]) {
@@ -225,9 +230,9 @@ export class GameScene extends Phaser.Scene {
           width,
           opponentData,
         );
-      }
-      // 👉 UPDATE
-      else {
+      } else {
+        // 👉 NEU: Position updaten (wichtig bei resize / responsive)
+        this.opponentViews[index].setY(baseY + index * spacing);
         this.opponentViews[index].update(opponentData);
       }
     });

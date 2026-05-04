@@ -1,10 +1,7 @@
 import Phaser from "phaser";
 import type { OpponentViewData } from "../view/OpponentViewData";
 
-export class OpponentView {
-  private scene: Phaser.Scene;
-  private container: Phaser.GameObjects.Container;
-
+export class OpponentView extends Phaser.GameObjects.Container {
   private hiddenX: number;
   private visibleX: number;
 
@@ -36,14 +33,16 @@ export class OpponentView {
     width: number,
     data: OpponentViewData,
   ) {
-    this.scene = scene;
+    super(scene, x, y);
 
     this.visibleX = x;
     this.hiddenX = x + width;
 
     this.visibleBarWidth = this.BAR_WIDTH - width;
 
-    this.container = scene.add.container(this.hiddenX, y);
+    scene.add.existing(this);
+
+    this.setX(this.hiddenX);
 
     this.buildBase();
     this.buildInteraction();
@@ -101,7 +100,7 @@ export class OpponentView {
       ...this.handIcons,
     ]);
 
-    this.container.add([bg, this.nameText, this.cardAreaContainer]);
+    this.add([bg, this.nameText, this.cardAreaContainer]);
   }
 
   private buildInteraction(): void {
@@ -110,7 +109,7 @@ export class OpponentView {
       .setOrigin(1, 0.5)
       .setInteractive({ useHandCursor: true });
 
-    this.container.add(hit);
+    this.add(hit);
 
     hit.on("pointerdown", () => this.toggle());
     hit.on("pointerover", () => this.expand());
@@ -124,7 +123,7 @@ export class OpponentView {
 
   private expand(lock = false): void {
     this.scene.tweens.add({
-      targets: this.container,
+      targets: this,
       x: this.visibleX,
       duration: 180,
       ease: "Power2",
@@ -135,7 +134,7 @@ export class OpponentView {
     if (this.expanded && !lock) return;
 
     this.scene.tweens.add({
-      targets: this.container,
+      targets: this,
       x: this.hiddenX,
       duration: 180,
       ease: "Power2",
