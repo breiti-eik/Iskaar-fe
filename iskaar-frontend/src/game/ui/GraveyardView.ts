@@ -18,7 +18,7 @@ export class GraveyardView extends Phaser.GameObjects.Container {
 
   private create() {
     // 🪦 Stack (mit Hover Expand!)
-    this.stack = new StackView(this.scene, 0.8, false, true);
+    this.stack = new StackView(this.scene, 0.8, true, true, false);
     this.stack.setPosition(0, 0);
 
     // 🖼 Frame

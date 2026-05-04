@@ -59,7 +59,7 @@ export class GameScene extends Phaser.Scene {
     // Views
     this.marketView = new MarketView(this);
     this.marketView.setPosition(w * 0.45, h * 0.08);
-    this.drawPileView = new StackView(this, 0.8, false, false);
+    this.drawPileView = new StackView(this, 0.8, true, false, true);
     this.handView = new HandView(this);
 
     // 👉 Hand zentral unten
@@ -72,6 +72,7 @@ export class GameScene extends Phaser.Scene {
     );
     this.inPlayView.create();
     this.tableauView = new TableauView(this);
+    this.tableauView.create();
     this.actionView = new ActionView(this);
     this.actionView.create();
     this.accountView = new AccountView(this);
@@ -267,10 +268,7 @@ export class GameScene extends Phaser.Scene {
     const scaleFactor = 0.7; // 🔥 30% kleiner
 
     const adjustedWidth = availableWidth * scaleFactor;
-    const maxHeight = this.scale.height * 0.5 * scaleFactor;
-
-    this.tableauView.create(leftMargin, this.scale.height - 20);
-
+    this.tableauView.setPosition(leftMargin, this.scale.height - 20);
     this.tableauView.updateLayout(adjustedWidth);
   }
 

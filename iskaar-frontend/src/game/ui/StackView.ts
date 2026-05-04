@@ -16,8 +16,15 @@ export class StackView extends Phaser.GameObjects.Container {
   private modifierIcon?: Phaser.GameObjects.Image;
   private modifierText?: Phaser.GameObjects.Text;
 
+  private stackLock: boolean = true;
+
   setHoverEnabled(enabled: boolean) {
     this.hoverEnabled = enabled;
+  }
+
+  // TODO remove after DrawPile refactor
+  getWorldX() {
+    return this.x;
   }
 
   constructor(
@@ -25,18 +32,20 @@ export class StackView extends Phaser.GameObjects.Container {
     scale: number = 0.6,
     hasCounter: boolean = true,
     hoverEnabled: boolean = false,
+    stackLock: boolean = true,
   ) {
     super(scene, 0, 0);
     this.scale = scale;
     this.hasCounter = hasCounter;
     this.hoverEnabled = hoverEnabled;
+    this.stackLock = stackLock;
 
     this.scene.add.existing(this);
 
     this.scene.input.on("pointermove", this.handlePointerMove, this);
   }
 
-  // 👉 Fall 1: Karten aufgedeckt (Discard etc.)
+  // 👉 Fall 1: Karten verdeckt (DrawPile etc.)
   setCards(cards: { name: string }[]) {
     this.isExpanded = false;
     this.clear();
@@ -44,7 +53,11 @@ export class StackView extends Phaser.GameObjects.Container {
     if (!cards || cards.length === 0) return;
     this.fullCards = [...cards];
 
-    const stackSize = Math.min(cards.length, this.MAX_STACK_VISIBLE);
+    console.log("SetCards:", this.fullCards);
+
+    const stackSize = this.stackLock
+      ? Math.min(cards.length, this.MAX_STACK_VISIBLE)
+      : 1;
     const stackLift = Math.round(16 * this.scale);
     const offset = Math.max(2, stackLift);
 
@@ -59,6 +72,8 @@ export class StackView extends Phaser.GameObjects.Container {
         cardData.name,
       );
       this.add(card);
+
+      console.log("Card: ", card);
 
       card.setScale(this.scale);
       card.setDepth(stackSize - i);
@@ -78,13 +93,16 @@ export class StackView extends Phaser.GameObjects.Container {
       hitArea.on("pointerover", () => this.expandStack());
     }
   }
-  // 👉 Fall : Karten verdeckt (DrawPile etc.)
+
+  // 👉 Fall 2: Karten aufgedeckt (Discard etc.)
   setCount(count: number) {
     this.clear();
 
     if (count <= 0) return;
 
-    const stackSize = Math.min(count, this.MAX_STACK_VISIBLE);
+    const stackSize = this.stackLock
+      ? Math.min(count, this.MAX_STACK_VISIBLE)
+      : 1;
 
     let topSprite!: Phaser.GameObjects.Image;
 
