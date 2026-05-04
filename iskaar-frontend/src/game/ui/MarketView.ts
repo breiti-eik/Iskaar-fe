@@ -10,7 +10,7 @@ export class MarketView extends Phaser.GameObjects.Container {
     this.scene.add.existing(this);
 
     for (let i = 0; i < 4; i++) {
-      const stack = new StackView(this.scene, 0.6, true, false);
+      const stack = new StackView(this.scene, 0.8, true, false);
       this.stacks.push(stack);
       this.add(stack);
     }
