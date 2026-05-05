@@ -16,11 +16,13 @@ import { MarketView } from "../ui/MarketView";
 import { GameViewMessage } from "../../core/message/GameViewMessage";
 import { TableauView } from "../ui/TableauView";
 import { GraveyardView } from "../ui/GraveyardView";
+import { PermanentView } from "../ui/PermanentView";
 
 export class GameScene extends Phaser.Scene {
   private gameClient!: GameClient;
   private marketView!: MarketView;
   private handView!: HandView;
+  private permanentView!: PermanentView;
   private inPlayView!: InPlayView;
   private actionView!: ActionView;
   private accountView!: AccountView;
@@ -52,41 +54,19 @@ export class GameScene extends Phaser.Scene {
       "Background",
     );
     bg.setDisplaySize(this.scale.width, this.scale.height);
-
-    const w = this.scale.width;
-    const h = this.scale.height;
-
     // Views
     this.marketView = new MarketView(this);
-    this.marketView.setPosition(w * 0.45, h * 0.08);
+
     this.drawPileView = new StackView(this, 0.8, true, false, true);
     this.handView = new HandView(this);
-
-    // 👉 Hand zentral unten
-    this.handView.setPosition(w * 0.5, h - 150);
+    this.permanentView = new PermanentView(this);
     this.discardPileView = new StackView(this, 0.8, false, true);
     this.inPlayView = new InPlayView(this);
-    this.inPlayView.setPosition(
-      this.scale.width * 0.5,
-      this.scale.height * 0.5,
-    );
-    this.inPlayView.create();
     this.tableauView = new TableauView(this);
-    this.tableauView.create();
     this.actionView = new ActionView(this);
-    this.actionView.create();
     this.accountView = new AccountView(this);
-    this.accountView.create();
-
     this.resourceView = new RessourceView(this);
-    this.resourceView.setPosition(w * 0.02, h * 0.02);
-
     this.graveyardView = new GraveyardView(this);
-
-    this.graveyardView.setPosition(
-      this.scale.width * 0.9,
-      this.scale.height * 0.85,
-    );
 
     // 🔥 Events
     GameEventBus.on("gameView", this.onGameView);
@@ -96,6 +76,7 @@ export class GameScene extends Phaser.Scene {
     if (this.isMock) {
       this.emitMockGameView();
     }
+    this.layoutUI();
   }
 
   shutdown() {
@@ -173,19 +154,10 @@ export class GameScene extends Phaser.Scene {
     const isActive = me.playerId === view.activePlayerId;
     this.inPlayView.updateFrame(isActive);
 
-    const bounds = this.inPlayView.getBounds();
-
-    // ActionView bleibt wie gehabt (ist OK so)
-    this.actionView.updateActionView(bounds, view.turn);
-
-    // 👉 AccountView Layout jetzt HIER (GameScene!)
-    const gapToFrame = 30;
-    const offsetX = bounds.width / 2 + gapToFrame;
-
-    this.accountView.setPosition(bounds.centerX - offsetX, bounds.centerY);
     this.accountView.show();
     this.updateOpponents(view);
     this.updateTableauLayout();
+    this.layoutUI();
   };
 
   private getActiveInPlay(view: GameViewData) {
@@ -201,25 +173,10 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateDrawPile(size: number) {
-    const centerX = this.getHandCenterX();
-    const offset = this.handView.getHandViewWidth();
-
-    const x = centerX - offset;
-    const y = this.scale.height * 0.85;
-
-    this.drawPileView.setPosition(x, y);
     this.drawPileView.setCount(size);
   }
 
   private updateDiscardPile(cards: { name: string }[]) {
-    const centerX = this.getHandCenterX();
-    const offset = this.handView.getHandViewWidth();
-
-    const x = centerX + offset;
-    const y = this.scale.height * 0.85;
-
-    this.discardPileView.setPosition(x, y);
-
     this.discardPileView.setCards(cards ?? []);
   }
 
@@ -251,29 +208,79 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  private getHandCenterX() {
-    return this.scale.width * 0.5;
-  }
-
   private updateTableauLayout() {
-    const leftMargin = 40; // vorher 20 → mehr Luft
-    const gapToDrawPile = 30; // NEU: Abstand zum Stack
-
-    // 👉 rechte Grenze = DrawPile
-    const drawPileX = this.drawPileView.x;
-
-    const availableWidth = drawPileX - leftMargin - gapToDrawPile; // NEU: Abstand links + Abstand zum DrawPile + Abstand rechts
-
-    // 👉 Höhe begrenzen (nicht zu hoch)
-    const scaleFactor = 0.7; // 🔥 30% kleiner
-
-    const adjustedWidth = availableWidth * scaleFactor;
-    this.tableauView.setPosition(leftMargin, this.scale.height - 20);
-    this.tableauView.updateLayout(adjustedWidth);
+    const w = this.scale.width;
+    this.tableauView.updateLayout(w * 0.18);
   }
 
   private emitMockGameView() {
     const message = MessageFactory.fromJson(mock) as GameViewMessage; // oder .create / .parse (je nach API)
     GameEventBus.emit("gameView", message.view);
+  }
+
+  private layoutUI() {
+    const w = this.scale.width;
+    const h = this.scale.height;
+
+    // =========================
+    // 🔴 TOP ZONE (FIXED)
+    // =========================
+    const topYOffset = -30;
+    const topY = h * 0.045 + topYOffset;
+
+    // 👉 Ressource weiter links + höher
+    this.resourceView.setPosition(w * 0.02, topY);
+
+    // 👉 Market höher + weiter rechts
+    this.marketView.setPosition(w * 0.45, topY);
+
+    // =========================
+    // 🟢 LEFT SIDE (FIXED)
+    // =========================
+    const leftX = w * 0.02; // weiter links
+
+    // 👉 Tableau deutlich tiefer + links
+    this.tableauView.setPosition(leftX, h * 0.98);
+
+    // =========================
+    // 🟣 CENTER PUBLIC ZONE
+    // =========================
+    const centerX = w * 0.5;
+    const inPlayY = h * 0.48;
+
+    this.inPlayView.setPosition(centerX, inPlayY);
+
+    // 👉 Account sauber links außerhalb (mehr Abstand)
+    const accountOffset = w * 0.22;
+    this.accountView.setPosition(centerX - accountOffset, inPlayY);
+
+    // 👉 Action unter InPlay
+    const actionOffset = h * 0.08;
+    this.actionView.setPosition(centerX, inPlayY + actionOffset);
+
+    // =========================
+    // 🟡 PLAYER BOTTOM ZONE
+    // =========================
+    const bottomY = h * 0.85;
+
+    this.handView.setPosition(centerX, bottomY);
+
+    const offset = this.handView.getHandViewWidth();
+
+    const drawX = centerX - offset;
+    const discardX = centerX + offset;
+
+    this.drawPileView.setPosition(drawX, bottomY);
+    this.discardPileView.setPosition(discardX, bottomY);
+
+    // 👉 NEU: PermanentView über DrawPile
+    const permanentOffsetY = h * 0.08; // Abstand nach oben
+
+    this.permanentView.setPosition(drawX, bottomY - permanentOffsetY);
+
+    // =========================
+    // 🟠 RIGHT BOTTOM
+    // =========================
+    this.graveyardView.setPosition(w * 0.92, bottomY);
   }
 }

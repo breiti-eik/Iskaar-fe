@@ -6,6 +6,7 @@ export class TableauView extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene) {
     super(scene);
     this.scene.add.existing(this);
+    this.create();
   }
 
   create() {

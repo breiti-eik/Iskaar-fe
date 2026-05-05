@@ -11,6 +11,7 @@ export class AccountView extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene) {
     super(scene, 0, 0);
     this.scene.add.existing(this);
+    this.create();
   }
 
   create() {

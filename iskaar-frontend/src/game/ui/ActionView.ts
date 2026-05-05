@@ -21,6 +21,7 @@ export class ActionView extends Phaser.GameObjects.Container {
     super(scene);
     this.scene.add.existing(this);
     this.create();
+    this.create;
   }
 
   create() {
