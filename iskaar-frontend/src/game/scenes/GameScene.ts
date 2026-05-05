@@ -237,7 +237,7 @@ export class GameScene extends Phaser.Scene {
     // =========================
     // 🟢 LEFT SIDE (FIXED)
     // =========================
-    const leftX = w * 0.02; // weiter links
+    const leftX = w * 0.032; // weiter links
 
     // 👉 Tableau deutlich tiefer + links
     this.tableauView.setPosition(leftX, h * 0.98);
