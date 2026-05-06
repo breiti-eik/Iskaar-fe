@@ -56,8 +56,6 @@ export class StackView extends Phaser.GameObjects.Container {
     if (!cards || cards.length === 0) return;
     this.fullCards = [...cards];
 
-    console.log("SetCards:", this.fullCards);
-
     const stackSize = this.stackLock
       ? Math.min(cards.length, this.MAX_STACK_VISIBLE)
       : 1;
@@ -75,9 +73,6 @@ export class StackView extends Phaser.GameObjects.Container {
         cardData.name,
       );
       this.add(card);
-
-      console.log("Card: ", card);
-
       card.setScale(this.scale);
       card.setDepth(stackSize - i);
 
