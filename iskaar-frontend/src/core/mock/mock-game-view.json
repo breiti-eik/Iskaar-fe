@@ -84,7 +84,32 @@
         { "id": "4", "name": "Knut" },
         { "id": "5", "name": "Knut" },
         { "id": "6", "name": "Knut" }
-      ]
+      ],
+      "tableau": {
+        "body": {
+          "strength": 3,
+          "health": 2,
+          "unconscious": "false"
+        },
+        "bank": {
+          "cards": [
+            { "id": "4", "name": "Knut" },
+            { "id": "5", "name": "Knut" }
+          ],
+          "amount": 2,
+          "open": "true"
+        },
+        "adventure": {
+          "size": 6,
+          "position": 1
+        },
+        "victoryPoints": {
+          "total": 2,
+          "ones": 2,
+          "fives": 0,
+          "tens": 0
+        }
+      }
     },
     "opponents": [
       {

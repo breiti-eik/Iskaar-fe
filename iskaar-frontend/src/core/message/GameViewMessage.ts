@@ -36,7 +36,13 @@ export class GameViewMessage extends ServerMessage {
     const { graveyard } = raw.board;
 
     const { tableau } = raw.me;
+    const { bank } = tableau;
+    const { adventure } = tableau;
+    const { victoryPoints } = tableau;
+    const { body } = tableau;
+
     const { me } = raw;
+
     return new GameViewData(
       raw.gameId,
       new BoardViewData(
@@ -121,10 +127,15 @@ export class GameViewMessage extends ServerMessage {
         me.inPlay ?? [],
         me.discard ?? [],
         new TableauViewData(
-          new AdventureViewData(),
-          new BankViewData(),
-          new BodyViewData(),
-          new VictoryPointsViewData(),
+          new AdventureViewData(adventure.size, adventure.position),
+          new BankViewData(bank.cards, bank.amount, bank.open),
+          new BodyViewData(body.strength, body.health, body.unconscious),
+          new VictoryPointsViewData(
+            victoryPoints.total,
+            victoryPoints.ones,
+            victoryPoints.fives,
+            victoryPoints.tens,
+          ),
         ),
       ),
 
