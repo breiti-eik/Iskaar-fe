@@ -121,6 +121,7 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     const { me } = view;
+    const { tableau } = me;
     const { ressources } = view.board;
     const { market } = view.board;
     const { graveyard } = view.board;
@@ -137,6 +138,9 @@ export class GameScene extends Phaser.Scene {
     }
     if (me.drawPileSize !== undefined) {
       this.updateDrawPile(me.drawPileSize);
+    }
+    if (tableau) {
+      this.tableauView.setTableauData(tableau);
     }
 
     if (me.hand) {
@@ -159,7 +163,8 @@ export class GameScene extends Phaser.Scene {
     this.accountView.show();
 
     this.updateOpponents(view);
-    this.updateTableauLayout();
+    const tableauWidth = this.scale.width * 0.18;
+    this.tableauView.updateLayout(tableauWidth);
     this.layoutUI();
   };
 
@@ -209,11 +214,6 @@ export class GameScene extends Phaser.Scene {
         this.opponentViews[index].update(opponentData);
       }
     });
-  }
-
-  private updateTableauLayout() {
-    const w = this.scale.width;
-    this.tableauView.updateLayout(w * 0.18);
   }
 
   private emitMockGameView() {
