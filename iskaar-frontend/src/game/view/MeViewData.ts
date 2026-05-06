@@ -1,4 +1,5 @@
 import type { CardViewData } from "./CardViewData";
+import type { TableauViewData } from "./TableauViewData";
 
 export class MeViewData {
   playerId: string;
@@ -8,6 +9,7 @@ export class MeViewData {
   hand: CardViewData[];
   inPlay: CardViewData[];
   discard: CardViewData[];
+  tableau: TableauViewData;
 
   constructor(
     playerId: string,
@@ -17,6 +19,7 @@ export class MeViewData {
     hand: CardViewData[],
     inPlay: CardViewData[],
     discardPile: CardViewData[],
+    tableau: TableauViewData,
   ) {
     this.playerId = playerId;
     this.playerName = playerName;
@@ -25,5 +28,6 @@ export class MeViewData {
     this.hand = hand;
     this.inPlay = inPlay;
     this.discard = discardPile;
+    this.tableau = tableau;
   }
 }

@@ -154,7 +154,10 @@ export class GameScene extends Phaser.Scene {
     const isActive = me.playerId === view.activePlayerId;
     this.inPlayView.updateFrame(isActive);
 
+    this.actionView.updateActionView(this.inPlayView.getBounds(), view.turn);
+
     this.accountView.show();
+
     this.updateOpponents(view);
     this.updateTableauLayout();
     this.layoutUI();
@@ -254,10 +257,6 @@ export class GameScene extends Phaser.Scene {
     const accountOffset = w * 0.22;
     this.accountView.setPosition(centerX - accountOffset, inPlayY);
 
-    // 👉 Action unter InPlay
-    const actionOffset = h * 0.08;
-    this.actionView.setPosition(centerX, inPlayY + actionOffset);
-
     // =========================
     // 🟡 PLAYER BOTTOM ZONE
     // =========================
@@ -273,10 +272,29 @@ export class GameScene extends Phaser.Scene {
     this.drawPileView.setPosition(drawX, bottomY);
     this.discardPileView.setPosition(discardX, bottomY);
 
-    // 👉 NEU: PermanentView über DrawPile
-    const permanentOffsetY = h * 0.08; // Abstand nach oben
+    // =========================
+    // ⚙️ ACTION ROW
+    // =========================
 
-    this.permanentView.setPosition(drawX, bottomY - permanentOffsetY);
+    const inPlayBounds = this.inPlayView.getBounds();
+
+    const actionRowGap = 20;
+
+    const actionRowY = inPlayBounds.bottom + actionRowGap;
+
+    const actionRowWidth = w * 0.4;
+
+    const permanentWidth = actionRowWidth * 0.2;
+    const actionWidth = actionRowWidth * 0.6;
+
+    const rowStartX = centerX - actionRowWidth / 2;
+
+    this.permanentView.setPosition(rowStartX + permanentWidth / 2, actionRowY);
+
+    this.actionView.setPosition(
+      rowStartX + permanentWidth + actionWidth / 2,
+      actionRowY,
+    );
 
     // =========================
     // 🟠 RIGHT BOTTOM

@@ -14,7 +14,7 @@ export class TableauView extends Phaser.GameObjects.Container {
 
     this.background = this.scene.add.image(0, 0, "Tableau");
     this.background.setOrigin(0, 1); // unten links
-
+    this.setVisible(false);
     this.add(this.background);
   }
 
@@ -24,6 +24,7 @@ export class TableauView extends Phaser.GameObjects.Container {
     const scale = maxWidth / texture.width;
 
     this.background.setScale(scale);
+    this.setVisible(true);
   }
 
   getWidth(): number {

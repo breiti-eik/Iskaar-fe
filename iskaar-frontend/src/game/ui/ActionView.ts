@@ -7,7 +7,6 @@ import type { GameScene } from "../scenes/GameScene";
 import { t } from "../../core/i18n";
 
 export class ActionView extends Phaser.GameObjects.Container {
-  private container!: Phaser.GameObjects.Container;
   private debugBg!: Phaser.GameObjects.Rectangle;
 
   private actionButtons: Map<ActionType, Button> = new Map();
@@ -15,13 +14,11 @@ export class ActionView extends Phaser.GameObjects.Container {
   private buttonPadding: number = 10;
   private VIEW_HEIGHT: number = 40;
   private MIN_BUTTON_WIDTH = 100;
-  private GAP_TO_FRAME = 20;
 
   constructor(scene: GameScene) {
     super(scene);
     this.scene.add.existing(this);
     this.create();
-    this.create;
   }
 
   create() {
@@ -55,8 +52,6 @@ export class ActionView extends Phaser.GameObjects.Container {
 
   updateActionView(bounds: Phaser.Geom.Rectangle, turn: TurnViewData) {
     const referenceWidth = bounds.width;
-
-    this.setPosition(bounds.centerX, bounds.bottom + this.GAP_TO_FRAME);
     this.updateSize(referenceWidth, this.VIEW_HEIGHT);
 
     this.renderButtons(turn);
