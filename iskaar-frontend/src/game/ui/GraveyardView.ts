@@ -52,7 +52,6 @@ export class GraveyardView extends Phaser.GameObjects.Container {
 
     const width = bounds.width + this.PADDING * 2;
     const height = bounds.height + this.PADDING * 2;
-    console.log("GraveyardView.updateFrame", { width, height });
 
     this.frame.setDisplaySize(width, height);
     this.frame.setPosition(0, 0);
@@ -67,7 +66,6 @@ export class GraveyardView extends Phaser.GameObjects.Container {
     });
   }
   private handleCollapse() {
-    console.log("GraveyardView.handleCollapse");
     if (
       !(this.scene.game.renderer instanceof Phaser.Renderer.WebGL.WebGLRenderer)
     ) {
