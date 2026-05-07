@@ -1,7 +1,9 @@
+import { BankView } from "./BankView";
 import Phaser from "phaser";
 import { BodyTrackView } from "./BodyTrackView";
 import type { TableauViewData } from "../view/TableauViewData";
 import { AdventureView } from "./AdventureView";
+import { VictoryPointsView } from "./VictoryPointsView";
 
 export class TableauView extends Phaser.GameObjects.Container {
   private background!: Phaser.GameObjects.Image;
@@ -9,6 +11,8 @@ export class TableauView extends Phaser.GameObjects.Container {
 
   private bodyTrack!: BodyTrackView;
   private adventureTrack!: AdventureView;
+  private victoryPoints!: VictoryPointsView;
+  private bankView!: BankView;
 
   constructor(scene: Phaser.Scene) {
     super(scene);
@@ -25,6 +29,8 @@ export class TableauView extends Phaser.GameObjects.Container {
 
     this.bodyTrack = new BodyTrackView(this.scene);
     this.adventureTrack = new AdventureView(this.scene);
+    this.victoryPoints = new VictoryPointsView(this.scene);
+    this.bankView = new BankView(this.scene);
 
     this.setVisible(false);
     this.add([
@@ -32,12 +38,16 @@ export class TableauView extends Phaser.GameObjects.Container {
       this.bodyTrack,
       this.debugBg,
       this.adventureTrack,
+      this.victoryPoints,
+      this.bankView,
     ]);
   }
 
   setTableauData(tableau: TableauViewData) {
     this.bodyTrack.setBodyTrackData(tableau.body);
     this.adventureTrack.setAdventureTrackData(tableau.adventure);
+    this.victoryPoints.setVictoryPointsData(tableau.victoryPoints);
+    this.bankView.setBankData(tableau.bank);
   }
 
   updateLayout(maxWidth: number) {
@@ -51,16 +61,32 @@ export class TableauView extends Phaser.GameObjects.Container {
   }
 
   layoutUI(scale: number) {
-    const w = this.getBounds().width;
-    const h = this.getBounds().height;
-    const bodyTrackWidth = w * 0.16;
-    const margin = 20;
+    const w = this.getWidth();
+    const h = this.getHeight();
+
+    const cellWith = w * 0.32;
+
     // Bodytrack
-    this.bodyTrack.updateLayout(bodyTrackWidth, h);
-    this.bodyTrack.setPosition(margin, 0);
+    const bodyTrackWidth = w * 0.28;
+    this.bodyTrack.updateLayout(0, 0, bodyTrackWidth, h, cellWith);
+
     // Adventuretrack
-    this.adventureTrack.updateLayout(w * 0.32, h);
-    this.adventureTrack.setPosition(0, 0);
+    this.adventureTrack.updateLayout(0, 0, w, h, cellWith);
+
+    const rightSlotWidth = w * 0.46;
+    const rightSlotX = w - rightSlotWidth;
+    const bankHeight = h * 0.55;
+    //BankView
+    this.bankView.updateLayout(rightSlotX, 0, rightSlotWidth, bankHeight);
+    const victoryHeight = h - bankHeight;
+
+    //VictoryPointsView
+    this.victoryPoints.updateLayout(
+      rightSlotX,
+      -bankHeight,
+      rightSlotWidth,
+      victoryHeight,
+    );
   }
 
   getWidth(): number {

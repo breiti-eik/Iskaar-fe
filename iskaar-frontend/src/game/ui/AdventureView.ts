@@ -3,33 +3,42 @@ import type { AdventureViewData } from "../view/AdventureViewData";
 export class AdventureView extends Phaser.GameObjects.Container {
   private debugBg!: Phaser.GameObjects.Rectangle;
   private adventureViewData!: AdventureViewData;
-
   private track!: Phaser.GameObjects.Image;
 
   private marker!: Phaser.GameObjects.Image;
-
-  private space = -0.06;
-
   constructor(scene: Phaser.Scene) {
     super(scene);
     this.scene.add.existing(this);
     this.marker = this.scene.add.image(0, 0, "PosMarker");
-    this.debugBg = this.scene.add.rectangle(0, 0, 100, 100, 0xff0000, 0);
+    this.debugBg = this.scene.add.rectangle(0, 0, 100, 100, 0xfff300, 0);
     this.debugBg.setOrigin(0, 1);
     this.loadTrack();
     this.marker.setOrigin(0, 1);
+    this.marker.setScale(0.2);
     this.setVisible(false);
   }
 
   setAdventureTrackData(adventure: AdventureViewData) {
     this.adventureViewData = adventure;
+    this.loadTrack();
   }
 
-  updateLayout(cellsize: number, scale: number) {
-    this.debugBg.setScale(scale);
-    this.marker.setScale(0.2);
-
+  updateLayout(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    cellWidth: number,
+  ) {
+    this.debugBg.setPosition(x, y);
+    this.debugBg.setSize(width, height);
+    this.updateUI(width, height, cellWidth);
     this.setVisible(true);
+  }
+
+  private updateUI(width: number, height: number, cellWidth: number) {
+    this.track.setOrigin(0, 1);
+    this.track.setDisplaySize(width, height);
   }
 
   private loadTrack() {
@@ -43,10 +52,7 @@ export class AdventureView extends Phaser.GameObjects.Container {
         "Track" + this.adventureViewData.size,
       );
     }
-    this.track.setOrigin(0, 1);
-    this.track.setScale(0.15);
-
-    this.add([this.track]);
+    this.add([this.debugBg, this.track]);
   }
 
   private calulateMarkerPosition() {}

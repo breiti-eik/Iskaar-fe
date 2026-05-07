@@ -11,33 +11,33 @@ export class BootScene extends Phaser.Scene {
     this.load.setPath("assets/cards");
     this.load.image("CardBack", "back.png");
 
-    //Money
+    //money
     this.load.image("Knut", "knut.png");
     this.load.image("Gro", "gro.png");
     this.load.image("Rand", "rand.png");
 
-    //Troll
+    //troll
     this.load.image("Troll", "troll.png");
 
-    //Yellow
+    //yellow
     this.load.image("Knueppel", "knueppel.png");
     this.load.image("Haube", "haube.png");
     this.load.image("Kutte", "kutte.png");
     this.load.image("Lederschuhe", "lederschuhe.png");
 
-    //Orange
+    //orange
     this.load.image("Messer", "messer.png");
     this.load.image("Helm", "helm.png");
     this.load.image("Stiefel", "stiefel.png");
     this.load.image("Kettenhemd", "kettenhemd.png");
 
-    //Red
+    //red
     this.load.image("Schwert", "schwert.png");
     this.load.image("Krone", "krone.png");
     this.load.image("Vollruestung", "vollruestung.png");
     this.load.image("Metallschienen", "metallschienen.png");
 
-    //Ringe
+    //rings
     this.load.image("Laufring", "laufring.png");
     this.load.image("Friedensring", "friedensring.png");
     this.load.image("Chaosring", "chaosring.png");
@@ -45,13 +45,13 @@ export class BootScene extends Phaser.Scene {
     this.load.image("Nekromanenring", "nekromanenring.png");
     this.load.image("Fluchring", "fluchring.png");
 
-    //Halsketten
+    //bracletts
     this.load.image("Diebesband", "diebesband.png");
     this.load.image("Talisman", "talisman.png");
     this.load.image("Stahlkette", "stahlkette.png");
     this.load.image("Bannreif", "bannreif.png");
 
-    //Neutral
+    //neutral
     this.load.image("Kristall", "kristall.png");
     this.load.image("Sonnenuhr", "sonnenuhr.png");
 
@@ -59,13 +59,16 @@ export class BootScene extends Phaser.Scene {
     this.load.setPath("assets/backgrounds");
     this.load.image("Background", "background.png");
 
-    //Tableau
+    //tableau
     this.load.setPath("assets/tableau");
     this.load.image("Tableau", "scoretableau_empty.png");
     this.load.image("PosMarker", "position-marker.png");
     this.load.image("Track6", "a-bar_6.png");
     this.load.image("Track5", "a-bar_5.png");
     this.load.image("Track4", "a-bar_4.png");
+    this.load.image("Marker1VP", "1sp-marker.png");
+    this.load.image("Marker5VP", "5sp-marker.png");
+    this.load.image("Marker10VP", "10sp-marker.png");
 
     //panels
     this.load.setPath("assets/ui/panels");
