@@ -48,4 +48,6 @@ export class AdventureView extends Phaser.GameObjects.Container {
 
     this.add([this.track]);
   }
+
+  private calulateMarkerPosition() {}
 }
