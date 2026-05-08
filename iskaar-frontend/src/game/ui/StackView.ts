@@ -48,7 +48,7 @@ export class StackView extends Phaser.GameObjects.Container {
     this.scene.input.on("pointermove", this.handlePointerMove, this);
   }
 
-  // 👉 Fall 1: Karten verdeckt (DrawPile etc.)
+  // 👉 Fall 1: Karten aufgedeckt (Discard etc.)
   setCards(cards: { name: string }[]) {
     this.isExpanded = false;
     this.clear();
@@ -64,21 +64,27 @@ export class StackView extends Phaser.GameObjects.Container {
 
     let topSprite!: Phaser.GameObjects.Image;
 
-    for (let i = 0; i < stackSize; i++) {
-      const cardData = cards[cards.length - 1 - i]; // 👈 von oben nach unten
+    const visibleCards = cards.slice(-stackSize);
+
+    for (let i = 0; i < visibleCards.length; i++) {
+      const cardData = visibleCards[i];
 
       const card = this.scene.add.image(
         -i * offset,
         -i * offset,
         cardData.name,
       );
+
       this.add(card);
+
       card.setScale(this.scale);
-      card.setDepth(stackSize - i);
+      card.setDepth(i);
 
       this.cards.push(card);
 
-      if (i === 0) topSprite = card;
+      if (i === visibleCards.length - 1) {
+        topSprite = card;
+      }
     }
 
     this.renderCounter(cards.length, topSprite, stackLift);
@@ -92,7 +98,7 @@ export class StackView extends Phaser.GameObjects.Container {
     }
   }
 
-  // 👉 Fall 2: Karten aufgedeckt (Discard etc.)
+  // 👉 Fall 2: Karten verdeckt (DrawPile etc.)
   setCount(count: number) {
     this.clear();
 
