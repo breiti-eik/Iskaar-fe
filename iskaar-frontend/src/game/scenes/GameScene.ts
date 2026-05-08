@@ -159,9 +159,7 @@ export class GameScene extends Phaser.Scene {
     this.inPlayView.updateFrame(isActive);
 
     this.actionView.updateActionView(this.inPlayView.getBounds(), view.turn);
-
-    this.accountView.show();
-
+    this.actionView.show(me.playerId === view.activePlayerId);
     this.updateOpponents(view);
     const tableauWidth = this.scale.width * 0.18;
     this.tableauView.updateLayout(tableauWidth);

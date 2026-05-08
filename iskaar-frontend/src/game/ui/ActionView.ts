@@ -25,6 +25,7 @@ export class ActionView extends Phaser.GameObjects.Container {
     this.debugBg = this.scene.add.rectangle(0, 0, 100, 100, 0xff0000, 0);
 
     this.add(this.debugBg);
+    this.setVisible(false);
   }
 
   private renderButtons(turn: TurnViewData) {
@@ -57,6 +58,10 @@ export class ActionView extends Phaser.GameObjects.Container {
     this.renderButtons(turn);
 
     this.layoutButtons(referenceWidth);
+  }
+
+  show(isShown: boolean) {
+    this.setVisible(isShown);
   }
 
   private layoutButtons(referenceWidth: number) {
