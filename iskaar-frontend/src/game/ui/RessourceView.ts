@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import { StackView } from "./StackView";
-import type { BoardViewData } from "../view/BoardViewData";
 import type { RessourceViewData } from "../view/RessourceViewData";
 
 export class RessourceView extends Phaser.GameObjects.Container {

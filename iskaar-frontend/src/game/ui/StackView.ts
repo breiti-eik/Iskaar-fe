@@ -181,36 +181,37 @@ export class StackView extends Phaser.GameObjects.Container {
     // =========================
     // 🪙 COIN + COST
     // =========================
-    if (supply.open) {
-      const coinX = card.x + card.displayWidth * 0.05;
-      const coinY = card.y + card.displayHeight * 0.95;
+    const coinX = card.x + card.displayWidth * 0.05;
+    const coinY = card.y + card.displayHeight * 0.95;
 
-      this.coinIcon = this.scene.add.image(coinX, coinY, "Coin");
-      this.add(this.coinIcon);
-      this.coinIcon.setOrigin(0, 1);
+    this.coinIcon = this.scene.add.image(coinX, coinY, "Coin");
+    this.add(this.coinIcon);
+    this.coinIcon.setOrigin(0, 1);
 
-      const coinScale = (card.displayWidth * 0.3) / this.coinIcon.width;
-      this.coinIcon.setScale(coinScale);
-      this.coinIcon.setDepth(1000);
+    const coinScale = (card.displayWidth * 0.3) / this.coinIcon.width;
+    this.coinIcon.setScale(coinScale);
+    this.coinIcon.setDepth(1000);
 
-      this.costText = this.scene.add.text(
-        this.coinIcon.x + this.coinIcon.displayWidth / 2,
-        this.coinIcon.y - this.coinIcon.displayHeight * 0.1,
-        `${supply.cost}`,
-        {
-          fontSize: `${Math.max(14, card.displayWidth * 0.16)}px`,
-          color: "#ffffff",
-          stroke: "#000000",
-          strokeThickness: 3,
-          fontStyle: "bold",
-        },
-      );
+    this.costText = this.scene.add.text(
+      this.coinIcon.x + this.coinIcon.displayWidth / 2,
+      this.coinIcon.y - this.coinIcon.displayHeight * 0.1,
+      `${supply.cost}`,
+      {
+        fontSize: `${Math.max(14, card.displayWidth * 0.16)}px`,
+        color: "#ffffff",
+        stroke: "#000000",
+        strokeThickness: 3,
+        fontStyle: "bold",
+      },
+    );
 
-      this.costText.setOrigin(0.5, 1);
-      this.costText.setDepth(1000);
+    this.costText.setOrigin(0.5, 1);
+    this.costText.setDepth(1000);
 
-      this.add(this.costText);
+    if (!supply.open) {
+      this.coinIcon.setTint(0x888888);
     }
+    this.add(this.costText);
 
     if (modifier !== undefined) {
       const baseX = card.x;

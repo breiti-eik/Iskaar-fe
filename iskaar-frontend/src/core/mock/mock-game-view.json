@@ -100,8 +100,8 @@
                     "open": "true"
                 },
                 "adventure": {
-                    "size": 4,
-                    "position": 1
+                    "size": 6,
+                    "position": 6
                 },
                 "victoryPoints": {
                     "total": 28,

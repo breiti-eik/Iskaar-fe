@@ -59,15 +59,32 @@ export class VictoryPointsView extends Phaser.GameObjects.Container {
     const padding = 30;
     const dimension = this.layoutWidth - padding;
 
-    this.markers.forEach(marker => {
-      const hw = (marker.displayWidth - padding) * 0.5;
-      const hh = (marker.displayHeight - padding) * 0.5;
+    this.markers.forEach((marker, index) => {
+      const slot = this.markerSlots[index];
 
-      const x = Phaser.Math.Between(padding + hw, dimension - padding - hw);
+      if (!slot) return;
 
-      const y = Phaser.Math.Between(-dimension + padding + hh, -padding - hh);
-
-      marker.setPosition(x, y);
+      marker.setPosition(dimension * slot.x, -dimension * slot.y);
     });
   }
+
+  private readonly markerSlots = [
+    // obere Reihe → stark verteilt
+    { x: 0.58, y: 0.14 },
+    { x: 0.86, y: 0.12 },
+    { x: 0.66, y: 0.3 },
+    { x: 0.92, y: 0.32 },
+
+    // mittlerer Bereich
+    { x: 0.74, y: 0.44 },
+    { x: 0.56, y: 0.48 },
+    { x: 0.86, y: 0.52 },
+    { x: 0.68, y: 0.6 },
+
+    // unterer Bereich
+    { x: 0.92, y: 0.66 },
+    { x: 0.6, y: 0.74 },
+    { x: 0.8, y: 0.8 },
+    { x: 0.7, y: 0.9 },
+  ];
 }
