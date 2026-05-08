@@ -57,10 +57,10 @@ export class TableauView extends Phaser.GameObjects.Container {
     this.debugBg.setDisplaySize(maxWidth, maxWidth);
     this.setVisible(true);
     this.background.setScale(scale);
-    this.layoutUI(scale);
+    this.layoutUI();
   }
 
-  layoutUI(scale: number) {
+  layoutUI() {
     const w = this.getWidth();
     const h = this.getHeight();
 
@@ -71,7 +71,7 @@ export class TableauView extends Phaser.GameObjects.Container {
     this.bodyTrack.updateLayout(0, 0, bodyTrackWidth, h, cellWith);
 
     // Adventuretrack
-    this.adventureTrack.updateLayout(0, 0, w, h, cellWith);
+    this.adventureTrack.updateLayout(0, 0, w, h);
 
     const rightSlotWidth = w * 0.46;
     const rightSlotX = w - rightSlotWidth;

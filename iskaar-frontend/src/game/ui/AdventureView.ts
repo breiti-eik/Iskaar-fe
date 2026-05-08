@@ -9,7 +9,6 @@ export class AdventureView extends Phaser.GameObjects.Container {
 
   private layoutWidth!: number;
   private layoutHeight!: number;
-  private cellWidth!: number;
 
   constructor(scene: Phaser.Scene) {
     super(scene);
@@ -29,16 +28,9 @@ export class AdventureView extends Phaser.GameObjects.Container {
     this.loadTrack();
   }
 
-  updateLayout(
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    cellWidth: number,
-  ) {
+  updateLayout(x: number, y: number, width: number, height: number) {
     this.layoutWidth = width;
     this.layoutHeight = height;
-    this.cellWidth = cellWidth;
 
     this.debugBg.setPosition(x, y);
     this.debugBg.setSize(width, height);
