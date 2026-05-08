@@ -35,6 +35,6 @@ export class BankView extends Phaser.GameObjects.Container {
 
     this.stack.setPosition(width * 0.6, -height / 2);
 
-    this.setVisible(this.bankData.open);
+    this.setVisible(true);
   }
 }
