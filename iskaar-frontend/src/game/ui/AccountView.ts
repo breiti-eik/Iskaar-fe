@@ -57,9 +57,6 @@ export class AccountView extends Phaser.GameObjects.Container {
     this.values.buy.setText(String(account.buy));
     this.values.moneyAction.setText(String(account.moneyAction));
     this.values.budget.setText(String(account.budget));
-  }
-
-  show() {
     this.setVisible(true);
   }
 }
