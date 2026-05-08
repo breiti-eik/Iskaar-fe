@@ -64,8 +64,9 @@ export class InPlayView extends Phaser.GameObjects.Container {
   }
 
   private getCardX(index: number, total: number): number {
-    const totalWidth = (total - 1) * this.spacing;
-    return -totalWidth / 2 + index * this.spacing;
+    const spacing = this.getSpacing(total);
+    const totalWidth = (total - 1) * spacing;
+    return -totalWidth / 2 + index * spacing;
   }
 
   private updateLayout() {
@@ -88,5 +89,21 @@ export class InPlayView extends Phaser.GameObjects.Container {
 
   getBounds(): Phaser.Geom.Rectangle {
     return super.getBounds();
+  }
+
+  private getSpacing(total: number): number {
+    const maxWidth = this.frame.displayWidth * 0.75;
+
+    if (total <= 1) {
+      return this.spacing;
+    }
+
+    const neededWidth = (total - 1) * this.spacing;
+
+    if (neededWidth <= maxWidth) {
+      return this.spacing;
+    }
+
+    return maxWidth / (total - 1);
   }
 }
