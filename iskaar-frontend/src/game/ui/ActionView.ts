@@ -12,7 +12,6 @@ export class ActionView extends Phaser.GameObjects.Container {
   private actionButtons: Map<ActionType, Button> = new Map();
 
   private buttonPadding: number = 10;
-  private VIEW_HEIGHT: number = 40;
   private MIN_BUTTON_WIDTH = 100;
 
   constructor(scene: GameScene) {
@@ -23,8 +22,6 @@ export class ActionView extends Phaser.GameObjects.Container {
 
   create() {
     this.debugBg = this.scene.add.rectangle(0, 0, 100, 100, 0xff0000, 0);
-
-    this.add(this.debugBg);
     this.setVisible(false);
   }
 
@@ -46,21 +43,22 @@ export class ActionView extends Phaser.GameObjects.Container {
         GameEventBus.emit("playerAction", action);
       });
 
-      this.add(button);
       this.actionButtons.set(action, button);
+      this.add([button, this.debugBg]);
     });
   }
 
-  updateActionView(bounds: Phaser.Geom.Rectangle, turn: TurnViewData) {
-    const referenceWidth = bounds.width;
-    this.updateSize(referenceWidth, this.VIEW_HEIGHT);
-
+  updateActionView(turn: TurnViewData, shown: boolean) {
     this.renderButtons(turn);
-
-    this.layoutButtons(referenceWidth);
+    this.show(shown);
   }
 
-  show(isShown: boolean) {
+  updateLayoutUI(width: number, height: number) {
+    this.debugBg.setDisplaySize(width, height);
+    this.layoutButtons(width);
+  }
+
+  private show(isShown: boolean) {
     this.setVisible(isShown);
   }
 
@@ -85,12 +83,8 @@ export class ActionView extends Phaser.GameObjects.Container {
     });
   }
 
-  private updateSize(width: number, height: number) {
-    this.debugBg.setDisplaySize(width, height);
-  }
-
   private calculateButtonWidth(referenceWidth: number) {
-    return referenceWidth * 0.25 - this.buttonPadding; //1/5 vom Container
+    return referenceWidth * 0.25 - this.buttonPadding; //1/4 vom Container
   }
 
   private calculateButtonPosition(

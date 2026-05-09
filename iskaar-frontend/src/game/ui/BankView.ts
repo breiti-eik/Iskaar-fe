@@ -4,8 +4,6 @@ import { StackView } from "./StackView";
 export class BankView extends Phaser.GameObjects.Container {
   private debugBg!: Phaser.GameObjects.Rectangle;
   private stack!: StackView;
-  private bankData!: BankViewData;
-
   constructor(scene: Phaser.Scene) {
     super(scene);
     this.scene.add.existing(this);
@@ -25,7 +23,6 @@ export class BankView extends Phaser.GameObjects.Container {
   }
 
   setBankData(bankData: BankViewData) {
-    this.bankData = bankData;
     this.stack.setCards(bankData.cards);
   }
 

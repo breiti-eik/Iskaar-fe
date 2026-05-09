@@ -149,6 +149,9 @@ export class GameScene extends Phaser.Scene {
     if (me.discard) {
       this.updateDiscardPile(me.discard);
     }
+    if (me.persistentCards) {
+      this.permanentView.setCards(me.persistentCards);
+    }
     if (graveyard) {
       this.graveyardView.setCards(graveyard);
     }
@@ -158,8 +161,10 @@ export class GameScene extends Phaser.Scene {
     const isActive = me.playerId === view.activePlayerId;
     this.inPlayView.updateFrame(isActive);
 
-    this.actionView.updateActionView(this.inPlayView.getBounds(), view.turn);
-    this.actionView.show(me.playerId === view.activePlayerId);
+    this.actionView.updateActionView(
+      view.turn,
+      me.playerId === view.activePlayerId,
+    );
     this.updateOpponents(view);
     const tableauWidth = this.scale.width * 0.18;
     this.tableauView.updateLayout(tableauWidth);
@@ -247,7 +252,7 @@ export class GameScene extends Phaser.Scene {
     // 🟣 CENTER PUBLIC ZONE
     // =========================
     const centerX = w * 0.5;
-    const inPlayY = h * 0.48;
+    const inPlayY = h * 0.47;
 
     this.inPlayView.setPosition(centerX, inPlayY);
 
@@ -258,7 +263,7 @@ export class GameScene extends Phaser.Scene {
     // =========================
     // 🟡 PLAYER BOTTOM ZONE
     // =========================
-    const bottomY = h * 0.85;
+    const bottomY = h * 0.87;
 
     this.handView.setPosition(centerX, bottomY);
 
@@ -275,28 +280,29 @@ export class GameScene extends Phaser.Scene {
     // =========================
 
     const inPlayBounds = this.inPlayView.getBounds();
+    const accountbounds = this.accountView.getBounds();
 
-    const actionRowGap = 20;
+    const actionRowGap = 25;
 
     const actionRowY = inPlayBounds.bottom + actionRowGap;
 
-    const actionRowWidth = w * 0.4;
+    const actionRowWidth = inPlayBounds.width + accountbounds.width;
 
-    const permanentWidth = actionRowWidth * 0.2;
-    const actionWidth = actionRowWidth * 0.6;
+    const actionWidth = actionRowWidth * 0.8;
+    const actionHeight = actionRowGap * 2;
 
-    const rowStartX = centerX - actionRowWidth / 2;
+    const actionViewX = centerX;
+    const permanentViewX = accountbounds.right - accountbounds.width * 0.5;
+    const permanentViewHeight = actionHeight * 2;
+    const permanentViewY = actionRowY + permanentViewHeight * 0.25;
 
-    this.permanentView.setPosition(rowStartX + permanentWidth / 2, actionRowY);
-
-    this.actionView.setPosition(
-      rowStartX + permanentWidth + actionWidth / 2,
-      actionRowY,
-    );
+    this.actionView.updateLayoutUI(actionWidth, actionHeight);
+    this.actionView.setPosition(actionViewX, actionRowY);
+    this.permanentView.setPosition(permanentViewX, permanentViewY);
 
     // =========================
     // 🟠 RIGHT BOTTOM
     // =========================
-    this.graveyardView.setPosition(w * 0.92, bottomY);
+    this.graveyardView.setPosition(w * 0.92, bottomY - 10);
   }
 }

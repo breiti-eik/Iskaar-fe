@@ -3,6 +3,7 @@ import { Card } from "../objects/Card";
 import type { CardViewData } from "../view/CardViewData";
 
 export class InPlayView extends Phaser.GameObjects.Container {
+  private debugBg!: Phaser.GameObjects.Rectangle;
   private frame!: Phaser.GameObjects.Image;
   private cards: Card[] = [];
 
@@ -16,12 +17,13 @@ export class InPlayView extends Phaser.GameObjects.Container {
 
   create() {
     // 👉 Frame
+    this.debugBg = this.scene.add.rectangle(0, 0, 5, 5, 0xaa0000, 0);
     this.frame = this.scene.add.image(0, 0, "Frame");
     this.frame.setOrigin(0.5);
     this.frame.setVisible(false);
     this.frame.setDepth(5);
 
-    this.add(this.frame);
+    this.add([this.frame, this.debugBg]);
   }
 
   setCards(cards: CardViewData[]) {
@@ -39,6 +41,7 @@ export class InPlayView extends Phaser.GameObjects.Container {
 
     this.updateLayout();
   }
+
   updateFrame(active: boolean) {
     this.frame.setPosition(0, 0);
     this.frame.setVisible(true);
@@ -50,6 +53,7 @@ export class InPlayView extends Phaser.GameObjects.Container {
     const targetHeight = targetWidth * aspectRatio;
 
     this.frame.setDisplaySize(targetWidth, targetHeight);
+    this.debugBg.setDisplaySize(targetWidth, targetHeight);
 
     if (active) {
       this.frame.setTint(0xfff3cd);
