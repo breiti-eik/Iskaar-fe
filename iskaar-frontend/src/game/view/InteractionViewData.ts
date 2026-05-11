@@ -1,11 +1,16 @@
-import type { ActionType } from "../objects/Actions";
-
+import type { ChoiceOptionViewData } from "./ChoiceOptionViewData";
 export class InteractionViewData {
   type: string;
-  allowedActions: ActionType[];
+  options: ChoiceOptionViewData[];
+  skippable: boolean;
 
-  constructor(type: string, allowedActions: ActionType[]) {
+  constructor(
+    type: string,
+    options: ChoiceOptionViewData[],
+    skippable: boolean,
+  ) {
     this.type = type;
-    this.allowedActions = allowedActions;
+    this.options = options;
+    this.skippable = skippable;
   }
 }
