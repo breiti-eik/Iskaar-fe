@@ -1,10 +1,10 @@
 import Phaser from "phaser";
 import { Button } from "../objects/Button";
-import type { TurnViewData } from "../view/TurnViewData";
 import { GameEventBus } from "../events/GameEventBus";
 import type { ActionType } from "../objects/Actions";
 import type { GameScene } from "../scenes/GameScene";
 import { t } from "../../core/i18n";
+import type { InteractionViewData } from "../view/InteractionViewData";
 
 export class ActionView extends Phaser.GameObjects.Container {
   private debugBg!: Phaser.GameObjects.Rectangle;
@@ -25,11 +25,11 @@ export class ActionView extends Phaser.GameObjects.Container {
     this.setVisible(false);
   }
 
-  private renderButtons(turn: TurnViewData) {
+  private renderButtons(interaction: InteractionViewData) {
     this.actionButtons.forEach(btn => btn.destroy());
     this.actionButtons.clear();
 
-    turn.allowedActions.forEach(action => {
+    interaction.allowedActions.forEach(action => {
       const button = new Button(
         this.scene,
         0,
@@ -48,8 +48,8 @@ export class ActionView extends Phaser.GameObjects.Container {
     });
   }
 
-  updateActionView(turn: TurnViewData, shown: boolean) {
-    this.renderButtons(turn);
+  updateActionView(interaction: InteractionViewData, shown: boolean) {
+    this.renderButtons(interaction);
     this.show(shown);
   }
 

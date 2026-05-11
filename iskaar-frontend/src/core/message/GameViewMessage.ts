@@ -12,6 +12,8 @@ import { AdventureViewData } from "../../game/view/AdventureViewData";
 import { BodyViewData } from "../../game/view/BodyViewData";
 import { VictoryPointsViewData } from "../../game/view/VictoryPointsViewData";
 import { BankViewData } from "../../game/view/BankViewData";
+import { TurnViewData } from "../../game/view/TurnViewData";
+import { InteractionViewData } from "../../game/view/InteractionViewData";
 
 export class GameViewMessage extends ServerMessage {
   readonly type = "GAME_VIEW";
@@ -156,11 +158,11 @@ export class GameViewMessage extends ServerMessage {
       raw.activePlayerId,
 
       // 🟠 TURN
-      {
-        phase: raw.turn?.phase ?? "",
-        allowedActions: raw.turn?.allowedActions ?? [],
-      },
-
+      new TurnViewData(raw.turn?.phase ?? ""),
+      new InteractionViewData(
+        raw.interaction?.type,
+        raw.interaction?.allowedActions ?? [],
+      ),
       // 🔴 ACCOUNT
       new AccountViewData(
         raw.account?.action ?? 0,

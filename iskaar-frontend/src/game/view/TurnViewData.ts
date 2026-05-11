@@ -1,6 +1,7 @@
-import type { ActionType } from "../objects/Actions";
-
-export interface TurnViewData {
+export class TurnViewData {
   phase: string;
-  allowedActions: readonly ActionType[];
+
+  constructor(phase: string) {
+    this.phase = phase;
+  }
 }

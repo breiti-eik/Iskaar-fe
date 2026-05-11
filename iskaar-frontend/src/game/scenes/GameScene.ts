@@ -125,6 +125,7 @@ export class GameScene extends Phaser.Scene {
     const { ressources } = view.board;
     const { market } = view.board;
     const { graveyard } = view.board;
+    const { interaction } = view;
 
     if (market) {
       this.marketView.setMarket(market.getSupplies(), w * 0.5);
@@ -162,7 +163,7 @@ export class GameScene extends Phaser.Scene {
     this.inPlayView.updateFrame(isActive);
 
     this.actionView.updateActionView(
-      view.turn,
+      interaction,
       me.playerId === view.activePlayerId,
     );
     this.updateOpponents(view);
