@@ -3,6 +3,10 @@ import { StackView } from "./StackView";
 import type { SupplyViewData } from "../view/SupplyViewData";
 
 export class MarketView extends Phaser.GameObjects.Container {
+  private slotPositions: Record<string, Phaser.Math.Vector2> = {};
+  getSlotPositions() {
+    return this.slotPositions;
+  }
   private stacks: StackView[] = [];
 
   constructor(scene: Phaser.Scene) {
@@ -34,6 +38,11 @@ export class MarketView extends Phaser.GameObjects.Container {
       const stack = this.stacks[index];
 
       stack.setPosition(x + cellWidth / 2, y);
+      const arrowOffsetX = cellWidth * 0.6;
+      this.slotPositions[supply.pileName] = new Phaser.Math.Vector2(
+        x + cellWidth + arrowOffsetX,
+        y,
+      );
 
       const modifier = this.getModifierFromPile(supply.pileName);
 

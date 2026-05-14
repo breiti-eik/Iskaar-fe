@@ -17,6 +17,7 @@ import { GameViewMessage } from "../../core/message/GameViewMessage";
 import { TableauView } from "../ui/TableauView";
 import { GraveyardView } from "../ui/GraveyardView";
 import { PermanentView } from "../ui/PermanentView";
+import { ShiftSupplyOverlayView } from "../ui/ShiftSupplyOverlayView";
 
 export class GameScene extends Phaser.Scene {
   private gameClient!: GameClient;
@@ -32,6 +33,7 @@ export class GameScene extends Phaser.Scene {
   private discardPileView!: StackView;
   private tableauView!: TableauView;
   private graveyardView!: GraveyardView;
+  private shiftSupplyOverlay!: ShiftSupplyOverlayView;
   private isMock = import.meta.env.VITE_USE_MOCK === "true";
 
   getCenterX() {
@@ -54,18 +56,23 @@ export class GameScene extends Phaser.Scene {
       "Background",
     );
     bg.setDisplaySize(this.scale.width, this.scale.height);
+
     // Views
+    this.resourceView = new RessourceView(this);
     this.marketView = new MarketView(this);
+    this.shiftSupplyOverlay = new ShiftSupplyOverlayView(this);
 
     this.drawPileView = new StackView(this, 0.8, true, false, true);
     this.handView = new HandView(this);
     this.permanentView = new PermanentView(this);
     this.discardPileView = new StackView(this, 0.8, false, true);
-    this.inPlayView = new InPlayView(this);
-    this.tableauView = new TableauView(this);
-    this.actionView = new ActionView(this);
+
     this.accountView = new AccountView(this);
-    this.resourceView = new RessourceView(this);
+    this.inPlayView = new InPlayView(this);
+    this.actionView = new ActionView(this);
+
+    this.tableauView = new TableauView(this);
+
     this.graveyardView = new GraveyardView(this);
 
     // 🔥 Events
@@ -120,6 +127,7 @@ export class GameScene extends Phaser.Scene {
       console.warn("Invalid GameViewData", event);
       return;
     }
+
     const { me } = view;
     const { tableau } = me;
     const { ressources } = view.board;
@@ -127,9 +135,24 @@ export class GameScene extends Phaser.Scene {
     const { graveyard } = view.board;
     const { interaction } = view;
 
+    const isShiftPhase = view.turn.phase === "SHIFT_SUPPLY";
+
+    const canShiftCards = view.interaction?.actions?.some(
+      op => op.action === "SHIFTING_CARDS",
+    );
+
+    this.shiftSupplyOverlay.setVisible(isShiftPhase || canShiftCards);
+
+    if (interaction) {
+      this.shiftSupplyOverlay.setInteraction(interaction);
+    }
+
     if (market) {
       this.marketView.setMarket(market.getSupplies(), w * 0.5);
     }
+    this.shiftSupplyOverlay.setSlotPositions(
+      this.marketView.getSlotPositions(),
+    );
 
     if (ressources) {
       this.resourceView.setBoard(ressources, w * 0.18);
@@ -240,6 +263,10 @@ export class GameScene extends Phaser.Scene {
 
     // 👉 Market höher + weiter rechts
     this.marketView.setPosition(w * 0.45, topY);
+
+    // direkt auf Market
+    this.shiftSupplyOverlay.setPosition(w * 0.45, topY + h * 0.08);
+    this.shiftSupplyOverlay.updateLayout(w * 0.4, topY + h * 0.08);
 
     // =========================
     // 🟢 LEFT SIDE (FIXED)

@@ -160,9 +160,8 @@ export class GameViewMessage extends ServerMessage {
       // 🟠 TURN
       new TurnViewData(raw.turn?.phase ?? ""),
       new InteractionViewData(
-        raw.interaction?.type,
-        raw.interaction?.options ?? [],
-        raw.interaction?.skippable ?? false,
+        raw.interaction?.actions ?? [],
+        raw.interaction?.selections ?? [],
       ),
       // 🔴 ACCOUNT
       new AccountViewData(

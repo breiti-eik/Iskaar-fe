@@ -29,7 +29,7 @@ export class ActionView extends Phaser.GameObjects.Container {
     this.actionButtons.forEach(btn => btn.destroy());
     this.actionButtons.clear();
 
-    interaction.options.forEach(option => {
+    interaction.actions.forEach(option => {
       const button = new Button(
         this.scene,
         0,

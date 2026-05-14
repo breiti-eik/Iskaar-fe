@@ -76,6 +76,7 @@ export class BootScene extends Phaser.Scene {
     this.load.image("OpponentBarBg", "opponent_area_back.png");
     this.load.image("Rosette", "rosette.png");
     this.load.image("Coin", "coin.png");
+    this.load.image("Arrow", "arrow.png");
 
     //buttons
     this.load.setPath("assets/ui/buttons");
