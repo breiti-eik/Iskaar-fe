@@ -25,11 +25,6 @@ export class StackView extends Phaser.GameObjects.Container {
     this.hoverEnabled = enabled;
   }
 
-  // TODO remove after DrawPile refactor
-  getWorldX() {
-    return this.x;
-  }
-
   constructor(
     scene: Phaser.Scene,
     scale: number = 0.6,
@@ -385,5 +380,13 @@ export class StackView extends Phaser.GameObjects.Container {
       this.counter.destroy();
       this.counter = undefined;
     }
+  }
+
+  getCardBounds(): Phaser.Geom.Rectangle | undefined {
+    const first = this.cards[0];
+
+    if (!first) return undefined;
+
+    return first.getBounds();
   }
 }

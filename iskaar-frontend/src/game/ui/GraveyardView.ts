@@ -41,9 +41,9 @@ export class GraveyardView extends Phaser.GameObjects.Container {
   }
 
   private updateFrame() {
-    const bounds = this.stack.getBounds();
+    const bounds = this.stack.getCardBounds();
 
-    if (bounds.width === 0 || bounds.height === 0) {
+    if (!bounds) {
       this.frame.setVisible(false);
       return;
     }
