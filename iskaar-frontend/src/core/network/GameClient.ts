@@ -3,6 +3,9 @@ import { PlayCardCommand } from "../command/PlayCardCommand";
 import { ActionCommand } from "../command/ActionCommand";
 import type { ActionType } from "../../game/objects/Actions";
 import { BuyFromPileCommand } from "../command/BuyFromPileCommand";
+import type { SupplyNameType } from "../../game/objects/SupplyName";
+import type { SupplyDirectionType } from "../../game/objects/SupplyDirection";
+import { ShiftSupplyCommand } from "../command/ShiftSupplyCommand";
 
 export class GameClient {
   private connection = new WebSocketConnection();
@@ -41,6 +44,20 @@ export class GameClient {
     }
 
     this.send(new BuyFromPileCommand(this.gameId, playerId, pileName));
+  }
+
+  shiftCardFromPile(pileName: SupplyNameType, direction: SupplyDirectionType) {
+    if (!this.playerId) {
+      console.warn("Player ID is undefined. Cannot buy from pile.");
+      return;
+    }
+    if (!this.gameId) {
+      throw new Error("GameClient not connected");
+    }
+
+    this.send(
+      new ShiftSupplyCommand(this.gameId, this.playerId, pileName, direction),
+    );
   }
 
   sendAction(action: ActionType) {

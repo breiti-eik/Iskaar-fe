@@ -65,7 +65,6 @@ export class TableauView extends Phaser.GameObjects.Container {
     const h = this.getHeight();
 
     const cellWith = w * 0.16;
-    console.log(w);
     // Bodytrack
     const bodyTrackWidth = w * 0.28;
     this.bodyTrack.updateLayout(0, 0, bodyTrackWidth, h, cellWith);

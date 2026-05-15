@@ -18,6 +18,8 @@ import { TableauView } from "../ui/TableauView";
 import { GraveyardView } from "../ui/GraveyardView";
 import { PermanentView } from "../ui/PermanentView";
 import { ShiftSupplyOverlayView } from "../ui/ShiftSupplyOverlayView";
+import type { SupplyNameType } from "../objects/SupplyName";
+import type { SupplyDirectionType } from "../objects/SupplyDirection";
 
 export class GameScene extends Phaser.Scene {
   private gameClient!: GameClient;
@@ -80,6 +82,7 @@ export class GameScene extends Phaser.Scene {
     GameEventBus.on("cardPlayed", this.onCardPlayed);
     GameEventBus.on("playerAction", this.sendActionToBackend);
     GameEventBus.on("buyCard", this.onBuyCard);
+    GameEventBus.on("shiftCard", this.onShiftCard);
     if (this.isMock) {
       this.emitMockGameView();
     }
@@ -90,6 +93,13 @@ export class GameScene extends Phaser.Scene {
     GameEventBus.off("gameView", this.onGameView);
     GameEventBus.off("cardPlayed", this.onCardPlayed);
   }
+
+  private onShiftCard = (event: {
+    pileName: SupplyNameType;
+    direction: SupplyDirectionType;
+  }) => {
+    this.gameClient.shiftCardFromPile(event.pileName, event.direction);
+  };
 
   private onBuyCard = (event: {
     pileName: string;

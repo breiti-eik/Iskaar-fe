@@ -1,6 +1,9 @@
 import Phaser from "phaser";
 import type { InteractionViewData } from "../view/InteractionViewData";
 import type { ShiftSupplyOptionViewData } from "../view/ShiftSupplyOptionViewData ";
+import { GameEventBus } from "../events/GameEventBus";
+import type { SupplyNameType } from "../objects/SupplyName";
+import type { SupplyDirectionType } from "../objects/SupplyDirection";
 
 export class ShiftSupplyOverlayView extends Phaser.GameObjects.Container {
   private slotPositions: Record<string, Phaser.Math.Vector2> = {};
@@ -25,7 +28,6 @@ export class ShiftSupplyOverlayView extends Phaser.GameObjects.Container {
   setInteraction(interaction: InteractionViewData) {
     this.selections = interaction.selections ?? [];
     this.renderArrows();
-    console.log("render arrows", this.selections);
   }
 
   updateLayout(width: number, height: number) {
@@ -43,7 +45,6 @@ export class ShiftSupplyOverlayView extends Phaser.GameObjects.Container {
       if (!slotPosition) {
         return;
       }
-      console.log(slotPosition);
 
       const arrow = this.scene.add.image(
         slotPosition.x,
@@ -54,17 +55,22 @@ export class ShiftSupplyOverlayView extends Phaser.GameObjects.Container {
       if (selection.pileName == "Slot -1") {
         arrow.setRotation(-Math.PI / 4);
         arrow.setPosition(
-          slotPosition.x - arrow.displayWidth / 3,
+          slotPosition.x,
           this.layoutHeight / 2 + arrow.displayHeight,
         );
       } else {
         arrow.setRotation(-Math.PI / 2);
-        arrow.setPosition(
-          slotPosition.x - arrow.displayWidth / 3,
-          this.layoutHeight / 2,
-        );
+        arrow.setPosition(slotPosition.x, this.layoutHeight / 2);
       }
-
+      arrow.setInteractive({
+        useHandCursor: true,
+      });
+      arrow.on("pointerdown", () => {
+        GameEventBus.emit("shiftCard", {
+          pileName: selection.pileName as SupplyNameType,
+          direction: selection.direction as SupplyDirectionType,
+        });
+      });
       this.add(arrow);
 
       this.arrows.push(arrow);

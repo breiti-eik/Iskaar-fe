@@ -38,9 +38,8 @@ export class MarketView extends Phaser.GameObjects.Container {
       const stack = this.stacks[index];
 
       stack.setPosition(x + cellWidth / 2, y);
-      const arrowOffsetX = cellWidth * 0.6;
       this.slotPositions[supply.pileName] = new Phaser.Math.Vector2(
-        x + cellWidth + arrowOffsetX,
+        x + cellWidth + cellWidth * 0.45,
         y,
       );
 
