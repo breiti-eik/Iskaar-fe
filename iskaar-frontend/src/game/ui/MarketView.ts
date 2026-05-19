@@ -8,6 +8,15 @@ export class MarketView extends Phaser.GameObjects.Container {
     return this.slotPositions;
   }
   private stacks: StackView[] = [];
+  private cellWidth!: number;
+  private cellHeight!: number;
+  getCellWidth() {
+    return this.cellWidth;
+  }
+
+  getCellHeight() {
+    return this.cellHeight;
+  }
 
   constructor(scene: Phaser.Scene) {
     super(scene, 0, 0);
@@ -26,26 +35,26 @@ export class MarketView extends Phaser.GameObjects.Container {
 
     const gap = totalWidth * 0.025;
 
-    const cellWidth = (totalWidth - gap * (count - 1)) / count;
-    const cellHeight = cellWidth * 1.4;
+    this.cellWidth = (totalWidth - gap * (count - 1)) / count;
+    this.cellHeight = this.cellWidth * 1.4;
 
     const startX = -totalWidth / 2;
     const y = 0;
 
     supplies.forEach((supply, index) => {
-      const x = startX + index * (cellWidth + gap);
+      const x = startX + index * (this.cellWidth + gap);
 
       const stack = this.stacks[index];
 
-      stack.setPosition(x + cellWidth / 2, y);
+      stack.setPosition(x + this.cellWidth / 2, y);
       this.slotPositions[supply.pileName] = new Phaser.Math.Vector2(
-        x + cellWidth + cellWidth * 0.45,
+        x + this.cellWidth / 2,
         y,
       );
 
       const modifier = this.getModifierFromPile(supply.pileName);
 
-      stack.setSupplyScaled(supply, cellWidth, cellHeight, modifier);
+      stack.setSupplyScaled(supply, this.cellWidth, this.cellHeight, modifier);
     });
   }
 

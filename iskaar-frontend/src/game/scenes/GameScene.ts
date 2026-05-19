@@ -147,9 +147,7 @@ export class GameScene extends Phaser.Scene {
 
     const isShiftPhase = view.turn.phase === "SHIFT_SUPPLY";
 
-    const canShiftCards = view.interaction?.actions?.some(
-      op => op.action === "SHIFTING_CARDS",
-    );
+    const canShiftCards = view.interaction?.type === "CARD_SHIFT";
 
     this.shiftSupplyOverlay.setVisible(isShiftPhase || canShiftCards);
 
@@ -162,6 +160,10 @@ export class GameScene extends Phaser.Scene {
     }
     this.shiftSupplyOverlay.setSlotPositions(
       this.marketView.getSlotPositions(),
+    );
+    this.shiftSupplyOverlay.setSlotSize(
+      this.marketView.getCellWidth(),
+      this.marketView.getCellHeight(),
     );
 
     if (ressources) {

@@ -1,6 +1,6 @@
 export const SupplyDirection = {
   TOWARDS_GRAVEYARD: "TOWARDS_GRAVEYARD",
-  TOWARDS_SUPPLY: "TOWARDS_SUPPLY",
+  AWAY_FROM_GRAVEYARD: "AWAY_FROM_GRAVEYARD",
 } as const;
 
 export type SupplyDirectionType =

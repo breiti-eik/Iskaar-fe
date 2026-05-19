@@ -127,9 +127,13 @@
         "interaction": {
             "actios": {},
             "selections": [
-                { "pileName": "Slot -1", "direction": "TOWARDS_GRAVEYARD" },
+                { "pileName": "Slot +2", "direction": "TOWARDS_GRAVEYARD" },
+                { "pileName": "Slot +1", "direction": "AWAY_FROM_GRAVEYARD" },
                 { "pileName": "Slot +1", "direction": "TOWARDS_GRAVEYARD" },
-                { "pileName": "Slot +2", "direction": "TOWARDS_GRAVEYARD" }
+                { "pileName": "Slot 0", "direction": "AWAY_FROM_GRAVEYARD" },
+                { "pileName": "Slot 0", "direction": "TOWARDS_GRAVEYARD" },
+                { "pileName": "Slot -1", "direction": "AWAY_FROM_GRAVEYARD" },
+                { "pileName": "Slot -1", "direction": "TOWARDS_GRAVEYARD" }
             ]
         },
         "account": {
