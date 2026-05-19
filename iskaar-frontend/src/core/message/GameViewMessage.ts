@@ -118,8 +118,6 @@ export class GameViewMessage extends ServerMessage {
         ),
         graveyard ?? [],
       ),
-
-      // 🔵 ME
       new MeViewData(
         me.playerId,
         me.playerName,
@@ -140,8 +138,6 @@ export class GameViewMessage extends ServerMessage {
           ),
         ),
       ),
-
-      // 🟡 OPPONENTS
       (raw.opponents ?? []).map(
         (o: any) =>
           new OpponentViewData(
@@ -153,18 +149,13 @@ export class GameViewMessage extends ServerMessage {
             o.discardTopCard ?? null,
           ),
       ),
-
-      // 🟣 ACTIVE PLAYER
       raw.activePlayerId,
-
-      // 🟠 TURN
       new TurnViewData(raw.turn?.phase ?? ""),
       new InteractionViewData(
         raw.interaction?.type ?? null,
         raw.interaction?.actions ?? [],
         raw.interaction?.selections ?? [],
       ),
-      // 🔴 ACCOUNT
       new AccountViewData(
         raw.account?.action ?? 0,
         raw.account?.budget ?? 0,
