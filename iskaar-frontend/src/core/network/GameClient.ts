@@ -64,6 +64,9 @@ export class GameClient {
     if (!this.gameId) {
       throw new Error("GameClient not connected");
     }
-    this.send(new ActionCommand(this.gameId, action));
+    switch (action) {
+      default:
+        this.send(new ActionCommand(this.gameId, action));
+    }
   }
 }

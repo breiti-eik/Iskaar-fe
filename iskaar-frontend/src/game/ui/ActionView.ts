@@ -40,6 +40,7 @@ export class ActionView extends Phaser.GameObjects.Container {
       );
 
       button.on("pointerdown", () => {
+        console.log(option.action);
         GameEventBus.emit("playerAction", option.action);
       });
 
