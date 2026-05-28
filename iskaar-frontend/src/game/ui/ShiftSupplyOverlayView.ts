@@ -36,7 +36,7 @@ export class ShiftSupplyOverlayView extends Phaser.GameObjects.Container {
   }
 
   setInteraction(interaction: InteractionViewData) {
-    this.selections = interaction.selections ?? [];
+    this.selections = interaction.selections as ShiftSupplyOptionViewData[];
     this.renderArrows();
   }
 

@@ -20,6 +20,7 @@ import { PermanentView } from "../ui/PermanentView";
 import { ShiftSupplyOverlayView } from "../ui/ShiftSupplyOverlayView";
 import type { SupplyNameType } from "../objects/SupplyName";
 import type { SupplyDirectionType } from "../objects/SupplyDirection";
+import { CardSelectionOverlayView } from "../ui/CardSelectionOverlayView";
 
 export class GameScene extends Phaser.Scene {
   private gameClient!: GameClient;
@@ -36,6 +37,7 @@ export class GameScene extends Phaser.Scene {
   private tableauView!: TableauView;
   private graveyardView!: GraveyardView;
   private shiftSupplyOverlay!: ShiftSupplyOverlayView;
+  private cardSelectionOverlay!: CardSelectionOverlayView;
   private isMock = import.meta.env.VITE_USE_MOCK === "true";
 
   getCenterX() {
@@ -63,6 +65,7 @@ export class GameScene extends Phaser.Scene {
     this.resourceView = new RessourceView(this);
     this.marketView = new MarketView(this);
     this.shiftSupplyOverlay = new ShiftSupplyOverlayView(this);
+    this.cardSelectionOverlay = new CardSelectionOverlayView(this);
 
     this.drawPileView = new StackView(this, 0.8, true, false, true);
     this.handView = new HandView(this);
@@ -83,6 +86,7 @@ export class GameScene extends Phaser.Scene {
     GameEventBus.on("playerAction", this.sendActionToBackend);
     GameEventBus.on("buyCard", this.onBuyCard);
     GameEventBus.on("shiftCard", this.onShiftCard);
+    GameEventBus.on("cardSelected", this.onCardSelected);
     if (this.isMock) {
       this.emitMockGameView();
     }
@@ -112,6 +116,11 @@ export class GameScene extends Phaser.Scene {
       event.buyerId,
     );
     this.gameClient.buyFromPileforMe(event.pileName, event.buyerId);
+  };
+
+  private onCardSelected = (event: { cardId: string }) => {
+    console.log("Selected card:", event.cardId);
+    this.gameClient.selectCard(event.cardId);
   };
 
   private sendActionToBackend = (event: ActionType) => {
@@ -148,11 +157,20 @@ export class GameScene extends Phaser.Scene {
     const isShiftPhase = view.turn.phase === "SHIFT_SUPPLY";
 
     const canShiftCards = view.interaction?.type === "CARD_SHIFT";
+    const canSelectCard = view.interaction?.type === "CARD";
 
     this.shiftSupplyOverlay.setVisible(isShiftPhase || canShiftCards);
 
-    if (interaction) {
+    if (isShiftPhase || canShiftCards) {
       this.shiftSupplyOverlay.setInteraction(interaction);
+    }
+
+    if (canSelectCard) {
+      const cards = interaction.selections.map(selection => selection);
+
+      this.cardSelectionOverlay.show(cards);
+    } else {
+      this.cardSelectionOverlay.hide();
     }
 
     if (market) {

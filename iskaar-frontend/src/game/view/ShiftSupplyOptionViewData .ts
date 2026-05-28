@@ -1,6 +1,8 @@
 import type { SupplyDirectionType } from "../objects/SupplyDirection";
+import type { SelectionViewData } from "./SelectionViewData";
 
-export class ShiftSupplyOptionViewData {
+export class ShiftSupplyOptionViewData implements SelectionViewData {
+  type = "CARD_SHIFT";
   pileName: string;
   direction: SupplyDirectionType;
 

@@ -1,11 +1,12 @@
 {
-  "PASS_PLAY": "Skip Play",
-  "PASS_BANK": "Skip Bank",
-  "DEPOSIT_MONEY": "Deposit",
-  "WITHDRAW_MONEY": "Withdraw",
-  "PASS_BUY": "Skip Buy",
-  "PASS_SHIFTING_CARDS": "Skip Shift",
-  "PASS_REACTION": "Skip Reaction",
-  "PASS_SELECTION": "Skip Selection",
-  "CLEAN_UP": "Clean Up"
+    "PASS_PLAY": "Skip Play",
+    "PASS_BANK": "Skip Bank",
+    "DEPOSIT_MONEY": "Deposit",
+    "WITHDRAW_MONEY": "Withdraw",
+    "PASS_BUY": "Skip Buy",
+    "PASS_SHIFTING_CARDS": "Skip Shift",
+    "PASS_REACTION": "Skip Reaction",
+    "PASS_SELECTION": "Skip Selection",
+    "BURY_CARD": "Bury card",
+    "CLEAN_UP": "Clean Up"
 }

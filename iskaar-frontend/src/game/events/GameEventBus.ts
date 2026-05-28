@@ -8,6 +8,7 @@ type Events = {
   cardPlayed: { cardId: string };
   playerAction: ActionType;
   gameView: GameViewData;
+  cardSelected: { cardId: string };
   buyCard: { pileName: string; buyerId: string | undefined }; // pileName to buy from;
   shiftCard: { pileName: SupplyNameType; direction: SupplyDirectionType };
 };

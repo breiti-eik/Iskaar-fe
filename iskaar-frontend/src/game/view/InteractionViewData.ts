@@ -1,15 +1,15 @@
 import type { SelectionType } from "../objects/Selection";
 import type { ChoiceOptionViewData } from "./ChoiceOptionViewData";
-import type { ShiftSupplyOptionViewData } from "./ShiftSupplyOptionViewData ";
+import type { SelectionViewData } from "./SelectionViewData";
 export class InteractionViewData {
   type: SelectionType;
   actions: ChoiceOptionViewData[];
-  selections: ShiftSupplyOptionViewData[];
+  selections: SelectionViewData[];
 
   constructor(
     type: SelectionType,
     actions: ChoiceOptionViewData[],
-    selections: ShiftSupplyOptionViewData[],
+    selections: SelectionViewData[],
   ) {
     this.type = type;
     this.actions = actions;

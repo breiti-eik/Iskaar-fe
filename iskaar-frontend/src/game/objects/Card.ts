@@ -22,7 +22,5 @@ export class Card extends Phaser.GameObjects.Container {
 
     this.setSize(150, 220);
     this.setInteractive();
-
-    scene.add.existing(this);
   }
 }
