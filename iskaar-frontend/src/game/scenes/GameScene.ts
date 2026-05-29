@@ -217,7 +217,7 @@ export class GameScene extends Phaser.Scene {
 
     this.actionView.updateActionView(
       interaction,
-      me.playerId === view.activePlayerId,
+      interaction.affectedPlayerIds?.includes(view.me.playerId) ?? false,
     );
     this.updateOpponents(view);
     const tableauWidth = this.scale.width * 0.18;

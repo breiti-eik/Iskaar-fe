@@ -1,13 +1,15 @@
 {
-    "PASS_PLAY": "Spielen beenden",
-    "PASS_BANK": "Bank beenden",
-    "DEPOSIT_MONEY": "Einzahlen",
-    "WITHDRAW_MONEY": "Abheben",
-    "PASS_BUY": "Kauf beenden",
-    "PASS_SHIFTING_CARDS": "Überspringen ...",
-    "PASS_REACTION": "Keine Reaktion",
-    "PASS_SELECTION": "Keine Auswahl",
-    "CLEAN_UP": "Runde beenden",
-    "BURY_CARD": "Handkarte begraben",
-    "DRAW_AND_TURN": "1 Ziehen, 1 Zug"
+  "PASS_PLAY": "Spielen beenden",
+  "PASS_BANK": "Bank beenden",
+  "DEPOSIT_MONEY": "Einzahlen",
+  "WITHDRAW_MONEY": "Abheben",
+  "PASS_BUY": "Kauf beenden",
+  "PASS_SHIFTING_CARDS": "Überspringen ...",
+  "PASS_REACTION": "Keine Reaktion",
+  "PASS_SELECTION": "Keine Auswahl",
+  "CLEAN_UP": "Runde beenden",
+  "BURY_CARD": "Handkarte begraben",
+  "DRAW_AND_TURN": "1 Ziehen, 1 Zug",
+  "ACCEPT": "Akzeptiert!",
+  "DECLINED": "Abgelehnt!"
 }

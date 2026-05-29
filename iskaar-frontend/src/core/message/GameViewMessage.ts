@@ -155,7 +155,9 @@ export class GameViewMessage extends ServerMessage {
         raw.interaction?.type ?? null,
         raw.interaction?.actions ?? [],
         raw.interaction?.selections ?? [],
+        raw.interaction?.affectedPlayerIds ?? [],
       ),
+
       new AccountViewData(
         raw.account?.action ?? 0,
         raw.account?.budget ?? 0,
