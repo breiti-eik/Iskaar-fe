@@ -1,44 +1,51 @@
 import Phaser from "phaser";
 import { Card } from "../objects/Card";
 import { GameEventBus } from "../events/GameEventBus";
+import type { CardViewData } from "../view/CardViewData";
 
-export class HandView {
-  private scene: Phaser.Scene;
+export class HandView extends Phaser.GameObjects.Container {
+  getHandViewWidth() {
+    return this.handViewWidth;
+  }
+
   private cards: Card[] = [];
 
-  private get baseY(): number {
-    return this.scene.scale.height - 150;
-  }
-  private readonly centerX = 1000;
-  private readonly spacing = 120;
-  private readonly curveStrength = 10;
   private hoveredCard?: Card;
+  private handViewWidth = 400;
 
   constructor(scene: Phaser.Scene) {
-    this.scene = scene;
+    super(scene, 0, 0);
+    this.scene.add.existing(this);
   }
 
-  setCards(cardIds: string[]) {
+  setCards(cards: CardViewData[]) {
     this.clear();
 
-    cardIds.forEach((id, index) => {
-      const card = new Card(this.scene, 0, 0, id);
+    const total = cards.length;
+
+    cards.forEach((cardData, index) => {
+      const textureKey = cardData.name;
+      const id = cardData.id;
+
+      // 👉 Zielposition vorher berechnen
+      const { x, y, rotation } = this.getCardTransform(index, total);
+
+      // 👉 NICHT mehr (0,0)!
+      const card = new Card(this.scene, x, y, id, textureKey);
+      this.add(card);
+      card.setRotation(rotation);
 
       this.setupInteractions(card);
       this.cards.push(card);
     });
 
-    this.updateLayout();
+    // 👉 WICHTIG: erstes Layout ohne Animation
+    this.updateLayout(false);
   }
 
   removeCard(card: Card) {
     this.cards = this.cards.filter(c => c !== card);
     this.updateLayout();
-  }
-
-  private getCardX(index: number, total: number): number {
-    const totalWidth = (total - 1) * this.spacing;
-    return this.centerX - totalWidth / 2 + index * this.spacing;
   }
 
   private clear() {
@@ -63,46 +70,87 @@ export class HandView {
 
     card.on("pointerdown", () => {
       GameEventBus.emit("cardPlayed", {
-        card: card,
+        cardId: card.id,
       });
     });
   }
 
-  private getRotation(index: number, total: number): number {
-    if (total <= 1) return 0;
-    const mid = (total - 1) / 2;
-    const distanceFromCenter = index - mid;
-
-    const maxAngle = 0.25; // ca. 14°
-    return (distanceFromCenter / mid) * maxAngle;
-  }
-
-  private getCardY(index: number, total: number): number {
-    if (total <= 1) return this.baseY;
-    const mid = (total - 1) / 2;
-    const distanceFromCenter = index - mid;
-
-    return this.baseY + Math.pow(distanceFromCenter, 2) * this.curveStrength;
-  }
-
-  private updateLayout() {
+  private updateLayout(animated: boolean = true) {
     const total = this.cards.length;
 
     this.cards.forEach((card, index) => {
-      const x = this.getCardX(index, total);
-      const y = this.getCardY(index, total);
-      const rotation = this.getRotation(index, total);
-
+      const { x, y, rotation } = this.getCardTransform(index, total);
       const isHovered = card === this.hoveredCard;
+
+      if (!animated) {
+        card.setPosition(x, isHovered ? y - 60 : y);
+        card.setScale(isHovered ? 1.1 : 0.95);
+        card.setRotation(isHovered ? 0 : rotation);
+        return;
+      }
 
       this.scene.tweens.add({
         targets: card,
         x,
         y: isHovered ? y - 60 : y,
-        scale: isHovered ? 1.1 : 1,
+        scale: isHovered ? 1.1 : 0.95,
         rotation: isHovered ? 0 : rotation,
         duration: 150,
       });
     });
+  }
+
+  private getCardTransform(index: number, total: number) {
+    const centerX = 0;
+    const baseY = 0;
+
+    if (total === 1) {
+      return { x: centerX, y: baseY, rotation: 0 };
+    }
+    const microWidth = 90;
+    const minWidth = 110;
+    const midWidth = 260;
+    const maxWidth = 400;
+
+    let maxTotalWidth: number;
+    if (total == 2) {
+      // Phase 1: klein → mittel
+      const t = Phaser.Math.Clamp((total - 1) / 3, 0, 1);
+      const eased = Math.pow(t, 0.75);
+      maxTotalWidth = Phaser.Math.Linear(microWidth, minWidth, eased);
+    } else if (total <= 4) {
+      // Phase 1: klein → mittel
+      const t = Phaser.Math.Clamp((total - 1) / 3, 0, 1);
+      const eased = Math.pow(t, 0.75);
+      maxTotalWidth = Phaser.Math.Linear(minWidth, midWidth, eased);
+    } else {
+      // Phase 2: mittel → groß
+      const t = Phaser.Math.Clamp((total - 4) / 8, 0, 1);
+      const eased = Math.pow(t, 0.9); // etwas flacher
+      maxTotalWidth = Phaser.Math.Linear(midWidth, maxWidth, eased);
+    }
+
+    // Radius bleibt gleich
+    const radius = 500;
+
+    // 🔥 Winkel berechnen basierend auf gewünschter Breite
+    const maxSpread = Math.min(
+      2 * Math.asin(maxTotalWidth / (2 * radius)),
+      1.2, // optionales hartes Limit
+    );
+
+    const startAngle = -maxSpread / 2;
+    const step = maxSpread / (total - 1);
+
+    const angle = startAngle + index * step;
+
+    const x = centerX + Math.sin(angle) * radius;
+    const y = baseY - Math.cos(angle) * radius + radius;
+
+    return {
+      x,
+      y,
+      rotation: angle * 0.8, // Karten folgen dem Bogen
+    };
   }
 }

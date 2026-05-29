@@ -1,0 +1,7 @@
+{
+    "PLAY_CARD": "Play Phase",
+    "BANK": "Bank Phase",
+    "BUY": "Buy Phase",
+    "SHIFT_SUPPLY": "Shift Supply",
+    "CLEANUP": "End Round"
+}

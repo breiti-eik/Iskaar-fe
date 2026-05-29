@@ -1,30 +1,31 @@
 import SockJS from "sockjs-client";
 import { Client, type IMessage } from "@stomp/stompjs";
 import { GameEventBus } from "../../game/events/GameEventBus";
+import { MessageFactory } from "../message/MessageFactory";
+import type { ServerMessage } from "../message/ServerMessage";
+import { GameViewMessage } from "../message/GameViewMessage";
 
 export class WebSocketConnection {
   private client?: Client;
 
-  connect(gameId: string, onConnected?: () => void) {
+  connect(gameId: string, playerId: string, onConnected?: () => void) {
     this.client = new Client({
       webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
-      reconnectDelay: 5000,
+      reconnectDelay: 0,
+
+      connectHeaders: { playerId },
 
       onConnect: () => {
-        console.log("WebSocket connected");
-
+        console.log("WebSocket connected as", playerId);
         onConnected?.();
-
         this.client!.subscribe("/user/queue/game", (msg: IMessage) => {
-          const data = this.parseMessage(msg);
-          if (data) {
-            GameEventBus.emit("GAME_STATE", data);
-          }
+          this.onMessage(msg);
         });
 
-        this.client!.subscribe(`/app/game/${gameId}`, (msg: IMessage) => {
-          const data = this.parseMessage(msg);
-          GameEventBus.emit("GAME_STATE", data);
+        // explizit initial GameView anfordern
+        this.client!.publish({
+          destination: "/app/game/init",
+          body: JSON.stringify({ gameId }),
         });
       },
     });
@@ -47,12 +48,20 @@ export class WebSocketConnection {
     });
   }
 
-  private parseMessage(msg: IMessage): any | null {
-    try {
-      return JSON.parse(msg.body);
-    } catch (e) {
-      console.error("Invalid message", msg.body);
-      return null;
+  private onMessage(raw: IMessage) {
+    const json = JSON.parse(raw.body);
+    let message = undefined;
+    console.debug("JSON ", json);
+    message = MessageFactory.fromJson(json);
+
+    this.dispatch(message);
+  }
+
+  private dispatch(message: ServerMessage) {
+    switch (message.type) {
+      case "GAME_VIEW":
+        GameEventBus.emit("gameView", (message as GameViewMessage).view);
+        break;
     }
   }
 }

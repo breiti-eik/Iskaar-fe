@@ -1,10 +1,16 @@
 import mitt from "mitt";
-import type { Card } from "../objects/Card";
+import type { GameViewData } from "../view/GameViewData";
+import type { ActionType } from "../objects/Actions";
+import type { SupplyNameType } from "../objects/SupplyName";
+import type { SupplyDirectionType } from "../objects/SupplyDirection";
 
 type Events = {
-  GAME_STATE: any; // 👈 wichtig
-  cardPlayed: { card: Card };
-  buyCardRequest: { cardId: string };
+  cardPlayed: { cardId: string };
+  playerAction: ActionType;
+  gameView: GameViewData;
+  cardSelected: { cardId: string };
+  buyCard: { pileName: string; buyerId: string | undefined }; // pileName to buy from;
+  shiftCard: { pileName: SupplyNameType; direction: SupplyDirectionType };
 };
 
 export const GameEventBus = mitt<Events>();
